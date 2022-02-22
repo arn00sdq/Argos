@@ -27,6 +27,8 @@ print('hierarchy =' + str(len(hierarchy[0])))
 tempTab = []
 index = 0
 
+# Pour explication ce lien :  https://docs.opencv.org/3.4/d9/d8b/tutorial_py_contours_hierarchy.html
+
 for i in range(len(hierarchy[0])):
     if (hierarchy[0][i][3] != 0 and hierarchy[0][i][3] != -1 ): #Pour affiner la recherche enlever le dernier enfant
         tempTab.append(hierarchy[0][i][3])
