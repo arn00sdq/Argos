@@ -1,7 +1,7 @@
 import cv2 as cv
 import numpy as np
 
-img = cv.imread('carrote.jpg')
+img = cv.imread('Chat.jpg')
 
 #image en nuance de gris
 img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -9,9 +9,11 @@ img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 #applique une valeur de seuil pour 1 pixel si inferieur blanc sinon noir
 #Trouver une technnique pour definir le seuil
 #Moyenne des couleurs situés au centre de l'image ?
-ret,th = cv.threshold(img_gray,40,130,cv.THRESH_BINARY)
+#voir pour un slider
+ret,th = cv.threshold(img_gray,55,200,cv.THRESH_BINARY)
 
-kernel = np.ones((1,1),np.uint8)
+#définit la grille
+kernel = np.ones((3,3),np.uint8)
 
 #suppression du bruit, fais grossir les zones lumineuses ou assombris à l'inverse
 th_dilation = cv.dilate(th,kernel,iterations = 1)
@@ -30,9 +32,10 @@ index = 0
 # Pour explication ce lien :  https://docs.opencv.org/3.4/d9/d8b/tutorial_py_contours_hierarchy.html
 
 for i in range(len(hierarchy[0])):
-    if (hierarchy[0][i][3] != 0 and hierarchy[0][i][3] != -1 ): #Pour affiner la recherche enlever le dernier enfant
+    if (hierarchy[0][i][3] != 0 and hierarchy[0][i][3] != -1  and hierarchy[0][i][2] == -1  ): #Pour affiner la recherche enlever le dernier enfant
         tempTab.append(hierarchy[0][i][3])
         index = index + 1
+        print(hierarchy[0][i])
 
 
 #enleve les index uniques : reduit les contours inutiles
@@ -55,8 +58,10 @@ print('nonDuplicate =' + str(nonDuplicate))
 #print(np.r_[r1, r2])
 
 for i in range(len(nonDuplicate)):
-    x, y, w, h = cv.boundingRect(contours[nonDuplicate[i]])
-    cv.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
+    if(cv.contourArea(contours[nonDuplicate[i]]) >= 7000):
+        print(cv.contourArea(contours[nonDuplicate[i]]))
+        x, y, w, h = cv.boundingRect(contours[nonDuplicate[i]])
+        cv.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
 #Nombre total de pixels
 whole_area = th_dilation.size
