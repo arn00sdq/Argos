@@ -57,12 +57,17 @@ while True:
 
     mask = cv.inRange(img_hsv,lower,upper)
 
-    result = cv.bitwise_and(img,img, mask=mask)
+    #Inverser les couleurs avec un thresold
+    #superposition rectangle
+    ret,th = cv.threshold(mask,0,255,cv.THRESH_BINARY_INV)
+
+    result = cv.bitwise_and(img,img, mask=th)
 
 
     cv.imshow('hsv',img_hsv)
     cv.imshow('img',img_cp)
     cv.imshow('mask',mask)
+    cv.imshow('th',th)
     cv.imshow('result',result) #2,71,75
 
     cv.waitKey(1)
