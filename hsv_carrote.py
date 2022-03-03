@@ -1,4 +1,5 @@
 from turtle import color, width
+from unittest import result
 import cv2 as cv
 import numpy as np
 
@@ -14,20 +15,28 @@ cv.namedWindow("TrackBars")
 cv.resizeWindow("TrackBars",740,240)
 cv.createTrackbar("X","TrackBars",10,2000,empty)
 cv.createTrackbar("Y","TrackBars",10,2000,empty) #58
+cv.createTrackbar("B","TrackBars",0,255,empty)
+cv.createTrackbar("G","TrackBars",0,255,empty) 
+cv.createTrackbar("R","TrackBars",0,255,empty)
 
 while True:
 
     #_, frame = cap.read()
-
-
     X_value = cv.getTrackbarPos("X","TrackBars")
     Y_value = cv.getTrackbarPos("Y","TrackBars")
 
-    img = cv.imread('Image_de_test/carrote.jpg')
+    B_value = cv.getTrackbarPos("B","TrackBars")
+    G_value = cv.getTrackbarPos("G","TrackBars")
+    R_value = cv.getTrackbarPos("R","TrackBars")
+
+
+    img = cv.imread('Image_de_test/carrote2.jpg')
+    img = cv.resize(img, (540,300))
 
     h,w,_ = img.shape
     img_hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 
+    #pointer
     cx = int(X_value/2)
     cy = int(Y_value/2)
 
@@ -36,13 +45,21 @@ while True:
 
     print(pixel_center)
 
-    if hue_value < 5:
-        color = "Red"
-
     cv.circle(img, (X_value, Y_value), 5, (255,0,0),3)
     cv.circle(img_hsv, (X_value, Y_value), 5, (255,0,0),3)
+    #mask
+
+    lower = np.array([B_value,G_value,R_value])
+    upper = np.array([255,255,255])
+
+    mask = cv.inRange(img_hsv,lower,upper)
+
+    result = cv.bitwise_and(img,img, mask=mask)
+
 
     cv.imshow('hsv',img_hsv)
     cv.imshow('img',img)
+    cv.imshow('mask',mask)
+    cv.imshow('result',result) #2,71,75
 
     cv.waitKey(1)
