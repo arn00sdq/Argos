@@ -30,7 +30,9 @@ while True:
     R_value = cv.getTrackbarPos("R","TrackBars")
 
 
-    img = cv.imread('Image_de_test/carrote2.jpg')
+    img = cv.imread('Image_de_test/carrote2.jpg');
+    img_cp = img.copy()
+    img_cp = cv.resize(img, (540,300))
     img = cv.resize(img, (540,300))
 
     h,w,_ = img.shape
@@ -49,6 +51,7 @@ while True:
     cv.circle(img_hsv, (X_value, Y_value), 5, (255,0,0),3)
     #mask
 
+    # define rgb HSV
     lower = np.array([B_value,G_value,R_value])
     upper = np.array([255,255,255])
 
@@ -58,7 +61,7 @@ while True:
 
 
     cv.imshow('hsv',img_hsv)
-    cv.imshow('img',img)
+    cv.imshow('img',img_cp)
     cv.imshow('mask',mask)
     cv.imshow('result',result) #2,71,75
 
