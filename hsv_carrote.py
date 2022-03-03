@@ -49,19 +49,19 @@ while True:
 
     cv.circle(img, (X_value, Y_value), 5, (255,0,0),3)
     cv.circle(img_hsv, (X_value, Y_value), 5, (255,0,0),3)
-    #mask
 
-    # define rgb HSV
+    # define rgb 
     lower = np.array([B_value,G_value,R_value])
     upper = np.array([255,255,255])
 
     mask = cv.inRange(img_hsv,lower,upper)
 
     #Inverser les couleurs avec un thresold
-    #superposition rectangle
     ret,th = cv.threshold(mask,0,255,cv.THRESH_BINARY_INV)
 
     result = cv.bitwise_and(img,img, mask=th)
+
+    #On peut exploiter les couleurs grace au mask
 
 
     cv.imshow('hsv',img_hsv)
