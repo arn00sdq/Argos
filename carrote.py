@@ -18,8 +18,8 @@ cv.createTrackbar("Dilatation","TrackBars",1,10,empty) # 1
 
 while True:
 
-    img = cv.imread('Image_de_test/carrote.jpg')
-    img2 = cv.imread('Image_de_test/carrote.jpg')
+    img = cv.imread('Image_de_test/chat.jpg')
+    img2 = cv.imread('Image_de_test/chat.jpg')
 
     #resize
     img = cv.resize(img, None,fx=0.5, fy=0.5, interpolation = cv.INTER_CUBIC)
