@@ -1,21 +1,16 @@
+from ZoneCarotte import ZoneCarotte
 import cv2 as cv
 import numpy as np
-import ZoneCarotte
 
-def empty(a):
-    pass
+target = 3
+t_value = 5
+d_value = 1
 
- #enleve les index uniques : reduit les contours inutiles
 def checkio(data):
     for index in range(len(data) - 1, -1, -1):
         if data.count(data[index]) == 1:
             del data[index]
     return data
-
-cv.namedWindow("TrackBars")
-cv.resizeWindow("TrackBars",740,240)
-cv.createTrackbar("Treshold Min","TrackBars",5,255,empty) #58
-cv.createTrackbar("Dilatation","TrackBars",1,10,empty) # 1
 
 while True:
 
@@ -25,9 +20,6 @@ while True:
     #resize
     img = cv.resize(img, None,fx=0.5, fy=0.5, interpolation = cv.INTER_CUBIC)
     img2 = cv.resize(img, None,fx=1, fy=1, interpolation = cv.INTER_CUBIC)
-
-    t_value = cv.getTrackbarPos("Treshold Min","TrackBars")
-    d_value = cv.getTrackbarPos("Dilatation","TrackBars")
 
     #image en nuance de gris
     img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
@@ -54,8 +46,8 @@ while True:
                      
 
     #draw time
-    print('contours = ' + str(len(contours)))
-    print('hierarchy = ' + str(len(hierarchy[0])))
+    """print('contours = ' + str(len(contours)))
+    print('hierarchy = ' + str(len(hierarchy[0])))"""
 
     tempTab = []
     index = 0
@@ -69,17 +61,28 @@ while True:
 
     FinalTab = checkio(tempTab)
 
+    rectangles = []
+
     #enleve les doublons du tableau
     nonDuplicate =  list(dict.fromkeys(FinalTab))
 
-    print('nonDuplicate = ' + str(nonDuplicate))
+    """print('nonDuplicate = ' + str(nonDuplicate))"""
 
     for i in range(len(nonDuplicate)):
         if(cv.contourArea(contours[nonDuplicate[i]]) >= 7000):
-            print("Coordonnées rectangle" + str(cv.contourArea(contours[nonDuplicate[i]])))
+            """print("Coordonnées rectangle " + str(cv.contourArea(contours[nonDuplicate[i]])))"""
             x, y, w, h = cv.boundingRect(contours[nonDuplicate[i]])
             cv.rectangle(img, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                
+            
+            zone = ZoneCarotte(x, y, x+w, y+h, w, h)
+            print ('Aire de la zone' + str(zone.getArea()))
+            print('N zones: ' + str(len(rectangles) + 1))
+            
+            if not zone.existsInArray(rectangles):
+                rectangles.append(zone)
+        
+    if len(rectangles) < target:
+        t_value += 1
 
     #Nombre total de pixels
     whole_area = th_dilation.size
@@ -94,9 +97,9 @@ while True:
     #print('White_Area =' + str(white_area / whole_area * 100) + ' %')
     #print('Black_Area =' + str(black_area / whole_area * 100) + ' %')
 
-    cv.imshow('gray',img_gray)
+    #cv.imshow('gray',img_gray)
     cv.imshow('carrote',img)
     cv.imshow('contour',img2)
-    cv.imshow('th_dilation', th_dilation)
+    #cv.imshow('th_dilation', th_dilation)
 
     cv.waitKey(1)
