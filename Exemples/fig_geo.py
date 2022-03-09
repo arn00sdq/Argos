@@ -4,7 +4,7 @@ import numpy as np
 
 while True:
 
-    img = cv.imread('Image_de_test/fig_geo.jpg')
+    img = cv.imread('./Image_de_test/fig_geo.jpg')
 
     # image en nuance de gris
     img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)

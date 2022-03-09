@@ -1,7 +1,6 @@
 import cv2 as cv
 import numpy as np
 import sys
-import matplotlib.pyplot  as plt
 
 def empty(a):
     pass
@@ -15,7 +14,7 @@ cv.createTrackbar("Treshold2 Min","TrackBars",0,255,empty)
 while True:
 
     # Load the image
-    image = cv.imread('Image_de_test/carrote.jpg')
+    image = cv.imread('../Image_de_test/carrote.jpg')
     image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
 
     # Grayscale 

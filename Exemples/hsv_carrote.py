@@ -1,4 +1,3 @@
-from turtle import color, width
 from unittest import result
 import cv2 as cv
 import numpy as np
