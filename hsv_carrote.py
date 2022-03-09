@@ -30,7 +30,7 @@ while True:
     R_value = cv.getTrackbarPos("V","TrackBars")
 
 
-    img = cv.imread('Image_de_test/carrote2.jpg');
+    img = cv.imread('Image_de_test/carrote.jpg');
     img_cp = img.copy()
     img_cp = cv.resize(img, (540,300))
     img = cv.resize(img, (540,300))
@@ -39,8 +39,8 @@ while True:
     img_hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 
     #pointer
-    cx = int(X_value/2)
-    cy = int(Y_value/2)
+    cx = int(X_value)
+    cy = int(Y_value)
 
     pixel_center = img_hsv[X_value,Y_value]
     hue_value = pixel_center[0]

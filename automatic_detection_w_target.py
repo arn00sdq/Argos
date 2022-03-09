@@ -2,7 +2,7 @@ from ZoneCarotte import ZoneCarotte
 import cv2 as cv
 import numpy as np
 
-target = 3
+target = 8
 t_value = 5
 d_value = 1
 
@@ -14,8 +14,8 @@ def checkio(data):
 
 while True:
 
-    img = cv.imread('Image_de_test/carrote.jpg')
-    img2 = cv.imread('Image_de_test/carrote.jpg')
+    img = cv.imread('Image_de_test/carrote2.jpg')
+    img2 = cv.imread('Image_de_test/carrote2.jpg')
 
     #resize
     img = cv.resize(img, None,fx=0.5, fy=0.5, interpolation = cv.INTER_CUBIC)
