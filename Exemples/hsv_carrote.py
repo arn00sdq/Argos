@@ -14,9 +14,9 @@ cv.namedWindow("TrackBars")
 cv.resizeWindow("TrackBars",740,240)
 cv.createTrackbar("X","TrackBars",10,2000,empty)
 cv.createTrackbar("Y","TrackBars",10,2000,empty) #58
-cv.createTrackbar("B","TrackBars",0,255,empty)
-cv.createTrackbar("G","TrackBars",0,255,empty) 
-cv.createTrackbar("R","TrackBars",0,255,empty)
+cv.createTrackbar("H","TrackBars",0,255,empty)
+cv.createTrackbar("S","TrackBars",0,255,empty) 
+cv.createTrackbar("V","TrackBars",0,255,empty)
 
 while True:
 
@@ -24,12 +24,12 @@ while True:
     X_value = cv.getTrackbarPos("X","TrackBars")
     Y_value = cv.getTrackbarPos("Y","TrackBars")
 
-    B_value = cv.getTrackbarPos("B","TrackBars")
-    G_value = cv.getTrackbarPos("G","TrackBars")
-    R_value = cv.getTrackbarPos("R","TrackBars")
+    B_value = cv.getTrackbarPos("H","TrackBars")
+    G_value = cv.getTrackbarPos("S","TrackBars")
+    R_value = cv.getTrackbarPos("V","TrackBars")
 
 
-    img = cv.imread('Image_de_test/carrote2.jpg');
+    img = cv.imread('Image_de_test/carrote.jpg');
     img_cp = img.copy()
     img_cp = cv.resize(img, (540,300))
     img = cv.resize(img, (540,300))
@@ -38,8 +38,8 @@ while True:
     img_hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
 
     #pointer
-    cx = int(X_value/2)
-    cy = int(Y_value/2)
+    cx = int(X_value)
+    cy = int(Y_value)
 
     pixel_center = img_hsv[X_value,Y_value]
     hue_value = pixel_center[0]
