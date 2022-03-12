@@ -11,5 +11,5 @@ repositories {
 
 dependencies {
     testImplementation     'junit:junit:4.13'
-    implementation fileTree(dir: '../libs', include: 'opencv-455.jar')
+    implementation fileTree(dir: 'libs', include: 'opencv-455.jar')
 }
