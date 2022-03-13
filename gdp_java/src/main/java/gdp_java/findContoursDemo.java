@@ -45,7 +45,7 @@ class FindContours {
     private int threshold = 100;
     private Random rng = new Random(12345);
     public FindContours(String[] args) {
-        String filename = args.length > 0 ? args[0] : "../data/HappyFish.jpg";
+        String filename =  "../../../../../Image_de_test/carrote2.jpg";
         Mat src = Imgcodecs.imread(filename);
         if (src.empty()) {
             System.err.println("Cannot read image: " + filename);
