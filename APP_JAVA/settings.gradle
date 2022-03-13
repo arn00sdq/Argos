@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Projet_TER"
 include ':app'
-include ':OpenCv-3-4-16'
+include ':OpenCV_4-5-5'
