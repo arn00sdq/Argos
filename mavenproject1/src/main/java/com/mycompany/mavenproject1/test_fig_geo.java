@@ -70,13 +70,13 @@ class Detection{
             return;
         }
         JPanel sliderPanel = new JPanel();
-        sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.PAGE_AXIS));
-        sliderPanel.add(new JLabel("Canny threshold: "));
+       // sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.PAGE_AXIS));
+        //sliderPanel.add(new JLabel("Canny threshold: "));
         JSlider slider = new JSlider(0, MAX_THRESHOLD, threshold);
-        slider.setMajorTickSpacing(20);
-        slider.setMinorTickSpacing(10);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
+        //slider.setMajorTickSpacing(20);
+        //slider.setMinorTickSpacing(10);
+        //slider.setPaintTicks(true);
+       // slider.setPaintLabels(true);
         slider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
