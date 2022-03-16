@@ -15,20 +15,15 @@ public class MainActivity extends AppCompatActivity {
 
     private CameraListener camera_component;
 
-    private final BaseLoaderCallback base_loader_callback = new BaseLoaderCallback(MainActivity.this) {
 
+    private final BaseLoaderCallback base_loader_callback = new BaseLoaderCallback(MainActivity.this) {
         @Override
         public void onManagerConnected(int status) {
 
-            switch (status) {
-                case BaseLoaderCallback.SUCCESS:
-                    Log.i(TAG, "onManagerConnected");
-                    camera_component.enable();
-                    Log.i(TAG, "cameraView enable");
-                    break;
-                default:
-                    super.onManagerConnected(status);
-                    break;
+            if (status == BaseLoaderCallback.SUCCESS) {
+                camera_component.enable();
+            } else {
+                super.onManagerConnected(status);
             }
             super.onManagerConnected(status);
         }
@@ -43,9 +38,6 @@ public class MainActivity extends AppCompatActivity {
         this.camera_component = new CameraListener( (JavaCameraView) findViewById(R.id.camera_view) );
     }
 
-    /**
-     * The camera is initially paused so the onResume function is called at start
-     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -54,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
     public void onDestroy() {
         super.onDestroy();
         this.camera_component.disable();
     }
-
 
 }
