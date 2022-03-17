@@ -1,25 +1,25 @@
 -- Merging decision tree log ---
 manifest
-ADDED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml:2:1-4:12
-INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml:2:1-4:12
-INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml:2:1-4:12
+ADDED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml:2:1-4:12
+INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml:2:1-4:12
+INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml:2:1-4:12
 	package
-		ADDED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml:3:7-27
-		INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
-		INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
+		ADDED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml:3:7-27
+		INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
+		INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
 	xmlns:android
-		ADDED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml:2:11-69
+		ADDED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml:2:11-69
 uses-sdk
-INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
-INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
-INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
-INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
+INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
+INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
+INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
+INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
-		ADDED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
-		INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
+		INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
+		ADDED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
+		INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
-		ADDED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
-		INJECTED from E:\CODE\Cours\M1\TER\Gestion-de-projet\APP_JAVA\OpenCV_4-5-5\java\AndroidManifest.xml
+		INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
+		ADDED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
+		INJECTED from /home/cazaux/Bureau/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/java/AndroidManifest.xml
