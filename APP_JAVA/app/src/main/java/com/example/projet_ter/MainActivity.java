@@ -3,7 +3,10 @@ package com.example.projet_ter;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
+import android.view.View;
+import android.widget.TableLayout;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.JavaCameraView;
@@ -14,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "ProjetTER::MainActivity";
 
     private CameraListener camera_component;
+    private ButtonLayout buttonLayout;
 
 
     private final BaseLoaderCallback base_loader_callback = new BaseLoaderCallback(MainActivity.this) {
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i(TAG, "onCreate");
         this.camera_component = new CameraListener( (JavaCameraView) findViewById(R.id.camera_view) );
+        this.buttonLayout = new ButtonLayout((View) findViewById(R.id.ButtonLayout) );
     }
 
     @Override
