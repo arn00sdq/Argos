@@ -4,12 +4,14 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener2 {
 
-    private static final String TAG = "ProjetTER::Camera";
+    private static final String TAG = "ProjectTER::Camera";
 
     private final JavaCameraView camera_view;
 
@@ -58,6 +60,8 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
 
          */
+        Imgproc.rectangle(this.rgba_matrix, new Point(500, 50), new Point(1000, 500), new Scalar(0, 0, 255), 5);
+        Imgproc.putText(this.rgba_matrix, "Voici du texte", new Point(500, 550), 2, 2,  new Scalar(0, 0, 255), 2, Imgproc.LINE_8, false );
         return this.rgba_matrix;
     }
 
