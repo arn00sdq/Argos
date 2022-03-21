@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "ProjetTER::MainActivity";
 
     private CameraListener camera_component;
-    private ButtonLayout buttonLayout;
+    private ConfigLayout configLayout;
 
 
     private final BaseLoaderCallback base_loader_callback = new BaseLoaderCallback(MainActivity.this) {
@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.i(TAG, "onCreate");
-        this.camera_component = new CameraListener( (JavaCameraView) findViewById(R.id.camera_view) );
-        this.buttonLayout = new ButtonLayout((View) findViewById(R.id.ButtonLayout) );
+        this.camera_component = new CameraListener((JavaCameraView) findViewById(R.id.camera_view));
+        this.configLayout = new ConfigLayout((View) findViewById(R.id.ButtonLayout));
     }
 
     @Override
