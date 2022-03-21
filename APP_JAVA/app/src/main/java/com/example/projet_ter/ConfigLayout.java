@@ -103,6 +103,7 @@ public class ConfigLayout {
     private void handle_auto_switch_change(boolean isChecked) {
         if (isChecked) {
             this.autoModeSwitch.setTextColor(Color.parseColor("#2196F3"));
+            // TODO
             this.seekBars.forEach(element -> {
                 element.setVisibility(View.VISIBLE);
             });
@@ -112,6 +113,7 @@ public class ConfigLayout {
             });
         } else {
             this.autoModeSwitch.setTextColor(Color.parseColor("#aaaaaa"));
+            // TODO
             this.seekBars.forEach(element -> {
                 element.setVisibility(View.VISIBLE);
             });
