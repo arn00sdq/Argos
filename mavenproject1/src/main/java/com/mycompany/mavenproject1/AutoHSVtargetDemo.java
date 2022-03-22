@@ -2,9 +2,10 @@ package com.mycompany.mavenproject1;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,19 +13,19 @@ import javax.swing.JSlider;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-class Detection_w_hsv {
+class AutoHSVtarget {
 
    
     private JFrame frame;
 
-    private JPanel imgPanel = new JPanel();
-    
     private Mat src;
     private Mat resizeImg;
     private Mat srcFinal;
@@ -34,6 +35,9 @@ class Detection_w_hsv {
     
     private static int MAX_VALUE = 255;
     private static int MAX_VALUE_H = 360/2;
+    private static final int MAX_THRESHOLD = 255;
+    private int threshold = 100;
+    private Random rng = new Random(12345);
     
     private static final String LOW_H_NAME = "Low H";
     private static final String LOW_S_NAME = "Low S";
@@ -49,19 +53,23 @@ class Detection_w_hsv {
     private JSlider sliderLowV;
     private JSlider sliderHighV;
     
-    public Detection_w_hsv(String[] args) {
+
+    private int i;
+
+    public AutoHSVtarget(String[] args) {
 
         src = Imgcodecs.imread("img\\carrote2.jpg");
         
         resizeImg = Mat.zeros(src.size(), CvType.CV_8U);
         Size sz = new Size(400,400);
         Imgproc.resize( src, resizeImg, sz );
+        
+        srcFinal = resizeImg.clone();
 
-        Imgproc.cvtColor(resizeImg, srcHsv, Imgproc.COLOR_BGR2HSV); 
+        Imgproc.cvtColor(resizeImg, srcHsv, Imgproc.COLOR_BGR2HSV);  
         
-        frame = new JFrame("Sliders");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   
-        
+        frame = new JFrame("Slider");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window_initialisation(frame.getContentPane());
 
         frame.pack();
@@ -69,7 +77,7 @@ class Detection_w_hsv {
         update();
     }
 
-    private void window_initialisation(Container pane) {
+     private void window_initialisation(Container pane) {
        
         JPanel sliderPanel = new JPanel();
         
@@ -105,7 +113,7 @@ class Detection_w_hsv {
 
     private void update() {
         
-        while (true) {
+        while(true){
             
             Mat srcHsv = new Mat();
             maskHsv = new Mat();
@@ -115,30 +123,46 @@ class Detection_w_hsv {
             Imgproc.cvtColor(resizeImg, srcHsv, Imgproc.COLOR_BGR2HSV,3);  
 
             Core.inRange(srcHsv, new Scalar(sliderLowH.getValue(), sliderLowS.getValue(), sliderLowV.getValue()),
-            new Scalar(sliderHighH.getValue(), sliderHighS.getValue(), sliderHighV.getValue()), maskHsv);
-            Imgproc.threshold(maskHsv,maskHsvInv,0, 255,Imgproc.THRESH_BINARY );
+                        new Scalar(sliderHighH.getValue(), sliderHighS.getValue(), sliderHighV.getValue()), maskHsv);
+
+            Imgproc.threshold(maskHsv,maskHsvInv,0, 255,Imgproc.THRESH_BINARY_INV );
+
             Core.bitwise_and(resizeImg, resizeImg,srcFinal, maskHsvInv);
-            
+
+         /*   Mat dstThreshold = new Mat();
+            Imgproc.threshold(maskHsv,dstThreshold,threshold, 255,Imgproc.THRESH_BINARY_INV );*/
+
+            List<MatOfPoint> contours = new ArrayList<>();
+            Mat hierarchy = new Mat();
+
+            Imgproc.findContours(maskHsvInv, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+            Mat drawing = Mat.zeros(maskHsvInv.size(), CvType.CV_8UC3);
+            for (int i = 0; i < contours.size(); i++) {
+                Scalar color = new Scalar(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256));
+                Imgproc.drawContours(drawing, contours, i, color, 1, Imgproc.LINE_8, hierarchy, 0, new Point());
+            }
+
             HighGui.imshow("original",resizeImg);
             HighGui.imshow("HSV",srcHsv);
             HighGui.imshow("mask", maskHsv);
             HighGui.imshow("maskInv", maskHsvInv);
             HighGui.imshow("Final", srcFinal);
+            HighGui.imshow("Final", drawing);
             HighGui.waitKey(1);
             
         }
-      
+       
     }
-    
+
 }
 
-public class hsv {
+public class AutoHSVtargetDemo {
 
     public static void main(String[] args) {
         // Load the native OpenCV library
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        new Detection_w_hsv(args);
+        new AutoHSVtarget(args);
 
     }
 

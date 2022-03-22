@@ -136,8 +136,8 @@ class Detection{
             
             double cont_area = Imgproc.contourArea(contours.get(i));
             
-            Imgproc.putText(srcCnt, "Points : " + String.valueOf(points.length),new Point(boundRect[i].x, boundRect[i].y),4, 1, new Scalar(0, 0, 0),3); 
-            Imgproc.putText(srcCnt, "Area : " +String.valueOf(cont_area),new Point(boundRect[i].x, boundRect[i].y + 30),4, 1, new Scalar(0, 0, 0),3); 
+            Imgproc.putText(srcCnt, "Points : " + String.valueOf(points.length),new Point(boundRect[i].x, boundRect[i].y),2, 1, new Scalar(0, 0, 0),3); 
+            Imgproc.putText(srcCnt, "Area : " +String.valueOf(cont_area),new Point(boundRect[i].x, boundRect[i].y + 30),2, 1, new Scalar(0, 0, 0),3); 
         }
         
         imgContoursLabel.setIcon(new ImageIcon(HighGui.toBufferedImage(srcCnt)));
