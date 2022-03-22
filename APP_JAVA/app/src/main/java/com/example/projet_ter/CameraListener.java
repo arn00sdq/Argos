@@ -18,7 +18,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     private Mat rgba_matrix;
     private Mat gray_matrix;
 
-    public CameraListener( JavaCameraView camera_view ) {
+    public CameraListener(JavaCameraView camera_view) {
         this.camera_view = camera_view;
         this.camera_view.setCvCameraViewListener(this);
     }
@@ -37,6 +37,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     /**
      * This function is called each time a frame is send by the camera
+     *
      * @param inputFrame The frame
      * @return the matrix to display
      */
@@ -51,8 +52,9 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
         original_size = this.rgba_matrix.size();
 
         Core.rotate(this.rgba_matrix, this.rgba_matrix, Core.ROTATE_90_CLOCKWISE);
-        Imgproc.resize(this.rgba_matrix, this.rgba_matrix, original_size);
-
+        double img_ratio = (double) (this.rgba_matrix.size().height / original_size.height);
+        Size new_size = new Size(Math.floor((int) original_size.width * img_ratio), original_size.height);
+        Imgproc.resize(this.rgba_matrix, this.rgba_matrix, original_size, Imgproc.INTER_CUBIC);
         /*
 
 
@@ -61,12 +63,14 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
          */
         Imgproc.rectangle(this.rgba_matrix, new Point(500, 50), new Point(1000, 500), new Scalar(0, 0, 255), 5);
-        Imgproc.putText(this.rgba_matrix, "Voici du texte", new Point(500, 550), 2, 2,  new Scalar(0, 0, 255), 2, Imgproc.LINE_8, false );
+        Imgproc.putText(this.rgba_matrix, "Voici du texte", new Point(500, 550), 2, 2,
+                new Scalar(0, 0, 255), 2, Imgproc.LINE_8, false);
         return this.rgba_matrix;
     }
 
     public void enable() {
         this.camera_view.setCameraPermissionGranted();
+        camera_view.setMaxFrameSize(10000, 10000);
         this.camera_view.enableView();
     }
 

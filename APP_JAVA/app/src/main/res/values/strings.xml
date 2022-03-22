@@ -2,4 +2,12 @@
     <string name="app_name">Projet_TER</string>
     <string name="add">+</string>
     <string name="title_app">Argos</string>
+    <string name="todo">TODO</string>
+    <string name="r_glage">Réglage</string>
+    <string name="Hue_min">Hue min</string>
+    <string name="Hue_max">Hue max</string>
+    <string name="Saturation_min">Saturation min</string>
+    <string name="Saturation_max">Saturation max</string>
+    <string name="Valeur_min">Valeur min</string>
+    <string name="Valeur_max">Valeur min</string>
 </resources>
