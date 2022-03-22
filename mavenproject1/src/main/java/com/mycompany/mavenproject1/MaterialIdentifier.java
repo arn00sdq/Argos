@@ -17,22 +17,34 @@ import java.util.Map.Entry;
 public class MaterialIdentifier {
     
     /**
-     * confidence: number between 1 and 100
-     * 100 means colors must exactly match
+     * confidence: degree of accuracy for comparison
+     * number between 1 and 100
+     * 100 means color values must exactly match
      */
     private PaletteMapper paletteMapper = null;
     private float confidence = 90;
-    
-    
+    /**
+     * 
+     * @param mapper palette containing mapped colors for materials
+     * @param confidence degree of accuracy for comparison
+     */
     public MaterialIdentifier(PaletteMapper mapper, float confidence) {
         this.paletteMapper = mapper;
         this.confidence = confidence;
     }
-    
+    /**
+     * 
+     * @param mapper palette containing mapped colors for materials
+     */
     public MaterialIdentifier(PaletteMapper mapper) {
         this.paletteMapper = mapper;
     }
-    
+    /**
+     * 
+     * @param colors Array of sRGB colors
+     * @return List of strings representing each color mapped to a material
+     *         returns either the name of a material or unknown
+     */
     public List<String> getMaterialNamesFromColors(Color[] colors){
         List<String> result = new ArrayList<>();
         for (Color color : colors) {
@@ -40,10 +52,15 @@ public class MaterialIdentifier {
         }
         return result;
     }
-    
+    /**
+     * 
+     * @param color Color that we want to identify
+     * @return Either the name of the identified material or unknown
+     */
     private String identifyMaterialFromColor(Color color){
         
         for (Entry<Color, String> entry : paletteMapper.getColorMap().entrySet()) {
+            
             Color baseColor = entry.getKey();
             String mat = entry.getValue();
             
@@ -51,7 +68,12 @@ public class MaterialIdentifier {
         }
         return "unknown";
     }
-    
+    /**
+     * 
+     * @param color color that we want to identify
+     * @param baseColor color present in the palette that maps to a material
+     * @return 
+     */
     private boolean colorsMatch(Color color, Color baseColor) {
         
         float decimalConfidence = confidence / 100;
