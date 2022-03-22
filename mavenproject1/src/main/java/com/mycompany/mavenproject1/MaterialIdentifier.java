@@ -72,7 +72,7 @@ public class MaterialIdentifier {
      * 
      * @param color color that we want to identify
      * @param baseColor color present in the palette that maps to a material
-     * @return 
+     * @return wether the two colors match
      */
     private boolean colorsMatch(Color color, Color baseColor) {
         
