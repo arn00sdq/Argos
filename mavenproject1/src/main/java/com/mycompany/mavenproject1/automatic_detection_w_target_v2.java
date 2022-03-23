@@ -41,6 +41,8 @@ class automatic_detection {
     int s_val = 1;
 
     List<ZoneCarotte> detected;
+    int maxZone;
+    ZoneCarotte zoneMaxAire;
     Mat drawing;
 
     ArrayList<List<String>> carotteColor = new ArrayList<>();
@@ -74,14 +76,14 @@ class automatic_detection {
 
     public automatic_detection(String[] args) {
 
-        src = Imgcodecs.imread("C:\\Users\\MSI\\Documents\\NetBeansProjects\\Gestion-de-projet\\mavenproject1\\src\\main\\java\\com\\mycompany\\mavenproject1\\test2.jpg");
+        src = Imgcodecs.imread("img\\carrote2.jpg");
 
 
         resizeImg = Mat.zeros(src.size(), CvType.CV_8U);
         Size sz = new Size(400, 400);
         Imgproc.resize(src, resizeImg, sz);
 
-        srcFinal = resizeImg.clone();
+        srcFinal = src.clone();
 
         Imgproc.cvtColor(resizeImg, srcHsv, Imgproc.COLOR_BGR2HSV);
 
@@ -143,8 +145,11 @@ class automatic_detection {
         Core.inRange(srcHsv, new Scalar(sliderLowH.getValue(), s_val, sliderLowV.getValue()),
                 new Scalar(sliderHighH.getValue(), sliderHighS.getValue(), sliderHighV.getValue()), maskHsv);
         Imgproc.threshold(maskHsv, maskHsvInv, 0, 255, Imgproc.THRESH_BINARY_INV);
+        //src,src,dest,mask
         Core.bitwise_and(resizeImg, resizeImg, srcFinal, maskHsvInv);
-
+        
+        HighGui.imshow("RectFinal", srcFinal);
+        HighGui.waitKey(1);
         List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.findContours(maskHsvInv, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
@@ -162,8 +167,13 @@ class automatic_detection {
             boundRect[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
             ZoneCarotte newZone = new ZoneCarotte(boundRect[i].x, boundRect[i].y, boundRect[i].x + boundRect[i].width,
                     boundRect[i].y + boundRect[i].height, boundRect[i].width, boundRect[i].height);
+            
 
+            ZoneCarotte maxCarotte;
+            
             if (newZone.getArea() > 1500 && !newZone.existsInArray(detected)) {
+                
+                
                 detected.add(newZone);
             }
 
@@ -175,7 +185,7 @@ class automatic_detection {
             Point p2 = new Point(detected.get(k).lower_x, detected.get(k).lower_y);
             Scalar color = new Scalar(0, 0, 255);
             int thickness = 2;
-            Imgproc.rectangle(srcFinal, p1, p2, color, thickness);
+            //Imgproc.rectangle(srcFinal, p1, p2, color, thickness);
 
         }     
 
@@ -212,17 +222,30 @@ class automatic_detection {
         }
 
         for (ZoneCarotte currentCarotte : detected) {
+            
+            if(currentCarotte.w > currentCarotte.h) {
+                
+                
+                for (int i = 0; i < currentCarotte.w ; i += currentCarotte.w/10) {
+                
+                    KmeanDetection kDetect = new KmeanDetection(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.w, currentCarotte.h);
+                    carotteColor.add(kDetect.Match(srcFinal));
 
-            for (int i = 0; i < currentCarotte.w + currentCarotte.w; i += 10) {
+                }
+                
+            }else{
+                
+                for (int i = 0; i < currentCarotte.w ; i += currentCarotte.w/10) {
+                
+                    KmeanDetection kDetect = new KmeanDetection(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.w, currentCarotte.h);
+                    carotteColor.add(kDetect.Match(srcFinal));
 
-                KmeanDetection kDetect = new KmeanDetection(currentCarotte.upper_x + i, currentCarotte.upper_y, 2, currentCarotte.h);
-                carotteColor.add(kDetect.Match());
-
+                }
             }
+            
 
         }
 
-        //System.out.println(carotteColor.get(0).get(0));
         HighGui.imshow("original", resizeImg);
         HighGui.imshow("HSV", srcHsv);
         HighGui.imshow("mask", maskHsv);
@@ -238,7 +261,7 @@ class automatic_detection {
 public class automatic_detection_w_target_v2 {
 
     public static void main(String[] args) {
-        // Load the native OpenCV library
+
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         new automatic_detection(args);
