@@ -21,7 +21,7 @@ import java.util.List;
 
 public class KmeanDetection {
     
-    int clusters = 1;
+    int clusters = 4;
     int upper_x;
     int upper_y;
     int w;
@@ -109,19 +109,21 @@ public class KmeanDetection {
         
     }
     
-    public List<String> Match() {
-        
-        String filepath = "img\\carrote2.jpg";
+    public List<String> Match(Mat kImg) {
+             
         PaletteMapper pm = new PaletteMapper(paletteTypes.DEFAULT_PALETTE);
         MaterialIdentifier mi = new MaterialIdentifier(pm, 50);
         Mat centers= new Mat();
         Mat labels = new Mat();
        
-        Mat img = Imgcodecs.imread(filepath);
+        if(this.upper_x +  this.w >= 400){
+            
+            this.upper_x = 399 - this.w ;
+        }
         
         Rect rectCrop = new Rect(this.upper_x, this.upper_y , this.w, this.h);
-        Mat imageROI = new Mat(img,rectCrop);
-                
+        Mat imageROI = new Mat(kImg,rectCrop);
+        
         Mat img_clone = new Mat();
 
         Imgproc.cvtColor(imageROI,img_clone,Imgproc.COLOR_RGB2BGR);
@@ -135,6 +137,12 @@ public class KmeanDetection {
         
         String dump = centers.dump();
         Color[] colorsArray = extractRgbFromString(dump, clusters);
+        
+        System.out.println("Nouvelle Zone : \n" + "\n");
+        for(int i = 0; i <colorsArray.length; i++){
+           System.out.println(colorsArray[i]);
+        }
+        
         
         List<String> res = new ArrayList<>();
         res = mi.getMaterialNamesFromColors(colorsArray);
