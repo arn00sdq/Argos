@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.mavenproject1;
+package com.argos.utils;
 
 import java.util.List;
 
@@ -90,6 +90,14 @@ public class ZoneCarotte {
         
         return exists;
         
+    }
+
+    @Override
+    public String toString() {
+        String res = new String();
+        res += "ZoneCarotte \n\tp1 (" + upper_x + ", " + upper_y + ")";
+        res += "\n\tp2 (" + lower_x + ", " + lower_y + ")";
+        return res;
     }
     
     
