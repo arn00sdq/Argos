@@ -20,6 +20,31 @@ public class ZoneCarotte {
     int w;
     int h;
     
+    
+    public int getUpper_x() {
+        return upper_x;
+    }
+
+    public int getUpper_y() {
+        return upper_y;
+    }
+
+    public int getLower_x() {
+        return lower_x;
+    }
+
+    public int getLower_y() {
+        return lower_y;
+    }
+
+    public int getW() {
+        return w;
+    }
+
+    public int getH() {
+        return h;
+    }
+    
     public ZoneCarotte(int upper_x,int upper_y,int lower_x,int lower_y,int w,int h){
         
         this.upper_x = upper_x;

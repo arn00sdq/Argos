@@ -51,7 +51,7 @@ class Detection_w_hsv {
     
     public Detection_w_hsv(String[] args) {
 
-        src = Imgcodecs.imread("img\\carrote2.jpg");
+        src = Imgcodecs.imread("C:\\Users\\MSI\\Documents\\NetBeansProjects\\Gestion-de-projet\\mavenproject1\\src\\main\\java\\com\\mycompany\\mavenproject1\\test2.jpg");
         
         resizeImg = Mat.zeros(src.size(), CvType.CV_8U);
         Size sz = new Size(400,400);
@@ -116,7 +116,7 @@ class Detection_w_hsv {
 
             Core.inRange(srcHsv, new Scalar(sliderLowH.getValue(), sliderLowS.getValue(), sliderLowV.getValue()),
             new Scalar(sliderHighH.getValue(), sliderHighS.getValue(), sliderHighV.getValue()), maskHsv);
-            Imgproc.threshold(maskHsv,maskHsvInv,0, 255,Imgproc.THRESH_BINARY );
+            Imgproc.threshold(maskHsv,maskHsvInv,0, 255,Imgproc.THRESH_BINARY_INV );
             Core.bitwise_and(resizeImg, resizeImg,srcFinal, maskHsvInv);
             
             HighGui.imshow("original",resizeImg);
