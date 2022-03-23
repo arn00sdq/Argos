@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.mycompany.mavenproject1;
+package com.argos.utils;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -13,6 +8,8 @@ import java.util.Map.Entry;
 /**
  *
  * @author Ivan
+ * @code This class is used to identify the identity of materials from a color
+ *       and a specific PaletteMapper
  */
 public class MaterialIdentifier {
     

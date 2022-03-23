@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.mavenproject1;
+package com.argos.utils;
 
-import com.mycompany.mavenproject1.PaletteMapper.*;
+import com.argos.utils.PaletteMapper.*;
 import org.opencv.core.Core;
 import org.opencv.highgui.*;
 import org.opencv.core.CvType;
