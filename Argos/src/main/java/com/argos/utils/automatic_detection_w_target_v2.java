@@ -76,7 +76,7 @@ class automatic_detection {
 
     public automatic_detection(String[] args) {
 
-        src = Imgcodecs.imread("C:\\Users\\MSI\\Documents\\NetBeansProjects\\Gestion-de-projet\\mavenproject1\\src\\main\\java\\com\\argos\\utils\\test2.jpg");
+        src = Imgcodecs.imread("C:\\Users\\MSI\\Documents\\NetBeansProjects\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\test2.jpg");
 
 
         resizeImg = Mat.zeros(src.size(), CvType.CV_8U);
