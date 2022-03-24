@@ -4,10 +4,9 @@
     <string name="title_app">Argos</string>
     <string name="todo">TODO</string>
     <string name="r_glage">Réglage</string>
-    <string name="Hue_min">Hue min</string>
-    <string name="Hue_max">Hue max</string>
-    <string name="Saturation_min">Saturation min</string>
-    <string name="Saturation_max">Saturation max</string>
-    <string name="Valeur_min">Valeur min</string>
-    <string name="Valeur_max">Valeur min</string>
+    <string name="Hue">Hue</string>
+    <string name="Saturation">Saturation</string>
+    <string name="Valeur">Valeur</string>
+    <string name="Aire">Aire</string>
+    <string name="auto">Auto</string>
 </resources>

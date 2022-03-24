@@ -1,5 +1,7 @@
 package com.example.projet_ter;
 
+import android.util.Log;
+
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
 import org.opencv.core.Core;
@@ -9,7 +11,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener2 {
+    public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     private static final String TAG = "ProjectTER::Camera";
 
@@ -51,10 +53,16 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
         original_size = this.rgba_matrix.size();
 
+        // Rotate the image
         Core.rotate(this.rgba_matrix, this.rgba_matrix, Core.ROTATE_90_CLOCKWISE);
-        double img_ratio = (double) (this.rgba_matrix.size().height / original_size.height);
-        Size new_size = new Size(Math.floor((int) original_size.width * img_ratio), original_size.height);
-        Imgproc.resize(this.rgba_matrix, this.rgba_matrix, original_size, Imgproc.INTER_CUBIC);
+        // Getting the new ratio
+        double img_ratio = (double) (original_size.width / this.rgba_matrix.size().width);
+        Size new_size = new Size(this.rgba_matrix.size().width * img_ratio, Math.floor((int) this.rgba_matrix.size().height * img_ratio));
+        Imgproc.resize(this.rgba_matrix, this.rgba_matrix, new_size, Imgproc.INTER_CUBIC);
+        this.rgba_matrix = this.rgba_matrix.submat((int) ((new_size.height / 2) - (original_size.height / 2)),
+                (int) ((new_size.height / 2) + (original_size.height / 2)),
+                (int) ((new_size.width / 2) - (original_size.width / 2)),
+                (int) ((new_size.width / 2) + (original_size.width / 2)));
         /*
 
 
@@ -70,12 +78,12 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     public void enable() {
         this.camera_view.setCameraPermissionGranted();
-        camera_view.setMaxFrameSize(10000, 10000);
         this.camera_view.enableView();
     }
 
     public void disable() {
         this.camera_view.disableView();
     }
+
 }
 
