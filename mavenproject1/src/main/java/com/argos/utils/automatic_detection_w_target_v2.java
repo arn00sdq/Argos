@@ -41,7 +41,7 @@ class automatic_detection {
     int s_val = 1;
 
     List<ZoneCarotte> detected;
-    int maxZone;
+    int maxZone = 0;
     ZoneCarotte zoneMaxAire;
     Mat drawing;
 
@@ -76,7 +76,7 @@ class automatic_detection {
 
     public automatic_detection(String[] args) {
 
-        src = Imgcodecs.imread("img\\carrote2.jpg");
+        src = Imgcodecs.imread("C:\\Users\\MSI\\Documents\\NetBeansProjects\\Gestion-de-projet\\mavenproject1\\src\\main\\java\\com\\argos\\utils\\test2.jpg");
 
 
         resizeImg = Mat.zeros(src.size(), CvType.CV_8U);
@@ -173,7 +173,12 @@ class automatic_detection {
             
             if (newZone.getArea() > 1500 && !newZone.existsInArray(detected)) {
                 
-                
+                if(newZone.getArea() > this.maxZone){
+                    
+                    this.maxZone = newZone.getArea();
+                    zoneMaxAire = newZone;
+                    
+                }
                 detected.add(newZone);
             }
 
@@ -220,12 +225,14 @@ class automatic_detection {
             }
             
         }
-
+        
+         System.out.println("optimal saturation" + optimalSaturation);
+        
         for (ZoneCarotte currentCarotte : detected) {
             
-            if(currentCarotte.w > currentCarotte.h) {
+            if(zoneMaxAire.w > zoneMaxAire.h) {
                 
-                
+                System.out.println("Horizontale");
                 for (int i = 0; i < currentCarotte.w ; i += currentCarotte.w/10) {
                 
                     KmeanDetection kDetect = new KmeanDetection(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.w, currentCarotte.h);
@@ -234,10 +241,10 @@ class automatic_detection {
                 }
                 
             }else{
+                System.out.println("Verticale");
+                for (int i = 0; i < currentCarotte.h ; i += currentCarotte.h/10) {
                 
-                for (int i = 0; i < currentCarotte.w ; i += currentCarotte.w/10) {
-                
-                    KmeanDetection kDetect = new KmeanDetection(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.w, currentCarotte.h);
+                    KmeanDetection kDetect = new KmeanDetection(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.h, currentCarotte.w);
                     carotteColor.add(kDetect.Match(srcFinal));
 
                 }

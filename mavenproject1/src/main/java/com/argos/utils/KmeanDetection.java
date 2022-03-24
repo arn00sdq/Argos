@@ -120,6 +120,10 @@ public class KmeanDetection {
             
             this.upper_x = 399 - this.w ;
         }
+         if(this.upper_y +  this.h >= 400){
+            
+            this.upper_y = 399 - this.h ;
+        }
         
         Rect rectCrop = new Rect(this.upper_x, this.upper_y , this.w, this.h);
         Mat imageROI = new Mat(kImg,rectCrop);
@@ -146,7 +150,7 @@ public class KmeanDetection {
         
         List<String> res = new ArrayList<>();
         res = mi.getMaterialNamesFromColors(colorsArray);
-
+        System.out.println(" Couleur palette" + res);
         return(res);
        
     }
