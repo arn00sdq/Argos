@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape android:shape="oval">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" >
+        <shape android:shape="rectangle">
             <solid android:color="#2196F3"/>
             <size
-                android:width="0dp"
-                android:height="15dp" />
+                android:width="10dp"
+                android:height="30dp" />
         </shape>
     </item>
-</layer-list>
+    <item android:state_pressed="false" >
+        <shape android:shape="rectangle">
+            <solid android:color="#2196F3"/>
+            <size
+                android:width="5dp"
+                android:height="20dp" />
+        </shape>
+    </item>
+</selector>

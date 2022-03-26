@@ -27,15 +27,14 @@ import org.opencv.android.OpenCVLoader;
 
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements
-        GestureDetector.OnGestureListener,
-        GestureDetector.OnDoubleTapListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "ProjetTER::MainActivity";
 
     private CameraListener camera_component;
     private ConfigLayout configLayout;
-
+    private float x1 = 0;
+    private float y1 = 0;
 
     private final BaseLoaderCallback base_loader_callback = new BaseLoaderCallback(MainActivity.this) {
         @Override
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.i(TAG, "onCreate");
         this.camera_component = new CameraListener((JavaCameraView) findViewById(R.id.camera_view));
         this.configLayout = new ConfigLayout((View) findViewById(R.id.ButtonLayout));
-        this.setDevelopButton();
+
     }
 
     @Override
@@ -77,94 +76,43 @@ public class MainActivity extends AppCompatActivity implements
         this.camera_component.disable();
     }
 
-    public void setDevelopButton() {
-        ImageButton settingButton = (ImageButton) findViewById(R.id.settingsButton);
-        settingButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View view) {
-                configLayout.setVisible( !configLayout.is_visible());
-            }
-        });
-    }
-
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onTouchEvent(MotionEvent event){
 
-        int action = MotionEventCompat.getActionMasked(event);
+        int action = event.getAction();
+        float x2 = event.getX();
+        float y2 = event.getY();
+        float dx = x2-x1;
+        float dy = y2-y1;
 
         switch(action) {
             case (MotionEvent.ACTION_DOWN) :
                 Log.d(TAG,"Action was DOWN");
+                x1 = event.getX();
+                y1 = event.getY();
                 return true;
-            case (MotionEvent.ACTION_MOVE) :
-                Log.d(TAG,"Action was MOVE");
-                return true;
+
             case (MotionEvent.ACTION_UP) :
                 Log.d(TAG,"Action was UP");
-                return true;
-            case (MotionEvent.ACTION_CANCEL) :
-                Log.d(TAG,"Action was CANCEL");
-                return true;
-            case (MotionEvent.ACTION_OUTSIDE) :
-                Log.d(TAG,"Movement occurred outside bounds " +
-                        "of current screen element");
+                // Use dx and dy to determine the direction of the move
+                if(Math.abs(dx) > Math.abs(dy)) {
+                    if(dx>0)
+                        Log.i(TAG, "right");
+                    else
+                        Log.i(TAG, "left");
+                } else {
+                    if (dy > 0) {
+                        this.configLayout.setVisible(false);
+                        Log.i(TAG, "down");
+                    } else {
+                        this.configLayout.setVisible(true);
+                        Log.i(TAG, "up");
+                    }
+                }
                 return true;
             default :
                 return super.onTouchEvent(event);
         }
-    }
-
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-        Log.i(TAG, "single tap");
-        return false;
-    }
-
-    @Override
-    public boolean onDoubleTap(MotionEvent motionEvent) {
-        Log.i(TAG, "double tap");
-        return false;
-    }
-
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
-        return false;
-    }
-
-    @Override
-    public boolean onDown(MotionEvent motionEvent) {
-        Log.i(TAG, "on down");
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent motionEvent) {
-        Log.i(TAG, "onShowPress");
-
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent motionEvent) {
-        Log.i(TAG, "onSingleTapUp");
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        Log.i(TAG, "onScroll");
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent motionEvent) {
-        Log.i(TAG, "onLongPress");
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        Log.i(TAG, "onFling");
-        return false;
     }
 }

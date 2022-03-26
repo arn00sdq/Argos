@@ -9,4 +9,13 @@
     <string name="Valeur">Valeur</string>
     <string name="Aire">Aire</string>
     <string name="auto">Auto</string>
+    <string name="algorithme" >Algorithme :</string>
+    <string name="k_means">K-MEANS</string>
+    <string name="aire_minimale_d_une_zone">Aire minimale d\'une zone</string>
+    <string name="nombre_de_clusters">Nombre de groupes</string>
+    <string name="nombre_d_it_rations">Nombre d\'itérations</string>
+    <string name="seuil">Seuil</string>
+    <string name="h">H</string>
+    <string name="s">S</string>
+    <string name="v">V</string>
 </resources>
