@@ -1,7 +1,7 @@
 # Argos
 
-/*<img src="https://ai.github.io/size-limit/logo.svg" align="right"
-     alt="Size Limit logo by Anton Lovchikov" width="120" height="178">*/
+/*<img src="./Images/logo.png" align="center"
+     alt="Logo" width="120" height="178">*/
 
 Argos is a real-time application bundled into an APK that automatically finds geological samples in the camera flux in order to extract useful visible data of those samples.
 
