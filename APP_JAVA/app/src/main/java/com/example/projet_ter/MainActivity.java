@@ -2,6 +2,7 @@ package com.example.projet_ter;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MotionEventCompat;
 
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED)
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         Objects.requireNonNull(this.getSupportActionBar()).hide();

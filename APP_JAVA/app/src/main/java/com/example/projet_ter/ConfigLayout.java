@@ -105,7 +105,7 @@ public class ConfigLayout {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View view) {
-                setVisible(!isVisible);
+                setVisible(!is_visible());
                 isVisible = !isVisible;
             }
         });
@@ -142,6 +142,10 @@ public class ConfigLayout {
         this.layout.setLayoutParams(layoutP);
     }
 
+    /**
+     * return the visibility of the layout
+     * @return true if visible
+     */
     public boolean is_visible() {
         return this.isVisible;
     }
