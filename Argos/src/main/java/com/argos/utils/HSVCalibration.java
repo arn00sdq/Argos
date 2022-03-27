@@ -52,9 +52,9 @@ public class HSVCalibration {
     int optimalSaturation = 1;
 
     int maxZone = 0;
-    ZoneCarotte zoneMaxAire;
+    TargetZone zoneMaxAire;
 
-    List<ZoneCarotte> detectedZones;
+    List<TargetZone> detectedZones;
     ArrayList<List<String>> carotteColor = new ArrayList<>();
 
     public HSVCalibration(Mat sourceCalibration) {
@@ -105,7 +105,7 @@ public class HSVCalibration {
             Imgproc.approxPolyDP(contoursPoly[i], contoursPoly[i], 0.02 * peri, true);
 
             boundRect[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
-            ZoneCarotte newZone = new ZoneCarotte(boundRect[i].x, boundRect[i].y, boundRect[i].x + boundRect[i].width,
+            TargetZone newZone = new TargetZone(boundRect[i].x, boundRect[i].y, boundRect[i].x + boundRect[i].width,
                     boundRect[i].y + boundRect[i].height, boundRect[i].width, boundRect[i].height);
 
            if (newZone.getArea() > 1500 && !newZone.existsInArray(detectedZones)) {
@@ -236,7 +236,7 @@ public class HSVCalibration {
         this.target = target;
     }
 
-    public List<ZoneCarotte> getDetectedZones() {
+    public List<TargetZone> getDetectedZones() {
         return detectedZones;
     }
 
