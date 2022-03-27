@@ -22,6 +22,7 @@
         android:layout_marginTop="46dp"
         android:layout_marginEnd="36dp"
         android:checked="true"
+        android:minHeight="48dp"
         android:scaleX="1.5"
         android:scaleY="1.5"
         android:text="@string/auto"
@@ -32,198 +33,254 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-    <ImageButton
-        android:id="@+id/settingsButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#00FFFFFF"
-        android:layout_marginBottom="26dp"
-        android:layout_marginEnd="26dp"
-        app:layout_constraintBottom_toTopOf="@+id/ButtonLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_sliders_solid"
-        app:tint="#ffffff" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ButtonLayout"
+        android:id="@+id/ButtonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_shape"
+        android:visibility="visible"
+        android:animateLayoutChanges="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/titleLayout"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/bg_shape"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" >
+            android:layout_height="wrap_content"
+            android:background="@drawable/config_layout_top"
+            android:padding="20dp"
+            android:animateLayoutChanges="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                android:id="@+id/textLeft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="28dp"
-                android:text="@string/r_glage"
-                android:textColor="#2196F3"
-                android:textSize="30sp"
+                android:text="@string/algorithme"
+                android:textSize="20sp"
+                android:textColor="#ffffff"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/seekBarText"
+                android:id="@+id/textAlgo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/k_means"
+                android:textSize="20sp"
+                android:textColor="#ffffff"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="80dp"
-                android:text="@string/Hue"
-                android:textColor="#2196F3"
-                android:textSize="14sp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/textLeft"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#2196F3"
-                android:max="254"
-                android:min="1"
-                android:progressTint="#2196F3"
-                android:thumbTint="#2196F3"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seekBarText" />
-
-            <TextView
-                android:id="@+id/seekBarText2"
+            <Switch
+                android:id="@+id/algoChangeSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="35dp"
-                android:text="@string/Saturation"
-                android:textColor="#2196F3"
-                android:textSize="14sp"
-                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seekBar" />
-
-            <SeekBar
-                android:id="@+id/seekBar2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#2196F3"
-                android:max="254"
-                android:min="1"
-                android:progressTint="#2196F3"
-                android:thumbTint="#2196F3"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seekBarText2" />
-
-
-            <TextView
-                android:id="@+id/seekBarText3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="35dp"
-                android:text="@string/Valeur"
-                android:textColor="#2196F3"
-                android:textSize="14sp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seekBar2" />
-
-            <SeekBar
-                android:id="@+id/seekBar3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#2196F3"
-                android:max="254"
-                android:min="1"
-                android:progressTint="#2196F3"
-                android:thumbTint="#2196F3"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seekBarText3" />
-
-            <TextView
-                android:id="@+id/seekBarText4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="35dp"
-                android:text="@string/Aire"
-                android:textColor="#2196F3"
-                android:textSize="14sp"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seekBar3" />
-
-            <SeekBar
-                android:id="@+id/seekBar4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#2196F3"
-                android:max="254"
-                android:min="1"
-                android:progressTint="#2196F3"
-                android:thumbTint="#2196F3"
-                android:visibility="invisible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seekBarText4" />
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ZoomLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/settingsButton"
-        app:layout_constraintTop_toBottomOf="@+id/AutoModeSwitch"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="20dp"
-        >
-<!--
-        <ImageButton
-            android:id="@+id/zoomButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:layout_constraintBottom_toBottomOf="parent"
-            android:layout_constraintEnd_toEndOf="parent"
-            android:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_magnifying_glass_plus_solid" />
--->
-        <android.widget.VerticalSeekBar
-            android:id="@+id/zoomBar"
-            style="@style/Widget.AppCompat.SeekBar.Discrete"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/slidersLayout"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:thumb="@drawable/seekbar_thumb"
-            android:progressDrawable="@drawable/seekbar_style"
-            android:max="10"
-            android:min="0"
+            android:visibility="visible"
+            android:padding="20dp"
+            android:animateLayoutChanges="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/titleLayout"
+            app:layout_constraintStart_toStartOf="parent" >
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/kmeansGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="textMinArea, seekBarMinArea, textNbCluster, seekBarNbCluster, textNbIt, seekBarNbIt, textThreshold, seekBarThreshold" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/hsvGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:constraint_referenced_ids="textH, seekBarH, textS, seekBarS, textV, seekBarV" />
+
+            <TextView
+                android:id="@+id/textMinArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/aire_minimale_d_une_zone"
+                android:textSize="20sp"
+                android:textColor="#ff2196F3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <SeekBar
+                android:id="@+id/seekBarMinArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:progressDrawable="@drawable/seekbar_progress"
+                android:thumb="@drawable/seekbar_thumb"
+                android:layout_marginTop="10dp"
+                android:progress="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textMinArea" />
+
+            <TextView
+                android:id="@+id/textNbCluster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nombre_de_clusters"
+                android:textSize="20sp"
+                android:textColor="#ff2196F3"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seekBarMinArea" />
+
+            <SeekBar
+                android:id="@+id/seekBarNbCluster"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:progressDrawable="@drawable/seekbar_progress"
+                android:thumb="@drawable/seekbar_thumb"
+                android:layout_marginTop="10dp"
+                android:progress="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textNbCluster" />
+
+            <TextView
+                android:id="@+id/textNbIt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nombre_d_it_rations"
+                android:textSize="20sp"
+                android:textColor="#ff2196F3"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seekBarNbCluster" />
+
+            <SeekBar
+                android:id="@+id/seekBarNbIt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:progressDrawable="@drawable/seekbar_progress"
+                android:thumb="@drawable/seekbar_thumb"
+                android:layout_marginTop="10dp"
+                android:progress="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textNbIt" />
+
+            <TextView
+                android:id="@+id/textThreshold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/seuil"
+                android:textSize="20sp"
+                android:textColor="#ff2196F3"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seekBarNbIt" />
+
+            <SeekBar
+                android:id="@+id/seekBarThreshold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:progressDrawable="@drawable/seekbar_progress"
+                android:thumb="@drawable/seekbar_thumb"
+                android:layout_marginTop="10dp"
+                android:progress="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textThreshold" />
+
+            <TextView
+                android:id="@+id/textH"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/h"
+                android:textSize="20sp"
+                android:textColor="#ff2196F3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <SeekBar
+                android:id="@+id/seekBarH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:progressDrawable="@drawable/seekbar_progress"
+                android:thumb="@drawable/seekbar_thumb"
+                android:layout_marginTop="10dp"
+                android:progress="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textH" />
+
+            <TextView
+                android:id="@+id/textS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/s"
+                android:textSize="20sp"
+                android:textColor="#ff2196F3"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seekBarH" />
+
+            <SeekBar
+                android:id="@+id/seekBarS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:progressDrawable="@drawable/seekbar_progress"
+                android:thumb="@drawable/seekbar_thumb"
+                android:layout_marginTop="10dp"
+                android:progress="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textS" />
+
+            <TextView
+                android:id="@+id/textV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/v"
+                android:textSize="20sp"
+                android:textColor="#ff2196F3"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seekBarS" />
+
+            <SeekBar
+                android:id="@+id/seekBarV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="30dp"
+                android:progressDrawable="@drawable/seekbar_progress"
+                android:thumb="@drawable/seekbar_thumb"
+                android:layout_marginTop="10dp"
+                android:progress="10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textV" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

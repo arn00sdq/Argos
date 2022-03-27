@@ -11,7 +11,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-    public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     private static final String TAG = "ProjectTER::Camera";
 
@@ -57,8 +57,11 @@ import org.opencv.imgproc.Imgproc;
         Core.rotate(this.rgba_matrix, this.rgba_matrix, Core.ROTATE_90_CLOCKWISE);
         // Getting the new ratio
         double img_ratio = (double) (original_size.width / this.rgba_matrix.size().width);
-        Size new_size = new Size(this.rgba_matrix.size().width * img_ratio, Math.floor((int) this.rgba_matrix.size().height * img_ratio));
+        // Resizing the mat with the new ratio
+        Size new_size = new Size(this.rgba_matrix.size().width * img_ratio,
+                Math.floor((int) this.rgba_matrix.size().height * img_ratio));
         Imgproc.resize(this.rgba_matrix, this.rgba_matrix, new_size, Imgproc.INTER_CUBIC);
+        // getting the sub mat to match the mat size needed
         this.rgba_matrix = this.rgba_matrix.submat((int) ((new_size.height / 2) - (original_size.height / 2)),
                 (int) ((new_size.height / 2) + (original_size.height / 2)),
                 (int) ((new_size.width / 2) - (original_size.width / 2)),

@@ -1,5 +1,8 @@
 package com.example.projet_ter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -14,14 +17,19 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.text.Layout;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.CompoundButton;
+import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,93 +39,111 @@ public class ConfigLayout {
     private static final String TAG = "ProjetTER::ConfigLayout";
 
     private final View layout;
+    private final View topLayout;
 
-    private final List<AppCompatSeekBar> seekBars = new ArrayList<>();
-    private final List<TextView> seekBarsText = new ArrayList<>();
-    private final int layoutInitialHeight;
+    private final Switch algoChangeSwitch;
 
+    private final Group kMeansGroup;
+    private final Group hsvGroup;
+
+    private final TextView agloNameField;
+
+    private final SeekBar minAreaSeekBar;
+    private final SeekBar nbClusterSeekBar;
+    private final SeekBar nbItSeekBar;
+    private final SeekBar thresholdSeekBar;
+
+    private final SeekBar hSeekBar;
+    private final SeekBar sSeekBar;
+    private final SeekBar vSeekBar;
+
+    private boolean isVisible = false;
+
+    /**
+     * Constructor
+     * @param layout the config layout
+     */
     public ConfigLayout(View layout) {
-        // Getting the layout
         this.layout = layout;
-        // Getting the initial height
-        this.layoutInitialHeight = layout.getLayoutParams().height;
-        // Getting the seekBars
-        this.seekBars.add(layout.findViewById(R.id.seekBar));
-        this.seekBars.add(layout.findViewById(R.id.seekBar2));
-        this.seekBars.add(layout.findViewById(R.id.seekBar3));
-        this.seekBars.add(layout.findViewById(R.id.seekBar4));
-        // Getting the seekBars text
-        this.seekBarsText.add(layout.findViewById(R.id.seekBarText));
-        this.seekBarsText.add(layout.findViewById(R.id.seekBarText2));
-        this.seekBarsText.add(layout.findViewById(R.id.seekBarText3));
-        this.seekBarsText.add(layout.findViewById(R.id.seekBarText4));
+        // Getting the top layout
+        this.topLayout = this.layout.findViewById(R.id.titleLayout);
+        // Getting the group
+        this.kMeansGroup = this.layout.findViewById(R.id.kmeansGroup);
+        this.hsvGroup = this.layout.findViewById(R.id.hsvGroup);
+        // Getting the switch
+        this.algoChangeSwitch = this.layout.findViewById(R.id.algoChangeSwitch);
+        // Getting the text field
+        this.agloNameField = this.layout.findViewById(R.id.textAlgo);
+        // Getting the kMeans seekBar
+        this.minAreaSeekBar = this.layout.findViewById(R.id.seekBarMinArea);
+        this.nbClusterSeekBar = this.layout.findViewById(R.id.seekBarNbCluster);
+        this.nbItSeekBar = this.layout.findViewById(R.id.seekBarNbIt);
+        this.thresholdSeekBar = this.layout.findViewById(R.id.seekBarThreshold);
+        // Getting the hsv seekBar
+        this.hSeekBar = this.layout.findViewById(R.id.seekBarH);
+        this.sSeekBar = this.layout.findViewById(R.id.seekBarS);
+        this.vSeekBar = this.layout.findViewById(R.id.seekBarV);
 
+        // Set a listener for the changeAlgo switch
+        this.algoChangeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    agloNameField.setText("HSV");
+                    hsvGroup.setVisibility(View.VISIBLE);
+                    kMeansGroup.setVisibility(View.INVISIBLE);
+                } else {
+                    agloNameField.setText("K-MEANS");
+                    kMeansGroup.setVisibility(View.VISIBLE);
+                    hsvGroup.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        this.topLayout.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                setVisible(!isVisible);
+                isVisible = !isVisible;
+            }
+        });
+
+        SeekBar.OnSeekBarChangeListener kMeansSeekBarChange = new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                Log.i(TAG, "i : " + i + ", b :" + b);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        };
     }
 
+    /**
+     * Set the sliders configuration visibility
+     * @param visible true to visible
+     */
     @RequiresApi(api = Build.VERSION_CODES.N) // For lambda function
     public void setVisible(boolean visible) {
         // Getting the current param layout
         ConstraintLayout.LayoutParams layoutP = (ConstraintLayout.LayoutParams) layout.getLayoutParams();
         // Set the new value to the element on the screen
+        float pixels = 0;
         if (visible) {
-            this.layout.setVisibility(View.VISIBLE);
-            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    500,
-                    layout.getContext().getResources().getDisplayMetrics());
-            layoutP.height = (int) pixels;
-            this.seekBars.forEach(element -> {
-                element.setVisibility(View.VISIBLE);
-            });
-            this.seekBarsText.forEach(element -> {
-                element.setVisibility(View.VISIBLE);
-            });
-        } else {
-            this.layout.setVisibility(View.INVISIBLE);
-            float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                    1,
-                    layout.getContext().getResources().getDisplayMetrics());
-            layoutP.height = (int) pixels;
-            this.seekBars.forEach(element -> {
-                element.setVisibility(View.INVISIBLE);
-            });
-            this.seekBarsText.forEach(element -> {
-                element.setVisibility(View.INVISIBLE);
-            });
+            pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 420, layout.getContext().getResources().getDisplayMetrics());
         }
+        layoutP.height = (int) pixels;
         // Apply new param to the layout
         this.layout.setLayoutParams(layoutP);
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O) // For lambda function and set min and max
-    public void setManualMode(boolean isChecked) {
-        int active_color = Color.parseColor("#2196F3");
-        int disable_color = Color.parseColor("#aaaaaa");
-        if (isChecked) {
-            this.seekBars.forEach(element -> {
-                element.setProgressBackgroundTintList(ColorStateList.valueOf(disable_color));
-                element.setProgressTintList(ColorStateList.valueOf(disable_color));
-                element.setThumbTintList(ColorStateList.valueOf(disable_color));
-                element.setEnabled(false);
-            });
-            this.seekBarsText.forEach(element -> {
-                element.setTextColor(disable_color);
-            });
-        } else {
-            this.seekBars.forEach(element -> {
-                element.setProgressBackgroundTintList(ColorStateList.valueOf(active_color));
-                element.setProgressTintList(ColorStateList.valueOf(active_color));
-                element.setThumbTintList(ColorStateList.valueOf(active_color));
-                element.setEnabled(true);
-            });
-            this.seekBarsText.forEach(element -> {
-                element.setTextColor(active_color);
-            });
-        }
-    }
-
     public boolean is_visible() {
-        return this.layout.getVisibility() == View.VISIBLE;
+        return this.isVisible;
     }
 
 }
