@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author MSI
  */
-public class ZoneCarotte {
+public class TargetZone {
     
     int upper_x;
     int upper_y;
@@ -45,7 +45,7 @@ public class ZoneCarotte {
         return h;
     }
     
-    public ZoneCarotte(int upper_x,int upper_y,int lower_x,int lower_y,int w,int h){
+    public TargetZone(int upper_x,int upper_y,int lower_x,int lower_y,int w,int h){
         
         this.upper_x = upper_x;
         this.upper_y = upper_y;
@@ -62,7 +62,7 @@ public class ZoneCarotte {
         
     }
     
-    public boolean equals(ZoneCarotte other){
+    public boolean equals(TargetZone other){
 
         if(this.upper_x == other.upper_x){
             
@@ -75,7 +75,7 @@ public class ZoneCarotte {
         }
     }
     
-    public boolean existsInArray(List<ZoneCarotte> array){
+    public boolean existsInArray(List<TargetZone> array){
         
         boolean exists = false;
 

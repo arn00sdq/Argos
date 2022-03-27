@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class KmeanDetection {
+public class KmeansMaterialRecognition {
     
     int clusters = 4;
     int upper_x;
@@ -28,7 +28,7 @@ public class KmeanDetection {
     int h;
     TermCriteria criteria = new TermCriteria(TermCriteria.EPS+TermCriteria.COUNT,10, 1.0);
     
-    public KmeanDetection(int upper_x,int upper_y,int w,int h){
+    public KmeansMaterialRecognition(int upper_x,int upper_y,int w,int h){
         
         this.upper_x = upper_x;
         this.upper_y = upper_y;
@@ -37,7 +37,7 @@ public class KmeanDetection {
         
     }
     
-    public KmeanDetection(int upper_x,int upper_y,int w,int h, int cluster){
+    public KmeansMaterialRecognition(int upper_x,int upper_y,int w,int h, int cluster){
         
         this.upper_x = upper_x;
         this.upper_y = upper_y;
