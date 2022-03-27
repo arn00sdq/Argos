@@ -43,9 +43,9 @@ public class FindContourKmean {
     boolean calibration_completed = false;
     int minDiff = target;
     int maxZone = 0;
-    ZoneCarotte zoneMaxAire;
+    TargetZone zoneMaxAire;
 
-    List<ZoneCarotte> detectedZones;
+    List<TargetZone> detectedZones;
     ArrayList<List<String>> carotteColor = new ArrayList<>();
 
     public FindContourKmean(Mat sourceCalibration) {
@@ -114,7 +114,7 @@ public class FindContourKmean {
             
             boundRect[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
             
-            ZoneCarotte newZone = new ZoneCarotte(boundRect[i].x, boundRect[i].y, boundRect[i].x + boundRect[i].width,
+            TargetZone newZone = new TargetZone(boundRect[i].x, boundRect[i].y, boundRect[i].x + boundRect[i].width,
                     boundRect[i].y + boundRect[i].height, boundRect[i].width, boundRect[i].height);
 
            if (newZone.getArea() > 1500 && !newZone.existsInArray(detectedZones)) {

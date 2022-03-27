@@ -40,9 +40,9 @@ class automatic_detection {
     boolean analysis_completed = false;
     int s_val = 1;
 
-    List<ZoneCarotte> detected;
+    List<TargetZone> detected;
     int maxZone = 0;
-    ZoneCarotte zoneMaxAire;
+    TargetZone zoneMaxAire;
     Mat drawing;
 
     ArrayList<List<String>> carotteColor = new ArrayList<>();
@@ -76,7 +76,7 @@ class automatic_detection {
 
     public automatic_detection(String[] args) {
 
-        src = Imgcodecs.imread("C:\\Users\\MSI\\Documents\\NetBeansProjects\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\test2.jpg");
+        src = Imgcodecs.imread("C:\\Users\\MSI\\Documents\\NetBeansProjects\\Gestion-de-projet\\mavenproject1\\src\\main\\java\\com\\argos\\utils\\test2.jpg");
 
 
         resizeImg = Mat.zeros(src.size(), CvType.CV_8U);
@@ -165,11 +165,11 @@ class automatic_detection {
             Imgproc.approxPolyDP(contoursPoly[i], contoursPoly[i], 0.02 * peri, true);
 
             boundRect[i] = Imgproc.boundingRect(new MatOfPoint(contoursPoly[i].toArray()));
-            ZoneCarotte newZone = new ZoneCarotte(boundRect[i].x, boundRect[i].y, boundRect[i].x + boundRect[i].width,
+            TargetZone newZone = new TargetZone(boundRect[i].x, boundRect[i].y, boundRect[i].x + boundRect[i].width,
                     boundRect[i].y + boundRect[i].height, boundRect[i].width, boundRect[i].height);
             
 
-            ZoneCarotte maxCarotte;
+            TargetZone maxCarotte;
             
             if (newZone.getArea() > 1500 && !newZone.existsInArray(detected)) {
                 
@@ -228,14 +228,14 @@ class automatic_detection {
         
          System.out.println("optimal saturation" + optimalSaturation);
         
-        for (ZoneCarotte currentCarotte : detected) {
+        for (TargetZone currentCarotte : detected) {
             
             if(zoneMaxAire.w > zoneMaxAire.h) {
                 
                 System.out.println("Horizontale");
                 for (int i = 0; i < currentCarotte.w ; i += currentCarotte.w/10) {
                 
-                    KmeanDetection kDetect = new KmeanDetection(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.w, currentCarotte.h);
+                    KmeansMaterialRecognition kDetect = new KmeansMaterialRecognition(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.w, currentCarotte.h);
                     carotteColor.add(kDetect.Match(srcFinal));
 
                 }
@@ -244,7 +244,7 @@ class automatic_detection {
                 System.out.println("Verticale");
                 for (int i = 0; i < currentCarotte.h ; i += currentCarotte.h/10) {
                 
-                    KmeanDetection kDetect = new KmeanDetection(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.h, currentCarotte.w);
+                    KmeansMaterialRecognition kDetect = new KmeansMaterialRecognition(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.h, currentCarotte.w);
                     carotteColor.add(kDetect.Match(srcFinal));
 
                 }
