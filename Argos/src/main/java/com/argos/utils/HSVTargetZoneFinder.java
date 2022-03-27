@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.argos.utils;
 
 import java.time.Duration;
@@ -48,7 +43,7 @@ public class HSVTargetZoneFinder {
     public List<TargetZone> getDetectedTargetZones(Mat src_image) {
 
         List<TargetZone> detectedZones = new ArrayList<>();
-
+        
         Mat hsv_image = new Mat();
         Mat hsv_mask = new Mat();
         Mat hsv_mask_inverted = new Mat();
@@ -260,7 +255,7 @@ public class HSVTargetZoneFinder {
 
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat img = Imgcodecs.imread("C:\\Users\\Ivan\\Google Drive\\FAC\\M1\\S2\\Gestion de Projets\\Gestion-de-projet\\mavenproject1\\src\\main\\java\\com\\argos\\utils\\test2.jpg");
+        Mat img = Imgcodecs.imread("C:\\Users\\Ivan\\Google Drive\\FAC\\M1\\S2\\Gestion de Projets\\Gestion-de-projet\\Images_de_test\\test2.jpg");
         HSVTargetZoneFinder cal = new HSVTargetZoneFinder();
         Instant start = Instant.now();
         cal.automaticallyCalibrate(img);
