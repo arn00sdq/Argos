@@ -11,22 +11,35 @@ import org.opencv.imgcodecs.Imgcodecs;
  */
 public class FrameAnalyzer {
 
-    public ContourFindingMethods ContourFindingMethod = ContourFindingMethods.HSV;
-    public HSVTargetZoneFinder HSVTargetZoneFinder = new HSVTargetZoneFinder();
+    public TargetZoneFinderMethod targetZoneFinderMethod = TargetZoneFinderMethod.HSV;
     
-    public static enum ContourFindingMethods {
+    public HSVTargetZoneFinder HSVTargetZoneFinder = new HSVTargetZoneFinder();
+    public KmeansTargetZoneFinder KmeansTargetZoneFinder = new KmeansTargetZoneFinder();
+    
+    public static enum TargetZoneFinderMethod {
         HSV, K_MEANS
-}
+    }
     
     
     public List<TargetZone> getTargetZonesFromImage(Mat img) {
-        //Analyse image, extraction des POI
-        switch (this.ContourFindingMethod){
+        switch (this.targetZoneFinderMethod){
             case HSV:
                 return HSVTargetZoneFinder.getDetectedTargetZones(img);
+            case K_MEANS:
+                return KmeansTargetZoneFinder.getDetectedTargetZones(img);
         }
         return null;
     }
+
+    public TargetZoneFinderMethod getTargetZoneFinderMethod() {
+        return targetZoneFinderMethod;
+    }
+
+    public void setTargetZoneFinderMethod(TargetZoneFinderMethod TargetZoneFinderMethod) {
+        this.targetZoneFinderMethod = TargetZoneFinderMethod;
+    }
+    
+    
     
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
