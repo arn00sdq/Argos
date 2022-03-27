@@ -10,14 +10,13 @@ import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.core.TermCriteria;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 /**
- *
+ * Class defining an object used to find target zones based on the k-means algorithm
  * @author MSI
  */
 public class KmeansTargetZoneFinder {
@@ -29,6 +28,12 @@ public class KmeansTargetZoneFinder {
 
     private final boolean debug = true;
 
+    /**
+     * Gets a list of detected TargetZone from an image
+     *
+     * @param src_image Mat representing an image
+     * @return list of TargetZone
+     */
     public List<TargetZone> getDetectedTargetZones(Mat src_image) {
 
         List<TargetZone> detectedZones = new ArrayList<>();
@@ -44,7 +49,6 @@ public class KmeansTargetZoneFinder {
         int flags = Core.KMEANS_PP_CENTERS;
         Mat centers = new Mat();
 
-        //Imgproc.cvtColor(imageROI,img_clone,Imgproc.COLOR_RGB2BGR);      
         Mat data = srcclone.reshape(1, srcclone.rows() * srcclone.cols());
         data.convertTo(data, CvType.CV_32F);
 
@@ -52,6 +56,7 @@ public class KmeansTargetZoneFinder {
 
         Mat draw = new Mat((int) src_image.total(), 1, CvType.CV_32FC3);
         Mat colors = centers.reshape(3, clustersNumber);
+        
         for (int i = 0; i < clustersNumber; i++) {
             Mat mask = new Mat(); // a mask for each cluster label
             Core.compare(bestLabels, new Scalar(i), mask, Core.CMP_EQ);
@@ -73,6 +78,7 @@ public class KmeansTargetZoneFinder {
 
         MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
         Rect[] boundRect = new Rect[contours.size()];
+        
         for (int i = 0; i < contours.size(); i++) {
 
             contoursPoly[i] = new MatOfPoint2f(contours.get(i).toArray());
@@ -115,7 +121,12 @@ public class KmeansTargetZoneFinder {
 
     }
 
-    
+    /**
+     * Gets a list of Contours from an image
+     *
+     * @param src_image Mat representing an image
+     * @return list of MatOfPoint
+     */
     public List<MatOfPoint> getDetectedContours(Mat src_image){
         Mat kmean_mask = new Mat();
         Mat kmean_mask_inverted = new Mat();
@@ -128,7 +139,6 @@ public class KmeansTargetZoneFinder {
         int flags = Core.KMEANS_PP_CENTERS;
         Mat centers = new Mat();
 
-        //Imgproc.cvtColor(imageROI,img_clone,Imgproc.COLOR_RGB2BGR);      
         Mat data = srcclone.reshape(1, srcclone.rows() * srcclone.cols());
         data.convertTo(data, CvType.CV_32F);
 

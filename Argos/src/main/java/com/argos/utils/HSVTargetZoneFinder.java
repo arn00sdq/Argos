@@ -17,7 +17,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 /**
- * Class defining an object used to find Targets based on HSV values and
+ * Class defining an object used to find target zones based on HSV values and
  * calibrating itself
  *
  * @author Ivan
@@ -90,8 +90,6 @@ public class HSVTargetZoneFinder {
 
         }
 
-        //System.out.println("contours :   " + contours.size());
-        //System.out.println("zones    :   " + detectedZones.size());
         if (this.debug) {
 
             for (int k = 0; k < detectedZones.size(); k++) {
