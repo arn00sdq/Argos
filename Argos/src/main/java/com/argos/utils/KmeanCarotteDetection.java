@@ -25,64 +25,42 @@ import org.opencv.imgproc.Imgproc;
  *
  * @author MSI
  */
-public class FindContourKmean {
+public class KmeanCarotteDetection {
 
-    private Integer target = 100;
+    private Integer attempts = 5;
+    private Integer K = 5;
+    private Integer threshold = 120;
+    private Integer min_area_contour = 500;
     
     private boolean debug = true;
-
-    Mat kmean_mask = new Mat();
-    Mat hsv_image_resize = new Mat();
-    Mat hsv_resize = new Mat();
-    Mat hsv_mask = new Mat();
-    Mat hsv_mask_inverted = new Mat();
-    Mat result_kmean = new Mat();
-    Mat hierarchy = new Mat();
-
-    int s_val = 1;
-    boolean calibration_completed = false;
-    int minDiff = target;
-    int maxZone = 0;
+    
     TargetZone zoneMaxAire;
 
-    List<TargetZone> detectedZones;
-    ArrayList<List<String>> carotteColor = new ArrayList<>();
-
-    public FindContourKmean(Mat sourceCalibration) {
-
-        hsv_image_resize = Mat.zeros(sourceCalibration.size(), CvType.CV_8U);
-        Size sz = new Size(400, 400);
-        Imgproc.resize(sourceCalibration, hsv_image_resize, sz);
-
-        calibrate();
-
-    }
-
-    public void calibrate() {
-
-        kmean_mask = new Mat();
-        hsv_mask = new Mat();
-        hsv_mask_inverted = new Mat();
-        hierarchy = new Mat();
+    public List<TargetZone> getDetectedCarotteZones(Mat src_image) {
         
+        List<TargetZone> detectedZones = new ArrayList<>();
+        
+        Mat kmean_mask = new Mat();
+        Mat kmean_mask_inverted = new Mat();
         Mat source_bitwised_and = new Mat();
+        Mat hierarchy = new Mat();
+        Mat srcclone = src_image.clone();
+                
         detectedZones = new ArrayList<>();
         
-        int K=5;
         Mat bestLabels = new Mat();
         TermCriteria criteria = new TermCriteria();
-        int attempts=5;
         int flags = Core.KMEANS_PP_CENTERS;
         Mat centers=new Mat();
 
         //Imgproc.cvtColor(imageROI,img_clone,Imgproc.COLOR_RGB2BGR);      
         
-        Mat data = hsv_image_resize.reshape (1, hsv_image_resize.rows() * hsv_image_resize.cols());
+        Mat data = srcclone.reshape (1, srcclone.rows() * srcclone.cols());
         data.convertTo(data,CvType.CV_32F);
                   
         Core.kmeans​(data, K, bestLabels, criteria, attempts, flags, centers);
         
-        Mat draw = new Mat((int)hsv_image_resize.total(),1, CvType.CV_32FC3);
+        Mat draw = new Mat((int)src_image.total(),1, CvType.CV_32FC3);
         Mat colors = centers.reshape(3,K);
         for (int i=0; i<K; i++) {
             Mat mask = new Mat(); // a mask for each cluster label
@@ -92,17 +70,17 @@ public class FindContourKmean {
             draw.setTo(new Scalar(d[0],d[1],d[2]), mask);
         }
         
-        draw = draw.reshape(3, hsv_image_resize.rows());
+        draw = draw.reshape(3, src_image.rows());
         draw.convertTo(draw, CvType.CV_8U);
         
         Imgproc.cvtColor(draw, kmean_mask, Imgproc.COLOR_BGR2GRAY);       
-        Imgproc.threshold(kmean_mask, hsv_mask_inverted, 150, 255, Imgproc.THRESH_BINARY);
-        Core.bitwise_and(hsv_image_resize, hsv_image_resize, source_bitwised_and, hsv_mask_inverted);
+        Imgproc.threshold(kmean_mask, kmean_mask_inverted, threshold, 200, Imgproc.THRESH_BINARY);//ou Inv
+        Core.bitwise_and(src_image, src_image, source_bitwised_and, kmean_mask_inverted);
        
         
         List<MatOfPoint> contours = new ArrayList<>();
         
-        Imgproc.findContours(hsv_mask_inverted, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(kmean_mask_inverted, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
         MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
         Rect[] boundRect = new Rect[contours.size()];
@@ -117,7 +95,7 @@ public class FindContourKmean {
             TargetZone newZone = new TargetZone(boundRect[i].x, boundRect[i].y, boundRect[i].x + boundRect[i].width,
                     boundRect[i].y + boundRect[i].height, boundRect[i].width, boundRect[i].height);
 
-           if (newZone.getArea() > 1500 && !newZone.existsInArray(detectedZones)) {
+           if (newZone.getArea() > min_area_contour && !newZone.existsInArray(detectedZones)) {
                 
                /* if(newZone.getArea() > this.maxZone){
                     
@@ -145,19 +123,55 @@ public class FindContourKmean {
             
             HighGui.imshow("image_bitwised", source_bitwised_and);  
             HighGui.imshow("2GRAY", kmean_mask);  
-            HighGui.imshow("resize_original", hsv_image_resize);   
+            HighGui.imshow("resize_original", kmean_mask);   
             HighGui.imshow("KmeanImg", draw);
-            HighGui.imshow("inv_mask", hsv_mask_inverted);
+            HighGui.imshow("inv_mask", kmean_mask_inverted);
 
             HighGui.waitKey(1);
             
         }
+        
+        return detectedZones;
 
+    }
+    
+    public Integer getMin_area_contour() {
+        return min_area_contour;
+    }
+    
+    public Integer getAttempt() {
+        return attempts;
+    }
+
+    public Integer getK() {
+        return K;
+    }
+
+    public Integer getThreshold() {
+        return threshold;
+    }
+
+    public void setAttempt(Integer attempt) {
+        this.attempts = attempt;
+    }
+
+    public void setK(Integer K) {
+        this.K = K;
+    }
+
+    public void setThreshold(Integer threshold) {
+        this.threshold = threshold;
+    }
+    
+    public void setMin_area_contour(Integer min_area_contour) {
+        this.min_area_contour = min_area_contour;
     }
 
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        FindContourKmean cal = new FindContourKmean(Imgcodecs.imread("C:\\Users\\MSI\\Documents\\NetBeansProjects\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\carrote2.jpg"));
+        Mat img = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\carotte2.jpg");
+        KmeanCarotteDetection cal = new KmeanCarotteDetection();
+        cal.getDetectedCarotteZones(img);
     }
 
 }
