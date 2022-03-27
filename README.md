@@ -1,7 +1,6 @@
 # Argos
 
-/*<img src="./Images/logo.png" align="right"
-     alt="Logo">*/
+<img src="./Images/logo.png" align="right" alt="Logo">
 
 Argos is a real-time application bundled into an APK that automatically finds geological samples in the camera flux in order to extract useful visible data of those samples.
 
