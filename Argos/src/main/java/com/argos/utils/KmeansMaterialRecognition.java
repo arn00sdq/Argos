@@ -7,11 +7,9 @@ package com.argos.utils;
 
 import com.argos.utils.PaletteMapper.*;
 import org.opencv.core.Core;
-import org.opencv.highgui.*;
 import org.opencv.core.CvType;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.imgcodecs.*;
 
 import java.awt.*;
 
