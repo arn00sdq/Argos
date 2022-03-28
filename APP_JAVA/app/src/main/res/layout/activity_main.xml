@@ -102,14 +102,14 @@
                 android:id="@+id/kmeansGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="invisible"
                 app:constraint_referenced_ids="textMinArea, seekBarMinArea, textNbCluster, seekBarNbCluster, textNbIt, seekBarNbIt, textThreshold, seekBarThreshold" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/hsvGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:constraint_referenced_ids="textH, seekBarH, textS, seekBarS, textV, seekBarV" />
 
             <TextView
@@ -131,6 +131,8 @@
                 android:thumb="@drawable/seekbar_thumb"
                 android:layout_marginTop="10dp"
                 android:progress="10"
+                android:min="50"
+                android:max="10000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textMinArea" />
@@ -155,6 +157,8 @@
                 android:thumb="@drawable/seekbar_thumb"
                 android:layout_marginTop="10dp"
                 android:progress="10"
+                android:min="3"
+                android:max="10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textNbCluster" />
@@ -179,6 +183,8 @@
                 android:thumb="@drawable/seekbar_thumb"
                 android:layout_marginTop="10dp"
                 android:progress="10"
+                android:min="1"
+                android:max="10"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textNbIt" />
@@ -203,6 +209,8 @@
                 android:thumb="@drawable/seekbar_thumb"
                 android:layout_marginTop="10dp"
                 android:progress="10"
+                android:min="0"
+                android:max="255"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textThreshold" />

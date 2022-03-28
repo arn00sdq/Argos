@@ -1,6 +1,12 @@
 package com.example.projet_ter;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+
+import androidx.annotation.RequiresApi;
 
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
@@ -11,18 +17,61 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import com.argos.utils.FrameAnalyzer;
+import com.argos.utils.PointOfInterest;
+import com.argos.utils.PointOfInterestFinder;
+import com.argos.utils.TargetZone;
+
+import java.lang.annotation.Target;
+import java.util.List;
+
 public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     private static final String TAG = "ProjectTER::Camera";
+
+    private final FrameAnalyzer frameAnalyzer = new FrameAnalyzer();
 
     private final JavaCameraView camera_view;
 
     private Mat rgba_matrix;
     private Mat gray_matrix;
 
+    private boolean analyseStarted = false;
+
+    private int startX;
+    private int startY;
+
+    @SuppressLint("ClickableViewAccessibility")
     public CameraListener(JavaCameraView camera_view) {
         this.camera_view = camera_view;
         this.camera_view.setCvCameraViewListener(this);
+        this.camera_view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    startX = (int) motionEvent.getX();
+                    startY = (int) motionEvent.getY();
+                }
+
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    int endX = (int) motionEvent.getX();
+                    int endY = (int) motionEvent.getY();
+                    int dX = Math.abs(endX - startX);
+                    int dY = Math.abs(endY - startY);
+
+                    if (Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) <= 10) {
+                        if(analyseStarted) {
+
+                        } else {
+                            analyseStarted = true;
+                        }
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        });
     }
 
     @Override
@@ -43,6 +92,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
      * @param inputFrame The frame
      * @return the matrix to display
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
 
@@ -66,16 +116,18 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
                 (int) ((new_size.height / 2) + (original_size.height / 2)),
                 (int) ((new_size.width / 2) - (original_size.width / 2)),
                 (int) ((new_size.width / 2) + (original_size.width / 2)));
-        /*
 
+        //if (this.analyseStarted) {
+            // Start the analyze
+            List<PointOfInterest> poiArray = PointOfInterest.toPOIList(this.frameAnalyzer.getTargetZonesFromImage(this.rgba_matrix));
+            System.out.println("TAILLE " + poiArray.size());
+            // Draw the data
+            poiArray.forEach( poi -> {
+                Imgproc.rectangle(this.rgba_matrix, new Point(poi.getX_coord(), poi.getY_coord()),
+                        new Point(poi.getX_coord() + poi.getWidth(), poi.getY_coord() + poi.getHeight()), new Scalar(0, 0, 255), 5);
+            });
+        //}
 
-            Ajouter fonction analyse d'image ICI
-
-
-         */
-        Imgproc.rectangle(this.rgba_matrix, new Point(500, 50), new Point(1000, 500), new Scalar(0, 0, 255), 5);
-        Imgproc.putText(this.rgba_matrix, "Voici du texte", new Point(500, 550), 2, 2,
-                new Scalar(0, 0, 255), 2, Imgproc.LINE_8, false);
         return this.rgba_matrix;
     }
 
@@ -86,6 +138,10 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     public void disable() {
         this.camera_view.disableView();
+    }
+
+    public FrameAnalyzer getFrameAnalyzer() {
+        return this.frameAnalyzer;
     }
 
 }

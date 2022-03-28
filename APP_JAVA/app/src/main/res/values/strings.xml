@@ -18,4 +18,6 @@
     <string name="h">H</string>
     <string name="s">S</string>
     <string name="v">V</string>
+    <string name="info">Info</string>
+    <string name="fermer">Fermer</string>
 </resources>

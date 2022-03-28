@@ -1,6 +1,10 @@
 package com.argos.utils;
 
-import java.awt.Color;
+import android.graphics.Color;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.Map;
 
 /**
@@ -25,6 +29,7 @@ public class PaletteMapper {
      * 
      * @param type Type of the palette
      */
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public PaletteMapper(paletteTypes type) {
         switch (type) {
             case DEFAULT_PALETTE:
@@ -41,10 +46,11 @@ public class PaletteMapper {
     /**
      * setter for the default Palette Mapping
      */
+    @RequiresApi(api = Build.VERSION_CODES.R)
     private void setDefaultPaletteMapping() {
         colorMapping = Map.ofEntries(
-                Map.entry(new Color(176,130,67), "sand"),
-                Map.entry(new Color(73,54,33), "clay")
+                Map.entry(Color.valueOf(176,130,67), "sand"),
+                Map.entry(Color.valueOf(73,54,33), "clay")
         );       
     }
 

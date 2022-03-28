@@ -1,5 +1,9 @@
 package com.argos.utils;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -12,7 +16,6 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -102,15 +105,6 @@ public class HSVTargetZoneFinder {
             }
 
             System.out.println("saturation value" + saturation_value);
-
-            HighGui.imshow("original", src_image);
-            HighGui.imshow("HSV", hsv_image);
-            HighGui.imshow("mask", hsv_mask);
-            HighGui.imshow("maskInv", hsv_mask_inverted);
-            HighGui.imshow("rect", srcclone);
-            HighGui.imshow("RectFinal", source_bitwised_and);
-            HighGui.waitKey(1);
-
         }
 
         return detectedZones;
@@ -251,6 +245,7 @@ public class HSVTargetZoneFinder {
         this.max_saturation_val = max_saturation_val;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         Mat img = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\test.png");

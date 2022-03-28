@@ -1,6 +1,10 @@
 package com.argos.utils;
 
-import java.awt.Color;
+import android.graphics.Color;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +13,7 @@ import java.util.List;
  * @author Ivan
  * @code This class defines a POI (Point Of Interest) in an image
  */
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class PointOfInterest {
 
     private final List<String> labels;
@@ -16,7 +21,7 @@ public class PointOfInterest {
     private final Integer height;
     private final Integer x_coord;
     private final Integer y_coord;
-    private Color lineColor = Color.CYAN;
+    private Color lineColor = Color.valueOf(Color.CYAN);
     private Integer lineWidth = 1;
 
     /**
@@ -66,7 +71,7 @@ public class PointOfInterest {
                             zone.getH(),
                             zone.getUpper_x(),
                             zone.getUpper_y(),
-                            Color.RED,
+                            Color.valueOf(Color.RED),
                             2));
         });
 
@@ -121,7 +126,7 @@ public class PointOfInterest {
         result += ",\n\ty : " + this.y_coord;
         result += ",\n\twidth : " + this.width;
         result += ",\n\theight : " + this.height;
-        result += ",\n\tlineColor : " + this.lineColor.getRed() + ", " + this.lineColor.getGreen() + ", " + this.lineColor.getBlue();
+        result += ",\n\tlineColor : " + this.lineColor.red() + ", " + this.lineColor.green() + ", " + this.lineColor.blue();
         result += ",\n\tlineWidth : " + this.lineWidth;
         result += "\n}";
 

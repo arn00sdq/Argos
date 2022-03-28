@@ -5,13 +5,16 @@
  */
 package com.argos.utils;
 
+import android.graphics.Color;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import com.argos.utils.PaletteMapper.*;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
-
-import java.awt.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +49,7 @@ public class KmeansMaterialRecognition {
         
     }
     
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private Color[] extractRgbFromString(String dump, int clusters){
         
         int row = 0;
@@ -90,7 +94,7 @@ public class KmeansMaterialRecognition {
                     b = Math.round(Float.parseFloat(s));
                 }
                 
-                colorsArray[row] = new Color((int)r,(int)g,(int)b,255);
+                colorsArray[row] = Color.valueOf(r,g,b);
 
                 row++;
                 element = 0;
@@ -108,6 +112,7 @@ public class KmeansMaterialRecognition {
         
     }
     
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean Match(Mat kImg) {
              
         PaletteMapper pm = new PaletteMapper(paletteTypes.DEFAULT_PALETTE);

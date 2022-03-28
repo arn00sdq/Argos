@@ -31,6 +31,8 @@ import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 
+import com.argos.utils.FrameAnalyzer;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,8 @@ public class ConfigLayout {
 
     private final View layout;
     private final View topLayout;
+
+    private final FrameAnalyzer frameAnalyzer;
 
     private final Switch algoChangeSwitch;
 
@@ -63,8 +67,9 @@ public class ConfigLayout {
      * Constructor
      * @param layout the config layout
      */
-    public ConfigLayout(View layout) {
+    public ConfigLayout(View layout, FrameAnalyzer frameAnalyzer) {
         this.layout = layout;
+        this.frameAnalyzer = frameAnalyzer;
         // Getting the top layout
         this.topLayout = this.layout.findViewById(R.id.titleLayout);
         // Getting the group
@@ -93,10 +98,12 @@ public class ConfigLayout {
                     agloNameField.setText("HSV");
                     hsvGroup.setVisibility(View.VISIBLE);
                     kMeansGroup.setVisibility(View.INVISIBLE);
+                    frameAnalyzer.targetZoneFinderMethod = FrameAnalyzer.TargetZoneFinderMethod.HSV;
                 } else {
                     agloNameField.setText("K-MEANS");
                     kMeansGroup.setVisibility(View.VISIBLE);
                     hsvGroup.setVisibility(View.INVISIBLE);
+                    frameAnalyzer.targetZoneFinderMethod = FrameAnalyzer.TargetZoneFinderMethod.K_MEANS;
                 }
             }
         });
@@ -110,10 +117,10 @@ public class ConfigLayout {
             }
         });
 
-        SeekBar.OnSeekBarChangeListener kMeansSeekBarChange = new SeekBar.OnSeekBarChangeListener() {
+        /*this.minAreaSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                Log.i(TAG, "i : " + i + ", b :" + b);
+                frameAnalyzer.KmeansTargetZoneFinder.setMin_area_contour(i);
             }
 
             @Override
@@ -121,7 +128,79 @@ public class ConfigLayout {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
-        };
+        });*/
+        /*this.nbClusterSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                frameAnalyzer.KmeansTargetZoneFinder.setClustersNumber(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });*/
+        /*this.nbItSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                frameAnalyzer.KmeansTargetZoneFinder.setAttemptNumber(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });*/
+        /*this.thresholdSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                frameAnalyzer.KmeansTargetZoneFinder.setThreshold(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });*/
+        this.hSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                frameAnalyzer.HSVTargetZoneFinder.setHue_value(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        this.sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                frameAnalyzer.HSVTargetZoneFinder.setSaturation_value(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        this.vSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                frameAnalyzer.HSVTargetZoneFinder.setValue_value(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
     }
 
     /**

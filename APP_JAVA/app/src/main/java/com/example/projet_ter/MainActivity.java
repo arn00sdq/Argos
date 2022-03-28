@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i(TAG, "onCreate");
         this.camera_component = new CameraListener((JavaCameraView) findViewById(R.id.camera_view));
-        this.configLayout = new ConfigLayout((View) findViewById(R.id.ButtonLayout));
+        this.configLayout = new ConfigLayout((View) findViewById(R.id.ButtonLayout), this.camera_component.getFrameAnalyzer());
 
     }
 

@@ -1,5 +1,9 @@
 package com.argos.utils;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -41,6 +45,7 @@ public class FrameAnalyzer {
     
     
     
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         

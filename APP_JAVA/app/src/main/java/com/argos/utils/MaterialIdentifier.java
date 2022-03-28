@@ -1,6 +1,10 @@
 package com.argos.utils;
 
-import java.awt.Color;
+import android.graphics.Color;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -42,6 +46,7 @@ public class MaterialIdentifier {
      * @return List of strings representing each color mapped to a material
      *         returns either the name of a material or unknown
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public List<String> getMaterialNamesFromColors(Color[] colors){
         List<String> result = new ArrayList<>();
         for (Color color : colors) {
@@ -54,6 +59,7 @@ public class MaterialIdentifier {
      * @param color Color that we want to identify
      * @return Either the name of the identified material or unknown
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private String identifyMaterialFromColor(Color color){
         
         for (Entry<Color, String> entry : paletteMapper.getColorMap().entrySet()) {
@@ -71,25 +77,26 @@ public class MaterialIdentifier {
      * @param baseColor color present in the palette that maps to a material
      * @return wether the two colors match
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean colorsMatch(Color color, Color baseColor) {
         
         float decimalConfidence = confidence / 100;
         
-        float lowerRedLimit = baseColor.getRed() * decimalConfidence;
-        float lowerGreenLimit = baseColor.getGreen() * decimalConfidence;
-        float lowerBlueLimit = baseColor.getBlue() * decimalConfidence;
+        float lowerRedLimit = baseColor.red() * decimalConfidence;
+        float lowerGreenLimit = baseColor.green() * decimalConfidence;
+        float lowerBlueLimit = baseColor.blue() * decimalConfidence;
         
-        float higherRedLimit = baseColor.getRed() * (1 - decimalConfidence) + baseColor.getRed();
-        float higherGreenLimit = baseColor.getGreen() * (1 - decimalConfidence) + baseColor.getGreen();
-        float higherBlueLimit = baseColor.getBlue() * (1 - decimalConfidence) + baseColor.getBlue();
+        float higherRedLimit = baseColor.red() * (1 - decimalConfidence) + baseColor.red();
+        float higherGreenLimit = baseColor.green() * (1 - decimalConfidence) + baseColor.green();
+        float higherBlueLimit = baseColor.blue() * (1 - decimalConfidence) + baseColor.blue();
 
         higherRedLimit = higherRedLimit > 255 ? 255 : higherRedLimit;
         higherGreenLimit = higherGreenLimit > 255 ? 255 : higherGreenLimit;
         higherBlueLimit = higherBlueLimit > 255 ? 255 : higherBlueLimit;
         
-        boolean redMatches = (color.getRed() >= lowerRedLimit) && (color.getRed() <= higherRedLimit);
-        boolean greenMatches = (color.getGreen() >= lowerGreenLimit) && (color.getGreen() <= higherGreenLimit);
-        boolean blueMatches = (color.getBlue() >= lowerBlueLimit) && (color.getBlue() <= higherBlueLimit);
+        boolean redMatches = (color.red() >= lowerRedLimit) && (color.red() <= higherRedLimit);
+        boolean greenMatches = (color.green() >= lowerGreenLimit) && (color.green() <= higherGreenLimit);
+        boolean blueMatches = (color.blue() >= lowerBlueLimit) && (color.blue() <= higherBlueLimit);
         
         return redMatches && greenMatches && blueMatches;
     }

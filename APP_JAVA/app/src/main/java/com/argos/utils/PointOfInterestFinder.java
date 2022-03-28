@@ -5,6 +5,10 @@
  */
 package com.argos.utils;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.opencv.core.Mat;
@@ -42,7 +46,8 @@ public class PointOfInterestFinder {
         
     }
     
-    public List<PointOfInterest> GetPointOfInterest(List<TargetZone> detectedCarotte,Mat image_bitwised){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public List<PointOfInterest> GetPointOfInterest(List<TargetZone> detectedCarotte, Mat image_bitwised){
           
         detectedCarotte.forEach(currentCarotte -> {
             
