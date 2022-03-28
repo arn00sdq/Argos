@@ -30,7 +30,7 @@ public class HSVTargetZoneFinder {
     private Integer hue_value = 0;
     private Integer saturation_value = 0;
     private Integer value_value = 0;
-    private Integer min_area_contour = 1750;
+    private Integer min_area_contour = 100;
 
     private final boolean debug = true;
 

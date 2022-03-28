@@ -15,7 +15,7 @@ import org.opencv.imgcodecs.Imgcodecs;
  */
 public class FrameAnalyzer {
 
-    public TargetZoneFinderMethod targetZoneFinderMethod = TargetZoneFinderMethod.HSV;
+    public TargetZoneFinderMethod targetZoneFinderMethod = TargetZoneFinderMethod.K_MEANS;
     
     public HSVTargetZoneFinder HSVTargetZoneFinder = new HSVTargetZoneFinder();
     public KmeansTargetZoneFinder KmeansTargetZoneFinder = new KmeansTargetZoneFinder();

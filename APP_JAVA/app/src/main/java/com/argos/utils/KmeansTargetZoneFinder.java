@@ -1,6 +1,7 @@
 package com.argos.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -20,7 +21,7 @@ import org.opencv.imgproc.Imgproc;
  */
 public class KmeansTargetZoneFinder {
 
-    private Integer attemptNumber = 5;
+    private Integer attemptNumber = 3;
     private Integer clustersNumber = 3;
     private Integer threshold = 120;
     private Integer min_area_contour = 500;
@@ -43,6 +44,11 @@ public class KmeansTargetZoneFinder {
         Mat hierarchy = new Mat();
         Mat srcclone = src_image.clone();
 
+        Integer attemptNumber = this.attemptNumber;
+        Integer clustersNumber = this.clustersNumber;
+        Integer threshold = this.threshold;
+        Integer min_area_contour = this.min_area_contour;
+
         Mat bestLabels = new Mat();
         TermCriteria criteria = new TermCriteria();
         int flags = Core.KMEANS_PP_CENTERS;
@@ -54,6 +60,10 @@ public class KmeansTargetZoneFinder {
         Core.kmeans(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
 
         Mat draw = new Mat((int) src_image.total(), 1, CvType.CV_32FC3);
+        centers = centers.submat(0, centers.rows(), 0, centers.cols() - 1);
+        System.out.println("Centers : " + centers + ", Cluster number : " + clustersNumber);
+        System.out.println(centers.dump());
+
         Mat colors = centers.reshape(3, clustersNumber);
         
         for (int i = 0; i < clustersNumber; i++) {

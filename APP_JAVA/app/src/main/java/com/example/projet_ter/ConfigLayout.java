@@ -117,7 +117,7 @@ public class ConfigLayout {
             }
         });
 
-        /*this.minAreaSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        this.minAreaSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 frameAnalyzer.KmeansTargetZoneFinder.setMin_area_contour(i);
@@ -128,8 +128,8 @@ public class ConfigLayout {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
-        });*/
-        /*this.nbClusterSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        });
+        this.nbClusterSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 frameAnalyzer.KmeansTargetZoneFinder.setClustersNumber(i);
@@ -140,8 +140,8 @@ public class ConfigLayout {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
-        });*/
-        /*this.nbItSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        });
+        this.nbItSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 frameAnalyzer.KmeansTargetZoneFinder.setAttemptNumber(i);
@@ -152,8 +152,8 @@ public class ConfigLayout {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
-        });*/
-        /*this.thresholdSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        });
+        this.thresholdSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 frameAnalyzer.KmeansTargetZoneFinder.setThreshold(i);
@@ -164,7 +164,7 @@ public class ConfigLayout {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
-        });*/
+        });
         this.hSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
