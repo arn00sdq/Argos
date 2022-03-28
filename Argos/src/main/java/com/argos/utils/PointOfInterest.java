@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class PointOfInterest {
 
-    private final String[] labels;
+    private final List<String> labels;
     private final Integer width;
     private final Integer height;
     private final Integer x_coord;
@@ -31,7 +31,7 @@ public class PointOfInterest {
      * @param lineWidth width of the line that should be used to draw the
      * bounding rectangle
      */
-    public PointOfInterest(String[] labels, Integer width, Integer height, Integer x_coord, Integer y_coord, Color lineColor, Integer lineWidth) {
+    public PointOfInterest(List<String> labels, Integer width, Integer height, Integer x_coord, Integer y_coord, Color lineColor, Integer lineWidth) {
         this.labels = labels;
         this.width = width;
         this.height = height;
@@ -41,7 +41,7 @@ public class PointOfInterest {
         this.lineWidth = lineWidth;
     }
 
-    public PointOfInterest(String[] labels, Integer width, Integer height, Integer x_coord, Integer y_coord) {
+    public PointOfInterest(List<String> labels, Integer width, Integer height, Integer x_coord, Integer y_coord) {
         this.labels = labels;
         this.width = width;
         this.height = height;
@@ -61,7 +61,7 @@ public class PointOfInterest {
 
         zones.forEach(zone -> {
             poiArray.add(new PointOfInterest(
-                            new String[]{"Zone carotte"},
+                            new ArrayList<>(),
                             zone.getW(),
                             zone.getH(),
                             zone.getUpper_x(),
@@ -74,7 +74,7 @@ public class PointOfInterest {
 
     }
 
-    public String[] getLabels() {
+    public List<String> getLabels() {
         return labels;
     }
 
@@ -110,9 +110,9 @@ public class PointOfInterest {
         String result = new String();
         result += "{\n";
         result += "\tlabels : [\n";
-        for (int i = 0; i < labels.length; i++) {
-            result += "\t\t" + labels[i];
-            if (i != labels.length - 1) {
+        for (int i = 0; i < labels.size(); i++) {
+            result += "\t\t" + labels.get(i);
+            if (i != labels.size() - 1) {
                 result += ",\n";
             }
         }

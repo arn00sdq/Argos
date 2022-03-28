@@ -47,10 +47,7 @@ class automatic_detection {
 
     ArrayList<List<String>> carotteColor = new ArrayList<>();
 
-    private JFrame frame;
-
     private Mat src;
-    private Mat resizeImg;
     private Mat srcFinal;
     private Mat srcHsv = new Mat();
     private Mat maskHsv;
@@ -60,74 +57,14 @@ class automatic_detection {
     private static int MAX_VALUE_H = 360 / 2;
     private Random rng = new Random(12345);
 
-    private static final String LOW_H_NAME = "Low H";
-    private static final String LOW_S_NAME = "Low S";
-    private static final String LOW_V_NAME = "Low V";
-    private static final String HIGH_H_NAME = "High H";
-    private static final String HIGH_S_NAME = "High S";
-    private static final String HIGH_V_NAME = "High V";
-
-    private JSlider sliderLowH;
-    private JSlider sliderHighH;
-    private JSlider sliderLowS;
-    private JSlider sliderHighS;
-    private JSlider sliderLowV;
-    private JSlider sliderHighV;
-
     public automatic_detection(String[] args) {
 
-        src = Imgcodecs.imread("C:\\Users\\MSI\\Documents\\NetBeansProjects\\Gestion-de-projet\\mavenproject1\\src\\main\\java\\com\\argos\\utils\\test2.jpg");
+        src = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\test.png");
 
-
-        resizeImg = Mat.zeros(src.size(), CvType.CV_8U);
-        Size sz = new Size(400, 400);
-        Imgproc.resize(src, resizeImg, sz);
 
         srcFinal = src.clone();
 
-        Imgproc.cvtColor(resizeImg, srcHsv, Imgproc.COLOR_BGR2HSV);
-
-        frame = new JFrame("Slider");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window_initialisation(frame.getContentPane());
-
-        frame.pack();
-        frame.setVisible(true);
         update();
-    }
-
-    private void window_initialisation(Container pane) {
-
-        JPanel sliderPanel = new JPanel();
-
-        sliderPanel.setLayout(new BoxLayout(sliderPanel, BoxLayout.PAGE_AXIS));
-        sliderPanel.add(new JLabel(LOW_H_NAME));
-
-        sliderLowH = new JSlider(0, MAX_VALUE_H, 0);
-        sliderPanel.add(sliderLowH);
-        sliderPanel.add(new JLabel(HIGH_H_NAME));
-
-        sliderHighH = new JSlider(0, MAX_VALUE_H, MAX_VALUE_H);
-        sliderPanel.add(sliderHighH);
-
-        sliderPanel.add(new JLabel(LOW_S_NAME));
-        sliderLowS = new JSlider(0, MAX_VALUE, 0);
-        sliderPanel.add(sliderLowS);
-        sliderPanel.add(new JLabel(HIGH_S_NAME));
-
-        sliderHighS = new JSlider(0, MAX_VALUE, MAX_VALUE);
-        sliderPanel.add(sliderHighS);
-        sliderPanel.add(new JLabel(LOW_V_NAME));
-
-        sliderLowV = new JSlider(0, MAX_VALUE, 0);
-        sliderPanel.add(sliderLowV);
-        sliderPanel.add(new JLabel(HIGH_V_NAME));
-
-        sliderHighV = new JSlider(0, MAX_VALUE, MAX_VALUE);
-        sliderPanel.add(sliderHighV);
-
-        pane.add(sliderPanel, BorderLayout.PAGE_START);
-
     }
 
     private void DetectContour() {
@@ -135,18 +72,18 @@ class automatic_detection {
         srcHsv = new Mat();
         maskHsv = new Mat();
         maskHsvInv = new Mat();
-        srcFinal = new Mat();
+        srcFinal = src.clone();
         
         Mat hierarchy = new Mat();
         
         detected = new ArrayList<>();
 
-        Imgproc.cvtColor(resizeImg, srcHsv, Imgproc.COLOR_BGR2HSV, 3);
-        Core.inRange(srcHsv, new Scalar(sliderLowH.getValue(), s_val, sliderLowV.getValue()),
-                new Scalar(sliderHighH.getValue(), sliderHighS.getValue(), sliderHighV.getValue()), maskHsv);
+        Imgproc.cvtColor(src, srcHsv, Imgproc.COLOR_BGR2HSV, 3);
+        Core.inRange(srcHsv, new Scalar(0, s_val, 0),
+                new Scalar(255, 255, 255), maskHsv);
         Imgproc.threshold(maskHsv, maskHsvInv, 0, 255, Imgproc.THRESH_BINARY_INV);
         //src,src,dest,mask
-        Core.bitwise_and(resizeImg, resizeImg, srcFinal, maskHsvInv);
+        Core.bitwise_and(src, src, srcFinal, maskHsvInv);
         
         HighGui.imshow("RectFinal", srcFinal);
         HighGui.waitKey(1);
@@ -168,31 +105,13 @@ class automatic_detection {
             TargetZone newZone = new TargetZone(boundRect[i].x, boundRect[i].y, boundRect[i].x + boundRect[i].width,
                     boundRect[i].y + boundRect[i].height, boundRect[i].width, boundRect[i].height);
             
-
-            TargetZone maxCarotte;
             
             if (newZone.getArea() > 1500 && !newZone.existsInArray(detected)) {
                 
-                if(newZone.getArea() > this.maxZone){
-                    
-                    this.maxZone = newZone.getArea();
-                    zoneMaxAire = newZone;
-                    
-                }
                 detected.add(newZone);
             }
-
-            Scalar color = new Scalar(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256));
-            Imgproc.drawContours(drawing, contours, i, color, 1, Imgproc.LINE_8, hierarchy, 0, new Point());
-        }
-        for (int k = 0; k < detected.size(); k++) {
-            Point p1 = new Point(detected.get(k).upper_x, detected.get(k).upper_y);
-            Point p2 = new Point(detected.get(k).lower_x, detected.get(k).lower_y);
-            Scalar color = new Scalar(0, 0, 255);
-            int thickness = 2;
-            //Imgproc.rectangle(srcFinal, p1, p2, color, thickness);
-
-        }     
+            
+        } 
 
     }
 
@@ -201,9 +120,7 @@ class automatic_detection {
         while (!analysis_completed) {
 
             DetectContour();
-            HighGui.imshow("HSV", drawing);
-            HighGui.imshow("RectFinal", srcFinal);
-            HighGui.waitKey(1);
+
 
             if (this.s_val < 150) {
 
@@ -226,39 +143,27 @@ class automatic_detection {
             
         }
         
-         System.out.println("optimal saturation" + optimalSaturation);
-        
-        for (TargetZone currentCarotte : detected) {
-            
-            if(zoneMaxAire.w > zoneMaxAire.h) {
-                
-                System.out.println("Horizontale");
-                for (int i = 0; i < currentCarotte.w ; i += currentCarotte.w/10) {
-                
-                    KmeansMaterialRecognition kDetect = new KmeansMaterialRecognition(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.w, currentCarotte.h);
-                    carotteColor.add(kDetect.Match(srcFinal));
+        for (int k = 0; k < detected.size(); k++) {
+                Point p1 = new Point(detected.get(k).upper_x, detected.get(k).upper_y);
+                Point p2 = new Point(detected.get(k).lower_x, detected.get(k).lower_y);
+                Scalar color = new Scalar(0, 255, 0);
+                int thickness = 2;
+                Imgproc.rectangle(srcFinal, p1, p2, color, thickness);
 
-                }
-                
-            }else{
-                System.out.println("Verticale");
-                for (int i = 0; i < currentCarotte.h ; i += currentCarotte.h/10) {
-                
-                    KmeansMaterialRecognition kDetect = new KmeansMaterialRecognition(currentCarotte.upper_x , currentCarotte.upper_y, currentCarotte.h, currentCarotte.w);
-                    carotteColor.add(kDetect.Match(srcFinal));
-
-                }
             }
             
+        
+        System.out.println("optimal saturation" + optimalSaturation);
+        
+        PointOfInterestFinder PoIFinder = new PointOfInterestFinder();
+        PoIFinder.GetPointOfInterest(detected,srcFinal);
+       
 
-        }
-
-        HighGui.imshow("original", resizeImg);
+        HighGui.imshow("original", src);
         HighGui.imshow("HSV", srcHsv);
         HighGui.imshow("mask", maskHsv);
         HighGui.imshow("maskInv", maskHsvInv);
        
-        HighGui.imshow("Final", drawing);
         HighGui.imshow("RectFinal", srcFinal);
         HighGui.waitKey(1);
 
