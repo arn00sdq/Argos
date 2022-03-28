@@ -253,7 +253,7 @@ public class HSVTargetZoneFinder {
 
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat img = Imgcodecs.imread("C:\\Users\\Ivan\\Google Drive\\FAC\\M1\\S2\\Gestion de Projets\\Gestion-de-projet\\Images_de_test\\test2.jpg");
+        Mat img = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\test.png");
         HSVTargetZoneFinder cal = new HSVTargetZoneFinder();
         Instant start = Instant.now();
         cal.automaticallyCalibrate(img);
