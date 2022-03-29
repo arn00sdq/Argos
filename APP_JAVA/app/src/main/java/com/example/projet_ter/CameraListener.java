@@ -119,6 +119,9 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
         //if (this.analyseStarted) {
             // Start the analyze
+            //
+            // ! On passe une matrice rgba (potentiellement 4 channels) au lieu d'une matrice rgb (3 channel)
+            // A verifier
             List<PointOfInterest> poiArray = PointOfInterest.toPOIList(this.frameAnalyzer.getTargetZonesFromImage(this.rgba_matrix));
             System.out.println("TAILLE " + poiArray.size());
             // Draw the data
@@ -145,4 +148,3 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     }
 
 }
-
