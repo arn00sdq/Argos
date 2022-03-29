@@ -2,7 +2,6 @@ package com.example.projet_ter;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -19,11 +18,10 @@ import org.opencv.imgproc.Imgproc;
 
 import com.argos.utils.FrameAnalyzer;
 import com.argos.utils.PointOfInterest;
-import com.argos.utils.PointOfInterestFinder;
-import com.argos.utils.TargetZone;
 
-import java.lang.annotation.Target;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -38,6 +36,8 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     private boolean analyseStarted = false;
 
+    private List<PointOfInterest> poiList = new ArrayList<>();
+
     private int startX;
     private int startY;
 
@@ -46,30 +46,24 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
         this.camera_view = camera_view;
         this.camera_view.setCvCameraViewListener(this);
         this.camera_view.setOnTouchListener(new View.OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    startX = (int) motionEvent.getX();
-                    startY = (int) motionEvent.getY();
+                if(analyseStarted && poiList.size() > 0) {
+                    int x = (int) motionEvent.getX();
+                    int y = (int) motionEvent.getY() - camera_view.getLayoutParams().height / 2 - rgba_matrix.rows() / 2;
+                    System.out.println(x + " x, " + y + " y");
+                    System.out.println(poiList);
+                    System.out.println("IMG size x = " + rgba_matrix.rows() + ", IMG size y = " + rgba_matrix.cols());
+                    System.out.println("Surface size x = " + camera_view.getLayoutParams().width + " Surface view size y = " + camera_view.getLayoutParams().height);
+                    /*Optional<PointOfInterest> poi = getPoiAt(x, y);
+                    if(poi.isPresent()) {
+                        new carotDataDialog(camera_view.getContext(), "TEST").show();
+                    }*/
+                } else {
+                    analyseStarted = true;
                 }
-
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    int endX = (int) motionEvent.getX();
-                    int endY = (int) motionEvent.getY();
-                    int dX = Math.abs(endX - startX);
-                    int dY = Math.abs(endY - startY);
-
-                    if (Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2)) <= 10) {
-                        if(analyseStarted) {
-
-                        } else {
-                            analyseStarted = true;
-                        }
-                        return true;
-                    }
-                }
-
-                return false;
+                return true;
             }
         });
     }
@@ -117,16 +111,16 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
                 (int) ((new_size.width / 2) - (original_size.width / 2)),
                 (int) ((new_size.width / 2) + (original_size.width / 2)));
 
-        //if (this.analyseStarted) {
+        if (this.analyseStarted) {
             // Start the analyze
-            List<PointOfInterest> poiArray = PointOfInterest.toPOIList(this.frameAnalyzer.getTargetZonesFromImage(this.rgba_matrix));
-            System.out.println("TAILLE " + poiArray.size());
+            this.poiList = PointOfInterest.toPOIList(this.frameAnalyzer.getTargetZonesFromImage(this.rgba_matrix));
             // Draw the data
-            poiArray.forEach( poi -> {
+            this.poiList.forEach( poi -> {
                 Imgproc.rectangle(this.rgba_matrix, new Point(poi.getX_coord(), poi.getY_coord()),
-                        new Point(poi.getX_coord() + poi.getWidth(), poi.getY_coord() + poi.getHeight()), new Scalar(0, 0, 255), 5);
+                        new Point(poi.getX_coord() + poi.getWidth(), poi.getY_coord() + poi.getHeight()),
+                        new Scalar(0, 0, 255), 5);
             });
-        //}
+        }
 
         return this.rgba_matrix;
     }
@@ -142,6 +136,16 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     public FrameAnalyzer getFrameAnalyzer() {
         return this.frameAnalyzer;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Optional<PointOfInterest> getPoiAt(int x, int y) {
+        if (this.poiList == null) return null;
+        return this.poiList.stream().filter( poi -> {
+            boolean b = poi.getX_coord() > x && poi.getX_coord() + poi.getWidth() < x
+                    && poi.getY_coord() > y && poi.getY_coord() + poi.getHeight() < y;
+            return b;
+        }).findFirst();
     }
 
 }

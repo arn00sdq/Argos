@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Log.i(TAG, "onCreate");
-        this.camera_component = new CameraListener((JavaCameraView) findViewById(R.id.camera_view));
-        this.configLayout = new ConfigLayout((View) findViewById(R.id.ButtonLayout), this.camera_component.getFrameAnalyzer());
+        this.camera_component = new CameraListener((JavaCameraView) this.findViewById(R.id.camera_view));
+        this.configLayout = new ConfigLayout((View) this.findViewById(R.id.ButtonLayout), this.camera_component.getFrameAnalyzer());
 
     }
 
