@@ -82,7 +82,7 @@ public class HSVCalibration {
         detectedZones = new ArrayList<>();
 
         Core.inRange(hsv_image,
-                new Scalar(0, s_val, 0),
+                new Scalar(0, 150, 0),
                 new Scalar(255, 255, 255),
                 hsv_mask);
 
