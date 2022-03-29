@@ -81,15 +81,31 @@ public class MaterialIdentifier {
     private boolean colorsMatch(Color color, Color baseColor) {
         
         float decimalConfidence = confidence / 100;
+        float maxIntervalrange = 256 * (1 - decimalConfidence);
+        float halfInterval = maxIntervalRange / 2;
         
+        float lowerRedLimit = baseColor.red() - halfInterval;
+        float lowerGreenLimit = baseColor.green() - halfInterval;
+        float lowerBlueLimit = baseColor.blue() - halfInterval;
+        
+        float higherRedLimit = baseColor.red() + halfInterval;
+        float higherGreenLimit = baseColor.green() + halfInterval;
+        float higherBlueLimit = baseColor.blue() + halfInterval;
+        
+        /*
         float lowerRedLimit = baseColor.red() * decimalConfidence;
         float lowerGreenLimit = baseColor.green() * decimalConfidence;
         float lowerBlueLimit = baseColor.blue() * decimalConfidence;
         
         float higherRedLimit = baseColor.red() * (1 - decimalConfidence) + baseColor.red();
         float higherGreenLimit = baseColor.green() * (1 - decimalConfidence) + baseColor.green();
-        float higherBlueLimit = baseColor.blue() * (1 - decimalConfidence) + baseColor.blue();
+        float higherBlueLimit = baseColor.blue() * (1 - decimalConfidence) + baseColor.blue();*/
 
+        
+        lowerRedLimit = lowerRedLimit < 0 ? 0 : lowerRedLimit;
+        lowerGreenLimit = lowerGreenLimit < 0 ? 0 : lowerGreenLimit;
+        lowerBlueLimit = lowerBlueLimit < 0 ? 0 : lowerBlueLimit;
+        
         higherRedLimit = higherRedLimit > 255 ? 255 : higherRedLimit;
         higherGreenLimit = higherGreenLimit > 255 ? 255 : higherGreenLimit;
         higherBlueLimit = higherBlueLimit > 255 ? 255 : higherBlueLimit;
