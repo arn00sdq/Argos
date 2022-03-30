@@ -54,9 +54,9 @@ public class PaletteMapper {
                 Map.entry(Color.valueOf(30,44,46), "Argile"),
                 Map.entry(Color.valueOf(58,80,87), "Argile"),
                 Map.entry(Color.valueOf(196,211,208), "Conglomérat"),
-                Map.entry(Color.valueOf(170,180,170), "Conglomérat"),
+                Map.entry(Color.valueOf(170,180,170), "Conglomérat")
 
-        );           
+        );
     }
 
 }

@@ -82,7 +82,7 @@ public class MaterialIdentifier {
         
         float decimalConfidence = confidence / 100;
         float maxIntervalrange = 256 * (1 - decimalConfidence);
-        float halfInterval = maxIntervalRange / 2;
+        float halfInterval = maxIntervalrange / 2;
         
         float lowerRedLimit = baseColor.red() - halfInterval;
         float lowerGreenLimit = baseColor.green() - halfInterval;
