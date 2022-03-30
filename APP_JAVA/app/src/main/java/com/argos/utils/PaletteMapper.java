@@ -44,14 +44,19 @@ public class PaletteMapper {
         return colorMapping;
     }
     /**
-     * setter for the default Palette Mapping
+     * Setter for the default Palette Mapping
      */
     @RequiresApi(api = Build.VERSION_CODES.R)
     private void setDefaultPaletteMapping() {
         colorMapping = Map.ofEntries(
-                Map.entry(Color.valueOf(176,130,67), "sand"),
-                Map.entry(Color.valueOf(73,54,33), "clay")
-        );       
+                Map.entry(Color.valueOf(177,186,181), "Sable massif"),
+                Map.entry(Color.valueOf(169,174,164), "Sable massif"),
+                Map.entry(Color.valueOf(30,44,46), "Argile"),
+                Map.entry(Color.valueOf(58,80,87), "Argile"),
+                Map.entry(Color.valueOf(196,211,208), "Conglomérat"),
+                Map.entry(Color.valueOf(170,180,170), "Conglomérat"),
+
+        );           
     }
 
 }
