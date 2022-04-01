@@ -18,3 +18,6 @@ Argos is a real-time application bundled into an APK that automatically finds ge
 1. Install the apk
 2. Run the apk
 3. Enjoy
+
+## link
+Link to the [project with opencv JavaCameraView](https://github.com/Onnonoka/Gestion-de-projet)
