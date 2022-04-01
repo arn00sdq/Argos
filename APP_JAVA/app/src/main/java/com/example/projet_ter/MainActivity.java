@@ -14,6 +14,7 @@ import android.text.Layout;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -21,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.JavaCameraView;
@@ -30,6 +32,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int REGUEST_CAMERA_PERMISSION_RESULT = 0;
     private static final String TAG = "ProjetTER::MainActivity";
 
     private CameraListener camera_component;
@@ -37,30 +40,16 @@ public class MainActivity extends AppCompatActivity {
     private float x1 = 0;
     private float y1 = 0;
 
-    private final BaseLoaderCallback base_loader_callback = new BaseLoaderCallback(MainActivity.this) {
-        @Override
-        public void onManagerConnected(int status) {
-
-            if (status == BaseLoaderCallback.SUCCESS) {
-                camera_component.enable();
-            } else {
-                super.onManagerConnected(status);
-            }
-            super.onManagerConnected(status);
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED)
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, 100);
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         Objects.requireNonNull(this.getSupportActionBar()).hide();
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Log.i(TAG, "onCreate");
-        this.camera_component = new CameraListener((JavaCameraView) this.findViewById(R.id.camera_view));
+        this.camera_component = new CameraListener(this, (TextureView) this.findViewById(R.id.textureView));
         this.configLayout = new ConfigLayout((View) this.findViewById(R.id.ButtonLayout), this.camera_component.getFrameAnalyzer());
 
     }
@@ -69,14 +58,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (OpenCVLoader.initDebug()) {
-            this.base_loader_callback.onManagerConnected(this.base_loader_callback.SUCCESS);
+            this.camera_component.startCamera();
         }
     }
 
     @Override
     public void onDestroy() {
+        this.camera_component.closeCamera();
         super.onDestroy();
-        this.camera_component.disable();
+    }
+
+    @Override
+    protected void onPause() {
+        this.camera_component.closeCamera();
+        super.onPause();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -116,6 +111,16 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             default :
                 return super.onTouchEvent(event);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REGUEST_CAMERA_PERMISSION_RESULT) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this.getApplicationContext(), "This Application can not run without camera services.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }
