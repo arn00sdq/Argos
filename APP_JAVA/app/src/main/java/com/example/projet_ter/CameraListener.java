@@ -13,6 +13,7 @@ import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.Image;
 import android.media.ImageReader;
 import android.os.Build;
 import android.os.Handler;
@@ -62,11 +63,14 @@ public class CameraListener {
     private final TextureView.SurfaceTextureListener mSurfaceTextureListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surfaceTexture, int width, int height) {
-            rgba_matrix = new Mat();
-            gray_matrix = new Mat();
-            Log.d(TAG, "Surface Available");
-            setupCamera(width, height);
-            connectCamera();
+            try {
+                // The listener as been bind to the SurfaceTexture
+                setupCamera(width, height);
+                connectCamera();
+                Log.d(TAG, "Surface Available");
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -76,23 +80,33 @@ public class CameraListener {
 
         @Override
         public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surfaceTexture) {
-            rgba_matrix.release();
-            gray_matrix.release();
             return false;
         }
 
         @Override
         public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
+            Log.d(TAG, "Suface updated");
 
+            /*
+
+                Ajout de l'analyse d'image ICI peux etre
+
+             */
         }
     };
+
     private CameraDevice mCameraDevice;
     private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(@NonNull CameraDevice cameraDevice) {
-            mCameraDevice = cameraDevice;
-            startPreview();
-            Log.d(TAG, "Camera device opened");
+            try {
+                mCameraDevice = cameraDevice;
+                startPreview();
+                Log.d(TAG, "Camera device opened");
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+                Log.d(TAG, "Camera device not open");
+            }
         }
 
         @Override
@@ -106,20 +120,25 @@ public class CameraListener {
             mCameraDevice.close();
             mCameraDevice = null;
         }
+
     };
+
     private HandlerThread mBackgroundHandlerThread;
     private Handler mBackgroundHandler;
+
     private String mCameraId;
     private Size mPreviewSize;
-    private Range<Integer> fpsRange = new Range<>(30, 30);
+    private final Range<Integer> fpsRange = new Range<>(30, 30);
+
     private CaptureRequest.Builder mCaptureRequestBuilder;
     private ImageReader.OnImageAvailableListener mImageListener = new ImageReader.OnImageAvailableListener() {
         @Override
         public void onImageAvailable(ImageReader imageReader) {
-
+            Log.d(TAG, "imageGot");
         }
     };
-    private static SparseIntArray ORIENTATIONS = new SparseIntArray();
+
+    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 0);
         ORIENTATIONS.append(Surface.ROTATION_90, 90);
@@ -144,7 +163,11 @@ public class CameraListener {
     private int startX;
     private int startY;
 
-    @SuppressLint("ClickableViewAccessibility")
+    /**
+     * Constructor
+     * @param context The app activity
+     * @param textureView The TextureView context
+     */
     public CameraListener(Activity context, TextureView textureView) {
         this.context = context;
         this.mTextureView = textureView;
@@ -224,19 +247,29 @@ public class CameraListener {
         return this.rgba_matrix;
     }*/
 
-    public void startCamera() {
+    /**
+     * Start the camera render pipeline
+     * @throws CameraAccessException if the camera cannot be accessed (Wrong camera id for exemple)
+     */
+    public void startCamera() throws CameraAccessException {
+        // starting the pipeline thread
         this.startBackgroundThread();
         if (this.mTextureView.isAvailable()) {
-            this.setupCamera(this.mTextureView.getWidth(), this.mTextureView.getHeight());
-            this.connectCamera();
+            this.setupCamera(this.mTextureView.getWidth(), this.mTextureView.getHeight()); // throws CameraAccesException
+            this.connectCamera();                                                          //
             Log.d(TAG, "available");
         } else {
+            // the texture view is not available
+            // Binding the listener to it
             this.mTextureView.setSurfaceTextureListener(this.mSurfaceTextureListener);
             Log.d(TAG, "not available");
         }
     }
 
-    public void closeCamera() {
+    /**
+     * Stop the camera render pipeline
+     */
+    public void closeCamera() throws InterruptedException {
         if (this.mCameraDevice != null) {
             this.mCameraDevice.close();
             this.mCameraDevice = null;
@@ -245,139 +278,166 @@ public class CameraListener {
     }
 
     /**
-     * Setup the camera and the preview
-     * @param width
-     * @param height
+     * Setup the camera render pipeline parameter
+     * @param width the width of the surface destination
+     * @param height the height of the serface destination
      */
-    private void setupCamera(int width, int height) {
+    private void setupCamera(int width, int height) throws CameraAccessException{
         CameraManager cameraManager = (CameraManager) this.context.getSystemService(Context.CAMERA_SERVICE);
-        try {
-            // Getting the Camera list
-            // The camera are represented by an ID
-            String[] cameraIds = cameraManager.getCameraIdList();
-            // Getting the back camera
-            // Iterates the cameras until we get the id of the back camera
-            int i = 0;
-            CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraIds[i]);
-            // Optie possible mais je comprend pas
-            while (i < cameraIds.length && cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT) {
-                i++;
-                cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraIds[i]);
-            }
-            // Getting camera format
-            StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-            // Getting the camera rotation to handle portrait and landscape mode
-            int deviceOrientation = this.context.getWindowManager().getDefaultDisplay().getRotation();
-            int totalRotation = sensorToRotation(cameraCharacteristics, deviceOrientation);
-            boolean swapRotation = totalRotation == 90 || totalRotation == 270;
-            int rotatedWidth = width;
-            int rotatedHeight = height;
-            if (swapRotation) {
-                rotatedWidth = height;
-                rotatedHeight = width;
-            }
-            // set the camera preview format to the BEST format available
-            this.mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
-            Log.d(TAG, "Width = " + rotatedWidth);
-            Log.d(TAG, "Height = " + rotatedHeight);
-            Log.d(TAG, "swap = " + swapRotation);
-            Log.d(TAG, "Preview Width = " + this.mPreviewSize.getWidth());
-            Log.d(TAG, "Preview Height = " + this.mPreviewSize.getHeight());
-            this.mCameraId = cameraIds[i];
-
-            Log.d(TAG, "Camera id got " + this.mCameraId + " length " + cameraIds.length);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
+        // Getting the Camera list
+        // The camera are represented by a string ID
+        String[] cameraIds = cameraManager.getCameraIdList();
+        // Getting the back camera
+        // Iterates the cameras until we get the id of the back camera
+        int i = 0;
+        CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraIds[i]);
+        // Optie possible mais je comprend pas
+        while (i < cameraIds.length && cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT) {
+            i++;
+            cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraIds[i]);
         }
+        // Getting camera format
+        StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+        // Getting the camera rotation to handle portrait and landscape mode
+        int deviceOrientation = this.context.getWindowManager().getDefaultDisplay().getRotation();
+        int totalRotation = sensorToRotation(cameraCharacteristics, deviceOrientation);
+        boolean swapRotation = totalRotation == 90 || totalRotation == 270;
+        int rotatedWidth = width;
+        int rotatedHeight = height;
+        if (swapRotation) {
+            rotatedWidth = height;
+            rotatedHeight = width;
+        }
+        // set the camera preview format to the BEST format available
+        this.mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
+        Log.d(TAG, "Width = " + rotatedWidth);
+        Log.d(TAG, "Height = " + rotatedHeight);
+        Log.d(TAG, "swap = " + swapRotation);
+        Log.d(TAG, "Preview Width = " + this.mPreviewSize.getWidth());
+        Log.d(TAG, "Preview Height = " + this.mPreviewSize.getHeight());
+        this.mCameraId = cameraIds[i];
+
+        Log.d(TAG, "Camera id got " + this.mCameraId + " length " + cameraIds.length);
     }
 
-    private void connectCamera() {
-        try {
+    /**
+     * Connect the camera to the render pipeline
+     * @throws CameraAccessException if the camera cannot be accessed (Wrong camera id for exemple)
+     */
+    private void connectCamera() throws CameraAccessException {
         CameraManager cameraManager = (CameraManager) this.context.getSystemService(Context.CAMERA_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if(ContextCompat.checkSelfPermission(this.context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                    cameraManager.openCamera(this.mCameraId, mCameraDeviceStateCallback, mBackgroundHandler);
-                } else {
-                    if (context.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-                        Toast.makeText(this.context, "This Application can not run without camera services.", Toast.LENGTH_SHORT).show();
-                    }
-                    this.context.requestPermissions(new String[] {Manifest.permission.CAMERA}, MainActivity.REGUEST_CAMERA_PERMISSION_RESULT);
-                }
-            } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(ContextCompat.checkSelfPermission(this.context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 cameraManager.openCamera(this.mCameraId, mCameraDeviceStateCallback, mBackgroundHandler);
+            } else {
+                if (context.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                    Toast.makeText(this.context, "This Application can not run without camera services.", Toast.LENGTH_SHORT).show();
+                }
+                this.context.requestPermissions(new String[] {Manifest.permission.CAMERA}, MainActivity.REGUEST_CAMERA_PERMISSION_RESULT);
             }
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
+        } else {
+            cameraManager.openCamera(this.mCameraId, mCameraDeviceStateCallback, mBackgroundHandler);
         }
     }
 
-    private void startPreview() {
-        try {
-            SurfaceTexture surfaceTexture = this.mTextureView.getSurfaceTexture();
-            surfaceTexture.setDefaultBufferSize(this.mPreviewSize.getWidth(), this.mPreviewSize.getHeight());
-            Surface previewSurface = new Surface(surfaceTexture);
+    /**
+     * Start the pipeline camera render loop
+     * @throws CameraAccessException
+     */
+    private void startPreview() throws CameraAccessException {
+        // Getting the surface to preview
+        SurfaceTexture surfaceTexture = this.mTextureView.getSurfaceTexture();
+        surfaceTexture.setDefaultBufferSize(this.mPreviewSize.getWidth(), this.mPreviewSize.getHeight());
+        Surface previewSurface = new Surface(surfaceTexture);
 
-            this.mCaptureRequestBuilder = this.mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-            this.mCaptureRequestBuilder.addTarget(previewSurface);
-            this.mCaptureRequestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, this.fpsRange);
+        // Binding the surface to the pipeline render and
+        this.mCaptureRequestBuilder = this.mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+        this.mCaptureRequestBuilder.addTarget(previewSurface);
+        this.mCaptureRequestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, this.fpsRange);
 
-            mCameraDevice.createCaptureSession(Arrays.asList(previewSurface), new CameraCaptureSession.StateCallback() {
-                @Override
-                public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    try {
-                        cameraCaptureSession.setRepeatingRequest(mCaptureRequestBuilder.build(), null, mBackgroundHandler);
-                    } catch (CameraAccessException e) {
-                        e.printStackTrace();
-                    }
+        // Starting the capture sessions
+        this.mCameraDevice.createCaptureSession(Arrays.asList(previewSurface), new CameraCaptureSession.StateCallback() {
+            @Override
+            public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
+                try {
+                    cameraCaptureSession.setRepeatingRequest(mCaptureRequestBuilder.build(), null, mBackgroundHandler);
+                } catch (CameraAccessException e) {
+                    e.printStackTrace();
                 }
+            }
 
-                @Override
-                public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-                    Toast.makeText(context.getApplicationContext(), "Unable to setup the camera preview", Toast.LENGTH_SHORT).show();
-                }
-            }, null);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
+                Toast.makeText(context.getApplicationContext(), "Unable to setup the camera preview", Toast.LENGTH_SHORT).show();
+            }
+        }, null);
     }
 
+    /**
+     * Return the frame analyser object
+     * @return the frame analyser object
+     */
     public FrameAnalyzer getFrameAnalyzer() {
         return this.frameAnalyzer;
     }
 
+    /**
+     * Get the poi on the preview by an x and a y
+     * @param x the x coord
+     * @param y the y coord
+     * @return the poi touched
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Optional<PointOfInterest> getPoiAt(int x, int y) {
         if (this.poiList == null) return null;
         return this.poiList.stream().filter( poi -> {
-            boolean b = poi.getX_coord() > x && poi.getX_coord() + poi.getWidth() < x
+            return poi.getX_coord() > x && poi.getX_coord() + poi.getWidth() < x
                     && poi.getY_coord() > y && poi.getY_coord() + poi.getHeight() < y;
-            return b;
         }).findFirst();
     }
 
+    /**
+     * Start the pipeline thread
+     */
     private void startBackgroundThread() {
-        this.mBackgroundHandlerThread = new HandlerThread("Projet_TER");
+        this.mBackgroundHandlerThread = new HandlerThread("Projet_TER:CameraPipelineThread");
         this.mBackgroundHandlerThread.start();
         this.mBackgroundHandler = new Handler(mBackgroundHandlerThread.getLooper());
     }
 
-    private void stopBackgroundThread() {
-        try {
+    /**
+     * Stop the pipeline thread
+     */
+    private void stopBackgroundThread() throws InterruptedException {
+        // Some device pause before destroy
+        // We handle this case by checking if the thread is already clear
+        if (this.mBackgroundHandlerThread != null) {
             this.mBackgroundHandlerThread.quitSafely();
             this.mBackgroundHandlerThread.join();
             this.mBackgroundHandlerThread = null;
             this.mBackgroundHandler = null;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
+    /**
+     * Compute the rotation from a camera
+     * @param cameraCharacteristics the camera characteristics
+     * @param deviceOrientation the current device orientation
+     * @return The current orientation
+     */
     private static int sensorToRotation(CameraCharacteristics cameraCharacteristics, int deviceOrientation) {
         int sensorOrientation = cameraCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
         deviceOrientation = ORIENTATIONS.get(sensorOrientation);
         return (sensorOrientation + deviceOrientation + 360) % 360;
     }
 
+    /**
+     * Compute the optimal format from a Size list and a width and a height target
+     * @param choises the size list available
+     * @param width the width target
+     * @param height the height target
+     * @return the optimal size from the list
+     */
     private static Size chooseOptimalSize(Size[] choises, int width, int height) {
         List<Size> bigEnough = new ArrayList<>();
         for(Size option : choises) {

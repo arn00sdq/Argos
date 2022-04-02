@@ -8,6 +8,7 @@ import androidx.core.view.MotionEventCompat;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraAccessException;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Layout;
@@ -58,19 +59,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (OpenCVLoader.initDebug()) {
-            this.camera_component.startCamera();
+            try {
+                this.camera_component.startCamera();
+            } catch (CameraAccessException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void onDestroy() {
-        this.camera_component.closeCamera();
+        try {
+            this.camera_component.closeCamera();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        this.camera_component.closeCamera();
+        try {
+            this.camera_component.closeCamera();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         super.onPause();
     }
 
@@ -123,4 +136,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 }
