@@ -1,10 +1,14 @@
 package com.example.projet_ter;
 
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -35,7 +39,9 @@ import androidx.core.content.ContextCompat;
 
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCameraView;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -43,6 +49,7 @@ import org.opencv.imgproc.Imgproc;
 
 import com.argos.utils.FrameAnalyzer;
 import com.argos.utils.PointOfInterest;
+import com.argos.utils.TargetZone;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,12 +93,34 @@ public class CameraListener {
         @Override
         public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surfaceTexture) {
             Log.d(TAG, "Suface updated");
-
             /*
+            Bitmap frame = Bitmap.createBitmap(mTextureView.getWidth(), mTextureView.getHeight(), Bitmap.Config.ARGB_8888);
+            mTextureView.getBitmap(frame);
+            Mat frameMat = new Mat (frame.getWidth(), frame.getHeight(), CvType.CV_8UC1);
+            Utils.bitmapToMat(frame, frameMat);
+            //List<TargetZone> poiList = frameAnalyzer.getTargetZonesFromImage(frameMat);
+            Imgproc.rectangle(frameMat, new Point(500, 100), new Point(1000, 150), new Scalar(255, 0, 0));
+            Utils.matToBitmap(frameMat, frame);
+            Log.d(TAG, String.valueOf(poiList.size()));
+            */
+        }
+    };
+    private ImageReader mImageReader;
+    private ImageReader.OnImageAvailableListener mOnImageAvailableListener = new ImageReader.OnImageAvailableListener() {
+        @Override
+        public void onImageAvailable(ImageReader imageReader) {
+            Log.d(TAG, "imageGot");
+            ImageAnalyzer imageAnalyzer = new ImageAnalyzer(mTextureView, imageReader);
+            imageAnalyzer.setImageAnalyzerListener(mImageAnalyserListener);
+            mBackgroundHandler.post(imageAnalyzer);
+        }
+    };
 
-                Ajout de l'analyse d'image ICI peux etre
-
-             */
+    private ImageAnalyzer mImageAnalyzer;
+    private ImageAnalyzer.ImageAnalyzerListener mImageAnalyserListener = new ImageAnalyzer.ImageAnalyzerListener() {
+        @Override
+        public void onImageDrawComplete() {
+            Log.d(TAG, "onImageDrawComplete");
         }
     };
 
@@ -128,15 +157,10 @@ public class CameraListener {
 
     private String mCameraId;
     private Size mPreviewSize;
+    private Size mImageSize;
     private final Range<Integer> fpsRange = new Range<>(30, 30);
 
     private CaptureRequest.Builder mCaptureRequestBuilder;
-    private ImageReader.OnImageAvailableListener mImageListener = new ImageReader.OnImageAvailableListener() {
-        @Override
-        public void onImageAvailable(ImageReader imageReader) {
-            Log.d(TAG, "imageGot");
-        }
-    };
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
     static {
@@ -152,9 +176,6 @@ public class CameraListener {
             return Long.signum( (long) lsize.getWidth() * lsize.getHeight() / (long) rsize.getWidth() * rsize.getHeight());
         }
     }
-
-    private Mat rgba_matrix;
-    private Mat gray_matrix;
 
     private boolean analyseStarted = false;
 
@@ -308,13 +329,21 @@ public class CameraListener {
             rotatedWidth = height;
             rotatedHeight = width;
         }
-        // set the camera preview format to the BEST format available
+        // set the preview format to the BEST format available
         this.mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
+        this.mImageSize = chooseOptimalSize(map.getOutputSizes(ImageFormat.YUV_420_888), rotatedWidth, rotatedHeight);
+        Log.d(TAG, "OutputSizeOption = " + Arrays.toString(map.getOutputSizes(SurfaceTexture.class)));
+        Log.d(TAG, "OutputSizeOption = " + Arrays.toString(map.getOutputSizes(ImageFormat.YUV_420_888)));
+        // setting the imageReader
+        // Despite what the documentation says, the JPEG format is not available on all devices.
+        // Use the YUV_420_888 format instead.
+        this.mImageReader = ImageReader.newInstance(this.mImageSize.getWidth(), this.mImageSize.getHeight(), ImageFormat.YUV_420_888, 1);
+        this.mImageReader.setOnImageAvailableListener(this.mOnImageAvailableListener, this.mBackgroundHandler);
         Log.d(TAG, "Width = " + rotatedWidth);
         Log.d(TAG, "Height = " + rotatedHeight);
         Log.d(TAG, "swap = " + swapRotation);
-        Log.d(TAG, "Preview Width = " + this.mPreviewSize.getWidth());
-        Log.d(TAG, "Preview Height = " + this.mPreviewSize.getHeight());
+        Log.d(TAG, "Preview Width = " + this.mImageSize.getWidth());
+        Log.d(TAG, "Preview Height = " + this.mImageSize.getHeight());
         this.mCameraId = cameraIds[i];
 
         Log.d(TAG, "Camera id got " + this.mCameraId + " length " + cameraIds.length);
@@ -352,11 +381,12 @@ public class CameraListener {
 
         // Binding the surface to the pipeline render and
         this.mCaptureRequestBuilder = this.mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-        this.mCaptureRequestBuilder.addTarget(previewSurface);
+        //this.mCaptureRequestBuilder.addTarget(previewSurface);
+        this.mCaptureRequestBuilder.addTarget(this.mImageReader.getSurface());
         this.mCaptureRequestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, this.fpsRange);
 
         // Starting the capture sessions
-        this.mCameraDevice.createCaptureSession(Arrays.asList(previewSurface), new CameraCaptureSession.StateCallback() {
+        this.mCameraDevice.createCaptureSession(Arrays.asList(/*previewSurface, */this.mImageReader.getSurface()), new CameraCaptureSession.StateCallback() {
             @Override
             public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
                 try {

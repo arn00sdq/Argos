@@ -15,7 +15,7 @@
   },
   {
     "level_": 0,
-    "message_": "JSON \u0027E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\.cxx\\Debug\\2k4s5g2f\\x86\\android_gradle_build.json\u0027 was up-to-date",
+    "message_": "rebuilding JSON E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\.cxx\\Debug\\2k4s5g2f\\x86\\android_gradle_build.json due to:",
     "file_": "E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\\CMakeLists.txt",
     "tag_": "debug|x86",
     "diagnosticCode_": 0,
@@ -25,7 +25,133 @@
       "fieldsDescending": {}
     },
     "memoizedSize": -1,
-    "memoizedHashCode": 129236532
+    "memoizedHashCode": 1406288605
+  },
+  {
+    "level_": 0,
+    "message_": "- expected json E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\.cxx\\Debug\\2k4s5g2f\\x86\\android_gradle_build.json file is not present, will remove stale json folder",
+    "file_": "E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\\CMakeLists.txt",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 484548791
+  },
+  {
+    "level_": 0,
+    "message_": "- missing previous command file E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\.cxx\\Debug\\2k4s5g2f\\x86\\metadata_generation_command.txt, will remove stale json folder",
+    "file_": "E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\\CMakeLists.txt",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -549158731
+  },
+  {
+    "level_": 0,
+    "message_": "- command changed from previous, will remove stale json folder",
+    "file_": "E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\\CMakeLists.txt",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1593787126
+  },
+  {
+    "level_": 0,
+    "message_": "created folder \u0027E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\.cxx\\Debug\\2k4s5g2f\\x86\u0027",
+    "file_": "E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\\CMakeLists.txt",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -1282135449
+  },
+  {
+    "level_": 0,
+    "message_": "executing cmake Executable : C:\\Users\\fred2\\AppData\\Local\\Android\\Sdk\\cmake\\3.18.1\\bin\\cmake.exe\narguments : \n-HE:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\n-DCMAKE_SYSTEM_NAME\u003dAndroid\n-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\n-DCMAKE_SYSTEM_VERSION\u003d21\n-DANDROID_PLATFORM\u003dandroid-21\n-DANDROID_ABI\u003dx86\n-DCMAKE_ANDROID_ARCH_ABI\u003dx86\n-DANDROID_NDK\u003dC:\\Users\\fred2\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\n-DCMAKE_ANDROID_NDK\u003dC:\\Users\\fred2\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\n-DCMAKE_TOOLCHAIN_FILE\u003dC:\\Users\\fred2\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\build\\cmake\\android.toolchain.cmake\n-DCMAKE_MAKE_PROGRAM\u003dC:\\Users\\fred2\\AppData\\Local\\Android\\Sdk\\cmake\\3.18.1\\bin\\ninja.exe\n-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003dE:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\build\\intermediates\\cxx\\Debug\\2k4s5g2f\\obj\\x86\n-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003dE:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\build\\intermediates\\cxx\\Debug\\2k4s5g2f\\obj\\x86\n-DCMAKE_BUILD_TYPE\u003dDebug\n-BE:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\.cxx\\Debug\\2k4s5g2f\\x86\n-GNinja\n-DANDROID_STL\u003dc++_shared\njvmArgs : \n\n",
+    "file_": "E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\\CMakeLists.txt",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -772501295
+  },
+  {
+    "level_": 0,
+    "message_": "Executable : C:\\Users\\fred2\\AppData\\Local\\Android\\Sdk\\cmake\\3.18.1\\bin\\cmake.exe\narguments : \n-HE:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\n-DCMAKE_SYSTEM_NAME\u003dAndroid\n-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\n-DCMAKE_SYSTEM_VERSION\u003d21\n-DANDROID_PLATFORM\u003dandroid-21\n-DANDROID_ABI\u003dx86\n-DCMAKE_ANDROID_ARCH_ABI\u003dx86\n-DANDROID_NDK\u003dC:\\Users\\fred2\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\n-DCMAKE_ANDROID_NDK\u003dC:\\Users\\fred2\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\n-DCMAKE_TOOLCHAIN_FILE\u003dC:\\Users\\fred2\\AppData\\Local\\Android\\Sdk\\ndk\\21.4.7075529\\build\\cmake\\android.toolchain.cmake\n-DCMAKE_MAKE_PROGRAM\u003dC:\\Users\\fred2\\AppData\\Local\\Android\\Sdk\\cmake\\3.18.1\\bin\\ninja.exe\n-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003dE:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\build\\intermediates\\cxx\\Debug\\2k4s5g2f\\obj\\x86\n-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003dE:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\build\\intermediates\\cxx\\Debug\\2k4s5g2f\\obj\\x86\n-DCMAKE_BUILD_TYPE\u003dDebug\n-BE:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\.cxx\\Debug\\2k4s5g2f\\x86\n-GNinja\n-DANDROID_STL\u003dc++_shared\njvmArgs : \n\n",
+    "file_": "E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\\CMakeLists.txt",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1581127760
+  },
+  {
+    "level_": 0,
+    "message_": "Exiting generation of E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\.cxx\\Debug\\2k4s5g2f\\x86\\compile_commands.json.bin normally",
+    "file_": "E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\\CMakeLists.txt",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1087184285
+  },
+  {
+    "level_": 0,
+    "message_": "done executing cmake",
+    "file_": "E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\\CMakeLists.txt",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1281440875
+  },
+  {
+    "level_": 0,
+    "message_": "write command file E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\.cxx\\Debug\\2k4s5g2f\\x86\\metadata_generation_command.txt",
+    "file_": "E:\\CODE\\Cours\\M1\\TER\\Gestion-de-projet\\APP_JAVA\\OpenCV_4-5-5\\libcxx_helper\\CMakeLists.txt",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -2115345433
   },
   {
     "level_": 0,

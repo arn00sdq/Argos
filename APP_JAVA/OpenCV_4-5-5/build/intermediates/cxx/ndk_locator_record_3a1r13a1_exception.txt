@@ -51,7 +51,7 @@ Using Android SDK: C:\Android\cmdline-tools\tools
 	at org.gradle.internal.event.ListenerBroadcast.dispatch(ListenerBroadcast.java:141)
 	at org.gradle.internal.event.ListenerBroadcast.dispatch(ListenerBroadcast.java:37)
 	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94)
-	at com.sun.proxy.$Proxy53.afterEvaluate(Unknown Source)
+	at com.sun.proxy.$Proxy43.afterEvaluate(Unknown Source)
 	at org.gradle.configuration.project.LifecycleProjectEvaluator$NotifyAfterEvaluate$1.execute(LifecycleProjectEvaluator.java:187)
 	at org.gradle.configuration.project.LifecycleProjectEvaluator$NotifyAfterEvaluate$1.execute(LifecycleProjectEvaluator.java:184)
 	at org.gradle.api.internal.project.DefaultProject.stepEvaluationListener(DefaultProject.java:1428)
