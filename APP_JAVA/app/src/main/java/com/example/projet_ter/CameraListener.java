@@ -342,8 +342,8 @@ public class CameraListener {
         Log.d(TAG, "Width = " + rotatedWidth);
         Log.d(TAG, "Height = " + rotatedHeight);
         Log.d(TAG, "swap = " + swapRotation);
-        Log.d(TAG, "Preview Width = " + this.mImageSize.getWidth());
-        Log.d(TAG, "Preview Height = " + this.mImageSize.getHeight());
+        Log.d(TAG, "Preview Width = " + this.mPreviewSize.getWidth());
+        Log.d(TAG, "Preview Height = " + this.mPreviewSize.getHeight());
         this.mCameraId = cameraIds[i];
 
         Log.d(TAG, "Camera id got " + this.mCameraId + " length " + cameraIds.length);
@@ -386,7 +386,7 @@ public class CameraListener {
         this.mCaptureRequestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, this.fpsRange);
 
         // Starting the capture sessions
-        this.mCameraDevice.createCaptureSession(Arrays.asList(/*previewSurface, */this.mImageReader.getSurface()), new CameraCaptureSession.StateCallback() {
+        this.mCameraDevice.createCaptureSession(Arrays.asList(/*previewSurface,*/ this.mImageReader.getSurface()), new CameraCaptureSession.StateCallback() {
             @Override
             public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
                 try {

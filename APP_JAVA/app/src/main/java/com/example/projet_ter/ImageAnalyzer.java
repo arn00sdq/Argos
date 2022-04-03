@@ -204,7 +204,9 @@ public class ImageAnalyzer implements Runnable {
         Utils.matToBitmap(this.rgbMatrix, this.mBitmapImage);
         // Obtain the canvas and draw the bitmap on top of it
         final Canvas canvas = this.mTextureView.lockCanvas();
-        canvas.drawBitmap(this.mBitmapImage, null, new Rect(0, 0, this.mTextureView.getWidth(), this.mTextureView.getHeight()), null);
+        int width = Math.max(this.mBitmapImage.getWidth(), canvas.getWidth());
+        int height = Math.max(this.mBitmapImage.getHeight(), canvas.getHeight());
+        canvas.drawBitmap(this.mBitmapImage, null, new Rect(0, 0, width, height), null);
         mTextureView.unlockCanvasAndPost(canvas);
     }
 
