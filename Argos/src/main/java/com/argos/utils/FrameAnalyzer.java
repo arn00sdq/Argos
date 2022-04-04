@@ -45,11 +45,17 @@ public class FrameAnalyzer {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
         FrameAnalyzer analyzer = new FrameAnalyzer();
-        List<TargetZone> zones = analyzer.getTargetZonesFromImage
-        (Imgcodecs.imread("C:\\Users\\Ivan\\Google Drive\\FAC\\M1\\S2\\Gestion de Projets\\Gestion-de-projet\\mavenproject1\\src\\main\\java\\com\\argos\\utils\\test2.jpg"));
-        zones.forEach(zone -> {
-            System.out.println(zone.toString());
-        });
+        Mat img = Imgcodecs.imread("C:\\Users\\Ivan\\Google Drive\\FAC\\M1\\S2\\Gestion de Projets\\Gestion-de-projet\\Images\\test2.jpg");
+        analyzer.HSVTargetZoneFinder.automaticallyCalibrate(img);
+        
+        List<TargetZone> zones = analyzer.getTargetZonesFromImage(img);
+        
+        TargetZoneAnalyzer tga = new TargetZoneAnalyzer(10, 90);
+        
+        tga.cutAndAnalyzeTargetZones(zones, img);
+        tga.getDetectedPOI().forEach(poi -> 
+                System.out.println(poi.toJSON())
+        );
         
     }
 }

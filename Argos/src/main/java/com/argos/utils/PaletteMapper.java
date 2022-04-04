@@ -43,8 +43,12 @@ public class PaletteMapper {
      */
     private void setDefaultPaletteMapping() {
         colorMapping = Map.ofEntries(
-                Map.entry(new Color(176,130,67), "sand"),
-                Map.entry(new Color(73,54,33), "clay")
+                Map.entry(new Color(177,186,181), "Sable massif"),
+                Map.entry(new Color(169,174,164), "Sable massif"),
+                Map.entry(new Color(30,44,46), "Argile"),
+                Map.entry(new Color(58,80,87), "Argile"),
+                Map.entry(new Color(196,211,208), "Conglomerat"),
+                Map.entry(new Color(170,180,170), "Conglomerat")
         );       
     }
 

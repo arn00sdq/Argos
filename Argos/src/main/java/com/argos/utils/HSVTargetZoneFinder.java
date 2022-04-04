@@ -162,7 +162,7 @@ public class HSVTargetZoneFinder {
      *
      * @param sourceCalibration source image to base the calibration upon
      */
-    private void automaticallyCalibrate(Mat sourceCalibration) {
+    public void automaticallyCalibrate(Mat sourceCalibration) {
 
         List<TargetZone> detectedZones = new ArrayList<>();
 
@@ -189,14 +189,12 @@ public class HSVTargetZoneFinder {
             
             System.out.println("Saturation: " + saturation_value + "  Zones: " + detectedZones.size());
 
-            if (Math.abs(targetNumber - detectedZones.size() + 1) < minDiff) {
+            if (Math.abs(targetNumber - detectedZones.size() + 1) <= minDiff) {
 
                 minDiff = Math.abs(targetNumber - detectedZones.size() + 1);
                 optimalSaturation = saturation_value;
 
             }
-            //System.out.println(detectedZones.size() + " zones detected. with val  " + saturation_value);
-
         }
 
         saturation_value = optimalSaturation;
@@ -250,21 +248,4 @@ public class HSVTargetZoneFinder {
     public void setMax_saturation_val(int max_saturation_val) {
         this.max_saturation_val = max_saturation_val;
     }
-
-    public static void main(String[] args) {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat img = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\test.png");
-        HSVTargetZoneFinder cal = new HSVTargetZoneFinder();
-        Instant start = Instant.now();
-        cal.automaticallyCalibrate(img);
-        cal.getDetectedTargetZones(img).
-                forEach(zone -> {
-                    System.out.println(zone);
-                });
-        Instant end = Instant.now();
-        Duration interval = Duration.between(start, end);
-        System.out.println("Execution time in nanoseconds: " + interval.getNano());
-
-    }
-
 }

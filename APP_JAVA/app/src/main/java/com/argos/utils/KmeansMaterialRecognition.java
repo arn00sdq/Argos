@@ -23,6 +23,7 @@ import java.util.List;
 public class KmeansMaterialRecognition {
     
     int clusters = 4;
+    int recognitionPrecision = 90;
     int upper_x;
     int upper_y;
     int w;
@@ -116,7 +117,7 @@ public class KmeansMaterialRecognition {
     public boolean Match(Mat kImg) {
              
         PaletteMapper pm = new PaletteMapper(paletteTypes.DEFAULT_PALETTE);
-        MaterialIdentifier mi = new MaterialIdentifier(pm, 50);
+        MaterialIdentifier mi = new MaterialIdentifier(pm, recognitionPrecision);
         Mat centers= new Mat();
         Mat labels = new Mat();
                        

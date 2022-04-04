@@ -2,6 +2,7 @@ package com.argos.utils;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -19,9 +20,11 @@ public class PointOfInterest {
     private Color lineColor = Color.CYAN;
     private Integer lineWidth = 1;
 
+    
+    private Hashtable<String, Integer> materialProportions;
     /**
      *
-     * @param labels names corresponding to this Point Of Interest
+     * @param materials names corresponding to this Point Of Interest
      * @param width width of the point of intereset area
      * @param height height of the point of intereset area
      * @param x_coord x coordinate of the upper left corner
@@ -31,8 +34,8 @@ public class PointOfInterest {
      * @param lineWidth width of the line that should be used to draw the
      * bounding rectangle
      */
-    public PointOfInterest(List<String> labels, Integer width, Integer height, Integer x_coord, Integer y_coord, Color lineColor, Integer lineWidth) {
-        this.labels = labels;
+    public PointOfInterest(List<String> materials, Integer width, Integer height, Integer x_coord, Integer y_coord, Color lineColor, Integer lineWidth) {
+        this.labels = materials;
         this.width = width;
         this.height = height;
         this.x_coord = x_coord;
@@ -102,6 +105,16 @@ public class PointOfInterest {
         return lineWidth;
     }
 
+    public Hashtable<String, Integer> getMaterialProportions() {
+        return materialProportions;
+    }
+
+    public void setMaterialProportions(Hashtable<String, Integer> materialProportions) {
+        this.materialProportions = materialProportions;
+    }
+
+    
+    
     /**
      * Convert a PointOfInterest to JSON format
      * @return JSON string
@@ -116,13 +129,14 @@ public class PointOfInterest {
                 result += ",\n";
             }
         }
-        result += "\n\t]";
+        result += "\n\t\t]";
         result += ",\n\tx : " + this.x_coord;
         result += ",\n\ty : " + this.y_coord;
         result += ",\n\twidth : " + this.width;
         result += ",\n\theight : " + this.height;
         result += ",\n\tlineColor : " + this.lineColor.getRed() + ", " + this.lineColor.getGreen() + ", " + this.lineColor.getBlue();
         result += ",\n\tlineWidth : " + this.lineWidth;
+        result += ",\n\tpercentages : " + this.materialProportions.toString();
         result += "\n}";
 
         return result;
