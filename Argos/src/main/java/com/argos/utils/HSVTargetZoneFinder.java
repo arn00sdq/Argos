@@ -1,7 +1,5 @@
 package com.argos.utils;
 
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.opencv.core.Core;
@@ -13,7 +11,6 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.highgui.HighGui;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -35,7 +32,10 @@ public class HSVTargetZoneFinder {
     private int max_saturation_val = 100;
 
     /**
-     * Gets a list of detected TargetZone from an image
+     * Gets a list of detected TargetZone from an image.
+     * Uses the HSV format and subsequent thresholding on
+     * masked images of the original image in order to 
+     * ignore background and get only the relevant figures.
      *
      * @param src_image Mat representing an image
      * @return list of TargetZone
@@ -157,7 +157,7 @@ public class HSVTargetZoneFinder {
     /**
      * This method goes through all possible values (from 0 to
      * max_saturation_value) of the saturation value in order to automatically
-     * find the most optimal value based on the number of TargetZones by the
+     * find the most optimal value based on the number of TargetZones found by the
      * finder method (prioritizing highest number)
      *
      * @param sourceCalibration source image to base the calibration upon

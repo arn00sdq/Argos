@@ -38,6 +38,27 @@ public class PaletteMapper {
     public Map<Color, String> getColorMap(){
         return colorMapping;
     }
+    
+    /**
+     *
+     * @param material The material name of which we want the Color
+     * @return The color that matches the corresponding material, or black if
+     * material is unknown
+     */
+    public Color getColorFromMaterial(String material) {
+
+        for (Map.Entry<Color, String> entry : colorMapping.entrySet()) {
+
+            Color color = entry.getKey();
+            String mat = entry.getValue();
+
+            if (mat.equalsIgnoreCase(material)) {
+                return color;
+            }
+
+        }
+        return new Color(0, 0, 0);
+    }
     /**
      * setter for the default Palette Mapping
      */

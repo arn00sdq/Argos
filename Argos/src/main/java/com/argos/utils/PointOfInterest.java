@@ -17,21 +17,21 @@ public class PointOfInterest {
     private final Integer height;
     private final Integer x_coord;
     private final Integer y_coord;
-    private Color lineColor = Color.CYAN;
+    private Color lineColor = new Color(255,0,0);
     private Integer lineWidth = 1;
 
-    
     private Hashtable<String, Integer> materialProportions;
+
     /**
      *
-     * @param materials names corresponding to this Point Of Interest
-     * @param width width of the point of intereset area
-     * @param height height of the point of intereset area
-     * @param x_coord x coordinate of the upper left corner
-     * @param y_coord y coordinate of the upper left corner
-     * @param lineColor color of the line that should be used to draw the
+     * @param materials Material names present in this Point Of Interest
+     * @param width Width of the point of interest area
+     * @param height Height of the point of interest area
+     * @param x_coord X coordinate of the upper left corner
+     * @param y_coord Y coordinate of the upper left corner
+     * @param lineColor Color of the line that should be used to draw the
      * bounding rectangle
-     * @param lineWidth width of the line that should be used to draw the
+     * @param lineWidth Width of the line that should be used to draw the
      * bounding rectangle
      */
     public PointOfInterest(List<String> materials, Integer width, Integer height, Integer x_coord, Integer y_coord, Color lineColor, Integer lineWidth) {
@@ -44,8 +44,16 @@ public class PointOfInterest {
         this.lineWidth = lineWidth;
     }
 
-    public PointOfInterest(List<String> labels, Integer width, Integer height, Integer x_coord, Integer y_coord) {
-        this.labels = labels;
+    /**
+     *
+     * @param materials Material names present in this Point Of Interest
+     * @param width Width of the point of interest area
+     * @param height Height of the point of interest area
+     * @param x_coord X coordinate of the upper left corner
+     * @param y_coord Y coordinate of the upper left corner
+     */
+    public PointOfInterest(List<String> materials, Integer width, Integer height, Integer x_coord, Integer y_coord) {
+        this.labels = materials;
         this.width = width;
         this.height = height;
         this.x_coord = x_coord;
@@ -55,8 +63,8 @@ public class PointOfInterest {
     /**
      * Creates a list of POIs representing the zones
      *
-     * @param zones list of TargetZone
-     * @return list of PointOfInterest
+     * @param zones List of TargetZone
+     * @return List of PointOfInterest
      */
     public static List<PointOfInterest> toPOIList(List<TargetZone> zones) {
 
@@ -64,13 +72,13 @@ public class PointOfInterest {
 
         zones.forEach(zone -> {
             poiArray.add(new PointOfInterest(
-                            new ArrayList<>(),
-                            zone.getW(),
-                            zone.getH(),
-                            zone.getUpper_x(),
-                            zone.getUpper_y(),
-                            Color.RED,
-                            2));
+                    new ArrayList<>(),
+                    zone.getW(),
+                    zone.getH(),
+                    zone.getUpper_x(),
+                    zone.getUpper_y(),
+                    Color.RED,
+                    2));
         });
 
         return poiArray;
@@ -113,10 +121,9 @@ public class PointOfInterest {
         this.materialProportions = materialProportions;
     }
 
-    
-    
     /**
      * Convert a PointOfInterest to JSON format
+     *
      * @return JSON string
      */
     public String toJSON() {

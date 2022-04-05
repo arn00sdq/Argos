@@ -11,8 +11,9 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.imgproc.Imgproc;
 
-import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Size;
@@ -20,32 +21,84 @@ import org.opencv.core.TermCriteria;
 
 public class MaterialAnalyzer {
 
-    private Mat analyzedImage;
+    private MaterialIdentifier materialIdentifier = new MaterialIdentifier(new PaletteMapper(paletteTypes.DEFAULT_PALETTE));
 
-    private int clusters = 4;
-    private PaletteMapper paletteMapper;
-    private MaterialIdentifier materialIdentifier;
+    /**
+     * This method uses the k-means algorithm in order to extract, from an area of
+     * an image, a number of predominant materials matching the found colors equal 
+     * to the number of clusters
+     * @param analyzedImage Image to analyze
+     * @param upper_x Upper X coordinate of the zone
+     * @param upper_y Upper Y coordinate of the zone
+     * @param w Width of the zone
+     * @param h Height of the zone
+     * @return A list of names of materials
+     */
+    public List<String> getMaterialsInsideZoneOfImage(Mat analyzedImage, int upper_x, int upper_y, int w, int h, int clustersNumber) {
 
-    private List<String> existingMaterials = new ArrayList<>();
+        Mat centers = new Mat();
+        Mat labels = new Mat();
 
-    public MaterialAnalyzer(Mat image) {
-        analyzedImage = image;
-        paletteMapper = new PaletteMapper(paletteTypes.DEFAULT_PALETTE);
-        materialIdentifier = new MaterialIdentifier(paletteMapper);
+        
+        Size sz = analyzedImage.size();
+
+        while (upper_x + w >= sz.width)
+            --w;
+        while (upper_y + h >= sz.height)
+            --h;   
+
+        Rect rectCrop = new Rect(upper_x, upper_y, w, h);
+        Mat imageROI = new Mat(analyzedImage, rectCrop);
+
+        Mat img_clone = new Mat();
+
+        Imgproc.cvtColor(imageROI, img_clone, Imgproc.COLOR_RGB2BGR);
+
+        Mat imgKmean = img_clone.clone();
+
+        imgKmean = img_clone.reshape(1, imageROI.rows() * imageROI.cols());
+        imgKmean.convertTo(imgKmean, CvType.CV_32F);
+
+        TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.COUNT, 10, 1.0);
+
+        Core.kmeans(imgKmean, clustersNumber, labels, criteria, 10, Core.KMEANS_PP_CENTERS, centers);
+
+        String dump = centers.dump();
+        Color[] colorsArray = extractRgbFromString(dump, clustersNumber);
+
+        return materialIdentifier.getMaterialNamesFromColors(colorsArray);
+
+    }
+    
+    /**
+     * Gets the Color value of the most present material in a hash table of material proportions
+     * @param materialProportions Hash table defining the proportions of each material
+     * @return The color of the predominant material
+     */
+    public Color getColorOfPredominantMaterial(Hashtable<String, Integer> materialProportions){
+        
+        Integer predominantMaterialMaxPresence = 0;
+        String predominantMaterial = "unknown";
+        
+        for (Map.Entry<String, Integer> entry : materialProportions.entrySet()) {
+            String material = entry.getKey();
+            Integer proportion = entry.getValue();
+            
+            if (proportion > predominantMaterialMaxPresence) {
+                predominantMaterialMaxPresence = proportion;
+                predominantMaterial = material;
+            }
+        }
+        
+        return this.materialIdentifier.getPaletteMapper().getColorFromMaterial(predominantMaterial);
     }
 
-    public MaterialAnalyzer(Mat image, int precision) {
-        analyzedImage = image;
-        paletteMapper = new PaletteMapper(paletteTypes.DEFAULT_PALETTE);
-        materialIdentifier = new MaterialIdentifier(paletteMapper, precision);
-    }
-
-    public MaterialAnalyzer(Mat image, int precision, paletteTypes paletteType) {
-        analyzedImage = image;
-        paletteMapper = new PaletteMapper(paletteType);
-        materialIdentifier = new MaterialIdentifier(paletteMapper, precision);
-    }
-
+    /**
+     * Converts color data in string format to Color format
+     * @param dump String containing Color data
+     * @param clusters Number of clusters to extract
+     * @return An array of colors of size equal to clusters
+     */
     private Color[] extractRgbFromString(String dump, int clusters) {
 
         int row = 0;
@@ -107,51 +160,11 @@ public class MaterialAnalyzer {
 
     }
 
-    public boolean zoneContainsMaterials(int upper_x, int upper_y, int w, int h) {
-
-        Mat centers = new Mat();
-        Mat labels = new Mat();
-
-        Size sz = analyzedImage.size();
-
-        if (upper_x + w >= sz.width) {
-
-            upper_x = (int) (sz.width - 1) - w;
-        }
-        if (upper_y + h >= sz.height) {
-
-            upper_y = (int) (sz.height - 1) - h;
-        }
-
-        Rect rectCrop = new Rect(upper_x, upper_y, w, h);
-        Mat imageROI = new Mat(analyzedImage, rectCrop);
-
-        Mat img_clone = new Mat();
-
-        Imgproc.cvtColor(imageROI, img_clone, Imgproc.COLOR_RGB2BGR);
-
-        Mat imgKmean = img_clone.clone();
-
-        imgKmean = img_clone.reshape(1, imageROI.rows() * imageROI.cols());
-        imgKmean.convertTo(imgKmean, CvType.CV_32F);
-
-        TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.COUNT, 10, 1.0);
-
-        Core.kmeans(imgKmean, clusters, labels, criteria, 10, Core.KMEANS_PP_CENTERS, centers);
-
-        String dump = centers.dump();
-        Color[] colorsArray = extractRgbFromString(dump, clusters);
-
-        existingMaterials = materialIdentifier.getMaterialNamesFromColors(colorsArray);
-        
-        //existingMaterials.removeIf(x -> x.contains("unknown"));
-
-        return (existingMaterials.size() > 0);
-
+    public float getConfidence() {
+        return materialIdentifier.getConfidence();
     }
-
-    public List<String> getExistingMaterials() {
-        return existingMaterials;
+    
+    public void setConfidence(float confidence) {
+        materialIdentifier.setConfidence(confidence);
     }
-
 }

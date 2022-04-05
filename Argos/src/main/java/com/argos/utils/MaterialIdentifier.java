@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import org.opencv.core.Core;
+
 
 /**
  *
@@ -15,16 +15,21 @@ import org.opencv.core.Core;
 public class MaterialIdentifier {
 
     /**
-     * confidence: degree of accuracy for comparison number between 1 and 100
-     * 100 means color values must exactly match
+     * Confidence: degree of accuracy for comparison ranging between 1 and 100
+     * 100 means color values must exactly match Example: with a confidence of
+     * 90 and checking against sand RGB(50,50,50), matching function will
+     * compare if a new Color, for example RGB(10,34,65) has values between 
+     * 50 +- 255 * (1 - confidence / 100) / 2
      */
-    private PaletteMapper paletteMapper = null;
     private float confidence = 90;
+    
+    private PaletteMapper paletteMapper = null;
+    
 
     /**
      *
-     * @param mapper palette containing mapped colors for materials
-     * @param confidence degree of accuracy for comparison
+     * @param mapper Palette containing mapped colors for materials
+     * @param confidence Degree of accuracy for comparison
      */
     public MaterialIdentifier(PaletteMapper mapper, float confidence) {
         this.paletteMapper = mapper;
@@ -33,7 +38,7 @@ public class MaterialIdentifier {
 
     /**
      *
-     * @param mapper palette containing mapped colors for materials
+     * @param mapper Malette containing mapped colors for materials
      */
     public MaterialIdentifier(PaletteMapper mapper) {
         this.paletteMapper = mapper;
@@ -46,11 +51,11 @@ public class MaterialIdentifier {
      * returns either the name of a material or unknown
      */
     public List<String> getMaterialNamesFromColors(Color[] colors) {
-        List<String> result = new ArrayList<>();
+        List<String> materialNames = new ArrayList<>();
         for (Color color : colors) {
-            result.add(identifyMaterialFromColor(color));
+            materialNames.add(identifyMaterialFromColor(color));
         }
-        return result;
+        return materialNames;
     }
 
     /**
@@ -68,20 +73,22 @@ public class MaterialIdentifier {
             if (colorsMatch(color, baseColor)) {
                 return mat;
             }
+
         }
         return "unknown";
     }
 
+
     /**
      *
-     * @param color color that we want to identify
-     * @param baseColor color present in the palette that maps to a material
-     * @return wether the two colors match
+     * @param color Color that we want to identify
+     * @param baseColor Color present in the palette that maps to a material
+     * @return Whether the two colors match
      */
     private boolean colorsMatch(Color color, Color baseColor) {
 
         float decimalConfidence = confidence / 100;
-        float maxIntervalrange = 256 * (1 - decimalConfidence);
+        float maxIntervalrange = 256 * (1 - decimalConfidence) / 2;
 
         float lowerRedLimit = baseColor.getRed() - maxIntervalrange;
         float lowerGreenLimit = baseColor.getGreen() - maxIntervalrange;
@@ -99,14 +106,28 @@ public class MaterialIdentifier {
         higherGreenLimit = higherGreenLimit > 255 ? 255 : higherGreenLimit;
         higherBlueLimit = higherBlueLimit > 255 ? 255 : higherBlueLimit;
 
-        //System.out.println("red between " + lowerRedLimit + " and " + higherRedLimit);
-        //System.out.println("green between " + lowerGreenLimit + " and " + higherGreenLimit);
-        //System.out.println("blue between " + lowerBlueLimit + " and " + higherBlueLimit);
-
         boolean redMatches = (color.getRed() >= lowerRedLimit) && (color.getRed() <= higherRedLimit);
         boolean greenMatches = (color.getGreen() >= lowerGreenLimit) && (color.getGreen() <= higherGreenLimit);
         boolean blueMatches = (color.getBlue() >= lowerBlueLimit) && (color.getBlue() <= higherBlueLimit);
 
         return redMatches && greenMatches && blueMatches;
     }
+
+    public PaletteMapper getPaletteMapper() {
+        return paletteMapper;
+    }
+
+    public float getConfidence() {
+        return confidence;
+    }
+
+    public void setPaletteMapper(PaletteMapper paletteMapper) {
+        this.paletteMapper = paletteMapper;
+    }
+
+    public void setConfidence(float confidence) {
+        this.confidence = confidence;
+    }
+    
+    
 }
