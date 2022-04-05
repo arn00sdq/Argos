@@ -60,6 +60,7 @@ public class TargetZoneMaterialsExtractor {
 
             PointOfInterest POI = new PointOfInterest(materialsList, zone.upper_x, zone.upper_y, zone.w, zone.h);
             POI.setMaterialProportions(getZoneMaterialsPercentages(materialPresencesInTargetZone));
+            POI.setLineColor(materialAnalyzer.getColorOfPredominantMaterial(materialPresencesInTargetZone));
             analyzedPOI.add(POI);
 
         });

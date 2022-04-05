@@ -121,6 +121,10 @@ public class PointOfInterest {
         this.materialProportions = materialProportions;
     }
 
+    public void setLineColor(Color lineColor) {
+        this.lineColor = lineColor;
+    }
+
     /**
      * Convert a PointOfInterest to JSON format
      *
