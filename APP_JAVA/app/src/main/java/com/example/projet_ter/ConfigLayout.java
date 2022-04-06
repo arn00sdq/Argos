@@ -22,6 +22,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.CompoundButton;
+
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -45,6 +47,7 @@ public class ConfigLayout {
 
     private final FrameAnalyzer frameAnalyzer;
 
+    private final ImageButton buttonChangeAlgo;
     private final Switch algoChangeSwitch;
 
     private final Group kMeansGroup;
@@ -75,6 +78,8 @@ public class ConfigLayout {
         // Getting the group
         this.kMeansGroup = this.layout.findViewById(R.id.kmeansGroup);
         this.hsvGroup = this.layout.findViewById(R.id.hsvGroup);
+        // Getting the ImageButton
+        this.buttonChangeAlgo = this.layout.findViewById(R.id.swapbutton);
         // Getting the switch
         this.algoChangeSwitch = this.layout.findViewById(R.id.algoChangeSwitch);
         // Getting the text field
@@ -89,12 +94,17 @@ public class ConfigLayout {
         this.sSeekBar = this.layout.findViewById(R.id.seekBarS);
         this.vSeekBar = this.layout.findViewById(R.id.seekBarV);
 
-        // Set a listener for the changeAlgo switch
-        this.algoChangeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @SuppressLint("SetTextI18n")
+        // Set a listener for the swapbutton
+        this.buttonChangeAlgo.setOnClickListener(new View.OnClickListener() {
+            // Set the boolean to check which algo is running
+            boolean algoswap = false;
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
+            public void onClick(View view) {
+                if (algoswap)
+                    algoswap = false;
+                else
+                    algoswap = true;
+                if (algoswap) {
                     agloNameField.setText("HSV");
                     hsvGroup.setVisibility(View.VISIBLE);
                     kMeansGroup.setVisibility(View.INVISIBLE);

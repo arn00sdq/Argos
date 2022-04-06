@@ -62,9 +62,9 @@
             android:id="@+id/titleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/config_layout_top"
-            android:padding="20dp"
             android:animateLayoutChanges="true"
+            android:background="@drawable/config_layout_top"
+            android:padding="18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -73,10 +73,12 @@
                 android:id="@+id/textLeft"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:text="@string/algorithme"
-                android:textSize="20sp"
                 android:textColor="#ffffff"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/swapbutton"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -84,20 +86,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/k_means"
-                android:textSize="20sp"
                 android:textColor="#ffffff"
-                android:layout_marginStart="10dp"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textLeft"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Switch
                 android:id="@+id/algoChangeSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            <ImageButton
+                android:id="@+id/swapbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#ff55B4FF"
+                android:clickable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                openwcv:srcCompat="@drawable/ic_action_name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
