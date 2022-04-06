@@ -1,6 +1,7 @@
 package com.argos.utils;
 
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -26,6 +27,7 @@ public class FrameAnalyzer {
     
     
     public List<TargetZone> getTargetZonesFromImage(Mat img) {
+        Log.d("FRAME_ANALYZER", String.valueOf(img.channels()));
         switch (this.targetZoneFinderMethod){
             case HSV:
                 return HSVTargetZoneFinder.getDetectedTargetZones(img);

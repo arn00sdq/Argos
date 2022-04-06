@@ -50,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Log.i(TAG, "onCreate");
-        this.camera_component = new CameraListener(this, (TextureView) this.findViewById(R.id.textureView));
+        //this.camera_component = new CameraListener(this, this.findViewById(R.id.textureView));
+        this.camera_component = new CameraListener(this.findViewById(R.id.javaCamera2View));
         this.configLayout = new ConfigLayout((View) this.findViewById(R.id.ButtonLayout), this.camera_component.getFrameAnalyzer());
 
     }
@@ -59,31 +60,36 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (OpenCVLoader.initDebug()) {
-            try {
+            /*try {
                 this.camera_component.startCamera();
             } catch (CameraAccessException e) {
                 e.printStackTrace();
-            }
+            }*/
+            this.camera_component.enable();
         }
     }
 
     @Override
     public void onDestroy() {
-        try {
+        /*try {
             this.camera_component.closeCamera();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
+
+        this.camera_component.disable();
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        try {
+        /*try {
             this.camera_component.closeCamera();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
+
+        this.camera_component.disable();
         super.onPause();
     }
 

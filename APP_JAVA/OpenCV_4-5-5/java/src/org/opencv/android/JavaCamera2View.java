@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Range;
 import android.view.Surface;
 import android.view.ViewGroup.LayoutParams;
 
@@ -193,6 +194,7 @@ public class JavaCamera2View extends CameraBridgeViewBase {
 
             mPreviewRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             mPreviewRequestBuilder.addTarget(surface);
+            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_TARGET_FPS_RANGE, new Range<>(30, 30));
 
             mCameraDevice.createCaptureSession(Arrays.asList(surface),
                 new CameraCaptureSession.StateCallback() {

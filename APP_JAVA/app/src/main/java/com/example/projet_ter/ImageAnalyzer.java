@@ -1,16 +1,19 @@
 package com.example.projet_ter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.SurfaceTexture;
 import android.graphics.YuvImage;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Build;
 import android.util.Log;
+import android.view.Surface;
 import android.view.TextureView;
 
 import androidx.annotation.RequiresApi;
@@ -24,7 +27,9 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Range;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.nio.ByteBuffer;
@@ -33,7 +38,7 @@ import java.util.List;
 
 public class ImageAnalyzer implements Runnable {
 
-    private static String TAG = "Projet_TER::ImageAnalyzer";
+    private static final String TAG = "Projet_TER::ImageAnalyzer";
 
     public static interface ImageAnalyzerListener {
         public default void onImageAnalyzerStarted() {
@@ -47,16 +52,23 @@ public class ImageAnalyzer implements Runnable {
     }
 
     private final TextureView mTextureView;
-    private final ImageReader mImageReader;
+    /*private final ImageReader mImageReader;
+    private final Surface mSurface;*/
+    private Image mImage;
     private FrameAnalyzer mFrameAnalyzer;
     private ImageAnalyzerListener mImageAnalyzerListener;
     private Mat rgbMatrix;
     private Bitmap mBitmapImage;
     private List<PointOfInterest> mPOIs;
 
-    public ImageAnalyzer(TextureView textureView, ImageReader imageReader) {
+    /*public ImageAnalyzer(TextureView textureView, ImageReader imageReader) {
         super();
         this.mImageReader = imageReader;
+        this.mTextureView = textureView;
+    }*/
+
+    public ImageAnalyzer(TextureView textureView) {
+        super();
         this.mTextureView = textureView;
     }
 
@@ -68,97 +80,14 @@ public class ImageAnalyzer implements Runnable {
         this.mFrameAnalyzer = frameAnalyzer;
     }
 
+    public void setImage(Image image) {
+        this.mImage = image;
+    }
+
     public List<PointOfInterest> getPOIs() {
         return this.mPOIs;
     }
 
-    public Bitmap getBitmap() {
-        return this.mBitmapImage;
-    }
-/*
-    public static byte[] yuvImageToByteArray(Image image) {
-
-        assert(image.getFormat() == ImageFormat.YUV_420_888);
-
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        Image.Plane[] planes = image.getPlanes();
-        byte[] result = new byte[width * height * 3 / 2];
-
-        int stride = planes[0].getRowStride();
-        assert (1 == planes[0].getPixelStride());
-        if (stride == width) {
-            planes[0].getBuffer().get(result, 0, width*height);
-        }
-        else {
-            for (int row = 0; row < height; row++) {
-                planes[0].getBuffer().position(row*stride);
-                planes[0].getBuffer().get(result, row*width, width);
-            }
-        }
-
-        stride = planes[1].getRowStride();
-        assert (stride == planes[2].getRowStride());
-        int pixelStride = planes[1].getPixelStride();
-        assert (pixelStride == planes[2].getPixelStride());
-        byte[] rowBytesCb = new byte[stride];
-        byte[] rowBytesCr = new byte[stride];
-
-        for (int row = 0; row < height/2; row++) {
-            int rowOffset = width*height + width/2 * row;
-            planes[1].getBuffer().position(row*stride);
-            planes[1].getBuffer().get(rowBytesCb);
-            planes[2].getBuffer().position(row*stride);
-            planes[2].getBuffer().get(rowBytesCr);
-
-            for (int col = 0; col < width/2; col++) {
-                result[rowOffset + col*2] = rowBytesCr[col*pixelStride];
-                result[rowOffset + col*2 + 1] = rowBytesCb[col*pixelStride];
-            }
-        }
-        return result;
-    }
-
-    public static Bitmap convertYUV(byte[] data, int width, int height, Rect crop) {
-        if (crop == null) {
-            crop = new Rect(0, 0, width, height);
-        }
-        Bitmap image = Bitmap.createBitmap(crop.width(), crop.height(), Bitmap.Config.ARGB_8888);
-        int yv = 0, uv = 0, vv = 0;
-        for (int y = crop.top; y < crop.bottom; y += 1) {
-            for (int x = crop.left; x < crop.right; x += 1) {
-                yv = data[y * width + x] & 0xff;
-                uv = (data[width * height + (x / 2) * 2 + (y / 2) * width + 1] & 0xff) - 128;
-                vv = (data[width * height + (x / 2) * 2 + (y / 2) * width] & 0xff) - 128;
-                image.setPixel(x, y, convertPixel(yv, uv, vv));
-            }
-        }
-        return image;
-    }
-
-    public static int convertPixel(int y, int u, int v) {
-        int r = (int) (y + 1.13983f * v);
-        int g = (int) (y - .39485f * u - .58060f * v);
-        int b = (int) (y + 2.03211f * u);
-        r = (r > 255) ? 255 : Math.max(r, 0);
-        g = (g > 255) ? 255 : Math.max(g, 0);
-        b = (b > 255) ? 255 : Math.max(b, 0);
-
-        return 0xFF000000 | (r << 16) | (g << 8) | b;
-    }
-
-    public static Bitmap ImageToBitmap(Image image) {
-        // Transformation of the image in YUV_420_888 format into an ByteArray
-        byte[] data = yuvImageToByteArray(image);
-        // Buffer to Bitmap
-        Bitmap bitmap = convertYUV(data, image.getWidth(), image.getHeight(), null);
-        if (bitmap == null) {
-            Log.d(TAG, "Bitmap is null ");
-        }
-        return bitmap;
-    }
-*/
     public static void imageToMat(final Image image, final Mat mat, byte[] data, byte[] rowData) {
         ByteBuffer buffer;
         int rowStride, pixelStride, width = image.getWidth(), height = image.getHeight(), offset = 0;
@@ -199,17 +128,27 @@ public class ImageAnalyzer implements Runnable {
         mat.put(0, 0, data);
     }
 
-    private final void draw() {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void draw() {
+        if (this.mPOIs != null) {
+            // Draw the data
+            this.mPOIs.forEach( poi -> {
+                Imgproc.rectangle(this.rgbMatrix, new Point(poi.getX_coord(), poi.getY_coord()),
+                        new Point(poi.getX_coord() + poi.getWidth(), poi.getY_coord() + poi.getHeight()),
+                        new Scalar(0, 0, 255), 5);
+            });
+        }
         // Create bitmap from BGR matrix
         Utils.matToBitmap(this.rgbMatrix, this.mBitmapImage);
         // Obtain the canvas and draw the bitmap on top of it
         final Canvas canvas = this.mTextureView.lockCanvas();
-        int width = Math.max(this.mBitmapImage.getWidth(), canvas.getWidth());
-        int height = Math.max(this.mBitmapImage.getHeight(), canvas.getHeight());
-        canvas.drawBitmap(this.mBitmapImage, null, new Rect(0, 0, width, height), null);
+        /*int width = Math.max(this.mBitmapImage.getWidth(), canvas.getWidth());
+        int height = Math.max(this.mBitmapImage.getHeight(), canvas.getHeight());*/
+        canvas.drawBitmap(this.mBitmapImage, null, new Rect(0, 0, canvas.getWidth(), canvas.getHeight()), null);
         mTextureView.unlockCanvasAndPost(canvas);
     }
 
+    @SuppressLint("LongLogTag")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void run() {
@@ -217,29 +156,51 @@ public class ImageAnalyzer implements Runnable {
             if (this.mImageAnalyzerListener != null) {
                 this.mImageAnalyzerListener.onImageAnalyzerStarted();
             }
+            /*Image.Plane[] planes = this.mImage.getPlanes();
+            //assert(planes[0].getPixelStride() == 1);
+            Log.d(TAG, "planes[2].getPixelStride() = " + planes[2].getPixelStride() );
+            Log.d(TAG, "Image format = " + this.mImage.getFormat());
+            ByteBuffer y_plane = planes[0].getBuffer();
+            ByteBuffer u_plane = planes[1].getBuffer();
+            ByteBuffer v_plane = planes[2].getBuffer();
+
+            Mat y_mat = new Mat(this.mImage.getHeight(), this.mImage.getWidth(), CvType.CV_8UC1, y_plane);
+            Mat u_mat = new Mat(this.mImage.getHeight() / 2, this.mImage.getWidth() / 2, CvType.CV_8UC2, uv_plane);
+            this.rgbMatrix = new Mat(this.mImage.getHeight(), this.mImage.getWidth(), CvType.CV_8UC1);
+            Imgproc.cvtColorTwoPlane(y_mat, uv_mat, this.rgbMatrix, Imgproc.COLOR_YUV2RGBA_NV21);
+            this.mImage.close();*/
+            //Imgproc.cvtColor(y_mat, this.rgbMatrix, Imgproc.COLOR_YUV2RGBA_NV21, 4);
+            //Imgproc.cvtColor(y_mat, this.rgbMatrix, Imgproc.COLOR_YUV2RGB_I420, 4);
             // Convert image to Bitmap to opencv Mat
-            Image image = this.mImageReader.acquireLatestImage();
-            Log.d(TAG, "Texture height = " + this.mTextureView.getHeight());
-            Log.d(TAG, "Image height = " + image.getHeight());
+            //Image image = this.mImageReader.acquireNextImage();
+            //Log.d(TAG, "Texture height = " + this.mTextureView.getHeight());
+            //Log.d(TAG, "Image height = " + this.mImage.getHeight());
             /*this.mBitmapImage = ImageToBitmap(image);
             // Close a fast as possible to release memory
             // Can make freezes if it is not done
             image.close();
             this.rgbMatrix = new Mat(this.mBitmapImage.getWidth(), this.mBitmapImage.getHeight(), CvType.CV_8UC1);
             Utils.bitmapToMat(this.mBitmapImage, this.rgbMatrix);*/
-            Mat Yuv420Mat = new Mat(image.getHeight() * 3 / 2, image.getWidth(), CvType.CV_8UC1);
-            Mat bgrMat = new Mat(image.getHeight() * 3 / 2, image.getWidth(), CvType.CV_8UC3);
-            imageToMat(image, Yuv420Mat, null, null);
+            Mat Yuv420Mat = new Mat(this.mImage.getHeight() * 3 / 2, this.mImage.getWidth(), CvType.CV_8UC1);
+            Mat bgrMat = new Mat(this.mImage.getHeight() * 3 / 2, this.mImage.getWidth(), CvType.CV_8UC3);
+            imageToMat(this.mImage, Yuv420Mat, null, null);
             Imgproc.cvtColor(Yuv420Mat, bgrMat, Imgproc.COLOR_YUV420p2BGR);
             Core.transpose(bgrMat, bgrMat);
             Core.flip(bgrMat, bgrMat, 1);
-            image.close();
+            //Imgproc.resize(bgrMat, bgrMat, new Size(640, 480), Imgproc.INTER_CUBIC);
+            this.mImage.close();
             this.rgbMatrix = bgrMat;
-            this.mBitmapImage = Bitmap.createBitmap(bgrMat.width(), bgrMat.height(), Bitmap.Config.ARGB_8888);
-            Log.d(TAG, "Bitmap height = " + this.mBitmapImage.getHeight());
+            this.mBitmapImage = Bitmap.createBitmap(this.rgbMatrix.width(), this.rgbMatrix.height(), Bitmap.Config.ARGB_8888);
+            //Log.d(TAG, "Bitmap height = " + this.mBitmapImage.getHeight());
             //this.mBitmapImage = Bitmap.createBitmap(this.mTextureView.getWidth(), this.mTextureView.getHeight(), Bitmap.Config.ARGB_8888);
             //Utils.matToBitmap(Yuv420Mat, this.mBitmapImage);
             // Draw the bimap on the canvas
+            if (this.mFrameAnalyzer != null) {
+                Mat rgb32f4c = new Mat((int) this.rgbMatrix.total(), 1, CvType.CV_32FC3);
+                this.rgbMatrix.convertTo(rgb32f4c, CvType.CV_32F);
+                Imgproc.cvtColor(rgb32f4c, rgb32f4c, Imgproc.COLOR_BGR2BGRA);
+                this.mPOIs = PointOfInterest.toPOIList(this.mFrameAnalyzer.getTargetZonesFromImage(rgb32f4c));
+            }
             this.draw();
             //this.mCanvas.drawBitmap(this.mBitmapImage, new Matrix(), null);
             if (this.mImageAnalyzerListener != null) {
@@ -247,6 +208,8 @@ public class ImageAnalyzer implements Runnable {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            this.mImage.close();
+            this.mImage = null;
         }
     }
 }
