@@ -6,6 +6,9 @@
 package com.argos.utils;
 
 import android.graphics.Color;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.argos.utils.PaletteMapper.*;
 import org.opencv.core.Core;
@@ -35,6 +38,7 @@ public class MaterialAnalyzer {
      * @param h Height of the zone
      * @return A list of names of materials
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public List<String> getMaterialsInsideZoneOfImage(Mat analyzedImage, int upper_x, int upper_y, int w, int h, int clustersNumber) {
 
         Mat centers = new Mat();
@@ -76,6 +80,7 @@ public class MaterialAnalyzer {
      * @param materialProportions Hash table defining the proportions of each material
      * @return The color of the predominant material
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public Color getColorOfPredominantMaterial(Hashtable<String, Integer> materialProportions){
         
         Integer predominantMaterialMaxPresence = 0;
@@ -100,6 +105,7 @@ public class MaterialAnalyzer {
      * @param clusters Number of clusters to extract
      * @return An array of colors of size equal to clusters
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private Color[] extractRgbFromString(String dump, int clusters) {
 
         int row = 0;
@@ -143,7 +149,7 @@ public class MaterialAnalyzer {
                     b = Math.round(Float.parseFloat(s));
                 }
 
-                colorsArray[row] = new Color((int) r, (int) g, (int) b, 255);
+                colorsArray[row] = Color.valueOf((int) r, (int) g, (int) b, 255);
 
                 row++;
                 element = 0;

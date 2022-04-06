@@ -1,6 +1,10 @@
 package com.argos.utils;
 
-import java.awt.Color;
+import android.graphics.Color;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.Map;
 
 /**
@@ -25,6 +29,7 @@ public class PaletteMapper {
      * 
      * @param type Type of the palette
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public PaletteMapper(paletteTypes type) {
         switch (type) {
             case DEFAULT_PALETTE:
@@ -45,6 +50,7 @@ public class PaletteMapper {
      * @return The color that matches the corresponding material, or black if
      * material is unknown
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public Color getColorFromMaterial(String material) {
 
         for (Map.Entry<Color, String> entry : colorMapping.entrySet()) {
@@ -57,19 +63,20 @@ public class PaletteMapper {
             }
 
         }
-        return new Color(0, 0, 0);
+        return Color.valueOf(0f, 0f, 0f);
     }
     /**
      * setter for the default Palette Mapping
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void setDefaultPaletteMapping() {
         colorMapping = Map.ofEntries(
-                Map.entry(new Color(177,186,181), "Sable massif"),
-                Map.entry(new Color(169,174,164), "Sable massif"),
-                Map.entry(new Color(30,44,46), "Argile"),
-                Map.entry(new Color(58,80,87), "Argile"),
-                Map.entry(new Color(196,211,208), "Conglomerat"),
-                Map.entry(new Color(170,180,170), "Conglomerat")
+                Map.entry(Color.valueOf(177,186,181), "Sable massif"),
+                Map.entry(Color.valueOf(169,174,164), "Sable massif"),
+                Map.entry(Color.valueOf(30,44,46), "Argile"),
+                Map.entry(Color.valueOf(58,80,87), "Argile"),
+                Map.entry(Color.valueOf(196,211,208), "Conglomerat"),
+                Map.entry(Color.valueOf(170,180,170), "Conglomerat")
         );       
     }
 

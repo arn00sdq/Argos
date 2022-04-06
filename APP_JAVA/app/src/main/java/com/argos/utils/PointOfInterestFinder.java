@@ -46,7 +46,7 @@ public class PointOfInterestFinder {
         
     }
     
-    @RequiresApi(api = Build.VERSION_CODES.N)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public List<PointOfInterest> GetPointOfInterest(List<TargetZone> detectedCarotte, Mat image_bitwised){
           
         detectedCarotte.forEach(currentCarotte -> {

@@ -11,7 +11,6 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.TermCriteria;
-import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -52,7 +51,7 @@ public class KmeansTargetZoneFinder {
         Mat data = srcclone.reshape(1, srcclone.rows() * srcclone.cols());
         data.convertTo(data, CvType.CV_32F);
 
-        Core.kmeans​(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
+        Core.kmeans(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
 
         Mat draw = new Mat((int) src_image.total(), 1, CvType.CV_32FC3);
         Mat colors = centers.reshape(3, clustersNumber);
@@ -95,28 +94,6 @@ public class KmeansTargetZoneFinder {
 
         }
 
-        if (this.debug) {
-            System.out.println("k" +centers);
-            System.out.println(detectedZones.size());
-
-            for (int k = 0; k < detectedZones.size(); k++) {
-                Point p1 = new Point(detectedZones.get(k).upper_x, detectedZones.get(k).upper_y);
-                Point p2 = new Point(detectedZones.get(k).lower_x, detectedZones.get(k).lower_y);
-                Scalar color = new Scalar(0, 0, 255);
-                int thickness = 2;
-                Imgproc.rectangle(source_bitwised_and, p1, p2, color, thickness);
-
-            }
-            HighGui.imshow("image_bitwised", source_bitwised_and);
-            HighGui.imshow("2GRAY", kmean_mask);
-            HighGui.imshow("resize_original", kmean_mask);
-            HighGui.imshow("KmeanImg", draw);
-            HighGui.imshow("inv_mask", kmean_mask_inverted);
-
-            HighGui.waitKey(1);
-
-        }
-
         return detectedZones;
 
     }
@@ -142,7 +119,7 @@ public class KmeansTargetZoneFinder {
         Mat data = srcclone.reshape(1, srcclone.rows() * srcclone.cols());
         data.convertTo(data, CvType.CV_32F);
 
-        Core.kmeans​(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
+        Core.kmeans(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
         System.out.println("k" +centers);
         Mat draw = new Mat((int) src_image.total(), 1, CvType.CV_32FC3);
         Mat colors = centers.reshape(3, clustersNumber);

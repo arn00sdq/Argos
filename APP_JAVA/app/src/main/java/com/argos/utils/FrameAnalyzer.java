@@ -1,5 +1,9 @@
 package com.argos.utils;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -55,7 +59,8 @@ public class FrameAnalyzer {
     }
     
     
-    
+    // function for java only
+    /*@RequiresApi(api = Build.VERSION_CODES.O)
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         
@@ -68,5 +73,5 @@ public class FrameAnalyzer {
         analyzer.targetZoneMaterialsExtractor.setNumberOfCuts(20);
         analyzer.getDetailedPOIsFromImage(img).forEach(POI -> System.out.println(POI.toJSON()));
         
-    }
+    }*/
 }

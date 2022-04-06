@@ -10,7 +10,6 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -87,29 +86,6 @@ public class HSVTargetZoneFinder {
             if (newZone.getArea() >= min_area_contour && !newZone.existsInArray(detectedZones)) {
                 detectedZones.add(newZone);
             }
-
-        }
-
-        if (this.debug) {
-
-            for (int k = 0; k < detectedZones.size(); k++) {
-                Point p1 = new Point(detectedZones.get(k).upper_x, detectedZones.get(k).upper_y);
-                Point p2 = new Point(detectedZones.get(k).lower_x, detectedZones.get(k).lower_y);
-                Scalar color = new Scalar(0, 0, 255);
-                int thickness = 2;
-                Imgproc.rectangle(srcclone, p1, p2, color, thickness);
-
-            }
-
-            System.out.println("saturation value" + saturation_value);
-
-            HighGui.imshow("original", src_image);
-            HighGui.imshow("HSV", hsv_image);
-            HighGui.imshow("mask", hsv_mask);
-            HighGui.imshow("maskInv", hsv_mask_inverted);
-            HighGui.imshow("rect", srcclone);
-            HighGui.imshow("RectFinal", source_bitwised_and);
-            HighGui.waitKey(1);
 
         }
 

@@ -543,7 +543,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
             @SuppressLint({"ClickableViewAccessibility", "LongLogTag"})
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(analyseStarted && poiList != null) {
+                if(analyseStarted && poiList != null && poiList.size() > 0) {
                     float scale = Math.max((float) mJavaCamera2View.getWidth() / rgba_matrix.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
                     Log.d(TAG, "scale = " + scale);
                     Size scaled_mat = new Size(rgba_matrix.width() * scale, rgba_matrix.height() * scale);

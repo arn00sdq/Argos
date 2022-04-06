@@ -1,6 +1,10 @@
 package com.argos.utils;
 
-import java.awt.Color;
+import android.graphics.Color;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -50,6 +54,7 @@ public class MaterialIdentifier {
      * @return List of strings representing each color mapped to a material
      * returns either the name of a material or unknown
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public List<String> getMaterialNamesFromColors(Color[] colors) {
         List<String> materialNames = new ArrayList<>();
         for (Color color : colors) {
@@ -63,6 +68,7 @@ public class MaterialIdentifier {
      * @param color Color that we want to identify
      * @return Either the name of the identified material or unknown
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private String identifyMaterialFromColor(Color color) {
 
         for (Entry<Color, String> entry : paletteMapper.getColorMap().entrySet()) {
@@ -85,18 +91,19 @@ public class MaterialIdentifier {
      * @param baseColor Color present in the palette that maps to a material
      * @return Whether the two colors match
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private boolean colorsMatch(Color color, Color baseColor) {
 
         float decimalConfidence = confidence / 100;
         float maxIntervalrange = 256 * (1 - decimalConfidence) / 2;
 
-        float lowerRedLimit = baseColor.getRed() - maxIntervalrange;
-        float lowerGreenLimit = baseColor.getGreen() - maxIntervalrange;
-        float lowerBlueLimit = baseColor.getBlue() - maxIntervalrange;
+        float lowerRedLimit = baseColor.red() - maxIntervalrange;
+        float lowerGreenLimit = baseColor.green() - maxIntervalrange;
+        float lowerBlueLimit = baseColor.blue() - maxIntervalrange;
 
-        float higherRedLimit = baseColor.getRed() + maxIntervalrange;
-        float higherGreenLimit = baseColor.getGreen() + maxIntervalrange;
-        float higherBlueLimit = baseColor.getBlue() + maxIntervalrange;
+        float higherRedLimit = baseColor.red() + maxIntervalrange;
+        float higherGreenLimit = baseColor.green() + maxIntervalrange;
+        float higherBlueLimit = baseColor.blue() + maxIntervalrange;
 
         lowerRedLimit = lowerRedLimit < 0 ? 0 : lowerRedLimit;
         lowerGreenLimit = lowerGreenLimit < 0 ? 0 : lowerGreenLimit;
@@ -106,9 +113,9 @@ public class MaterialIdentifier {
         higherGreenLimit = higherGreenLimit > 255 ? 255 : higherGreenLimit;
         higherBlueLimit = higherBlueLimit > 255 ? 255 : higherBlueLimit;
 
-        boolean redMatches = (color.getRed() >= lowerRedLimit) && (color.getRed() <= higherRedLimit);
-        boolean greenMatches = (color.getGreen() >= lowerGreenLimit) && (color.getGreen() <= higherGreenLimit);
-        boolean blueMatches = (color.getBlue() >= lowerBlueLimit) && (color.getBlue() <= higherBlueLimit);
+        boolean redMatches = (color.red() >= lowerRedLimit) && (color.red() <= higherRedLimit);
+        boolean greenMatches = (color.green() >= lowerGreenLimit) && (color.green() <= higherGreenLimit);
+        boolean blueMatches = (color.blue() >= lowerBlueLimit) && (color.blue() <= higherBlueLimit);
 
         return redMatches && greenMatches && blueMatches;
     }

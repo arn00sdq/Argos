@@ -5,6 +5,10 @@
  */
 package com.argos.utils;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -29,6 +33,7 @@ public class TargetZoneMaterialsExtractor {
      * @return A list of PointsOfInterest containing data about the materials
      * present in the zone
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     protected List<PointOfInterest> getPOIFromTargetZonesMaterials(List<TargetZone> targetZones, Mat image) {
 
         List<PointOfInterest> analyzedPOI = new ArrayList<>();
@@ -73,6 +78,7 @@ public class TargetZoneMaterialsExtractor {
      * @param materialPresencesInTargetZone HashTable where presence of each material has been counted
      * @return HashTable containing percentages instead of the count
      */
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private Hashtable<String, Integer> getZoneMaterialsPercentages(Hashtable<String, Integer> materialPresencesInTargetZone) {
 
         Hashtable<String, Integer> materialPercentages = new Hashtable<>();
@@ -86,6 +92,7 @@ public class TargetZoneMaterialsExtractor {
         return materialPercentages;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private Hashtable<String, Integer> addMaterialPresences(Hashtable<String, Integer> materialPresenceCount, List<String> detectedMaterials) {
 
         Hashtable<String, Integer> presencesCopy = materialPresenceCount;
