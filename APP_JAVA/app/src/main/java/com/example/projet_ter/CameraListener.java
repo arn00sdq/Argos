@@ -22,6 +22,7 @@ import org.opencv.imgproc.Imgproc;
 import com.argos.utils.FrameAnalyzer;
 import com.argos.utils.PointOfInterest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -633,12 +634,19 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
                 (int) ((new_size.width / 2) + (original_size.width / 2)));
         if (analyseStarted) {
             // Start the analyze
-            this.poiList = PointOfInterest.toPOIList(this.frameAnalyzer.getTargetZonesFromImage(this.rgba_matrix));
+            //this.poiList = PointOfInterest.toPOIList(this.frameAnalyzer.getTargetZonesFromImage(this.rgba_matrix));
+            this.poiList = frameAnalyzer.getDetailedPOIsFromImage(this.rgba_matrix);
+            //getNameOfPredominantMaterial
             // Draw the data
             this.poiList.forEach( poi -> {
-                Imgproc.rectangle(this.rgba_matrix, new Point(poi.getX_coord(), poi.getY_coord()),
-                        new Point(poi.getX_coord() + poi.getWidth(), poi.getY_coord() + poi.getHeight()),
-                        new Scalar(poi.getLineColor().red(), poi.getLineColor().green(), poi.getLineColor().blue()), 5);
+                if (poi.getWidth() < rgba_matrix.width() && poi.getHeight() < rgba_matrix.height()) {
+                    Imgproc.rectangle(this.rgba_matrix, new Point(poi.getX_coord(), poi.getY_coord()),
+                            new Point(poi.getX_coord() + poi.getWidth(), poi.getY_coord() + poi.getHeight()),
+                            new Scalar(poi.getLineColor().red(), poi.getLineColor().green(), poi.getLineColor().blue()), 5);
+                    //Imgproc.getFontScaleFromHeight(0, 20, 5);
+                    Imgproc.putText(this.rgba_matrix, poi.getLabels().get(0), new Point(poi.getX_coord() + 10, poi.getY_coord() + 30), 0, 1,
+                            new Scalar(poi.getLineColor().red(), poi.getLineColor().green(), poi.getLineColor().blue()), 5);
+                }
             });
         }
 

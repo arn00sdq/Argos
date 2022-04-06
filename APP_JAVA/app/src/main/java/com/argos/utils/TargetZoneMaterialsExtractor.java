@@ -37,6 +37,7 @@ public class TargetZoneMaterialsExtractor {
     protected List<PointOfInterest> getPOIFromTargetZonesMaterials(List<TargetZone> targetZones, Mat image) {
 
         List<PointOfInterest> analyzedPOI = new ArrayList<>();
+        if (targetZones.size() < 1) return analyzedPOI;
 
         TargetZone largestTargetZone = getLargestTargetZone(targetZones);
 

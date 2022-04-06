@@ -6,8 +6,10 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -77,7 +79,7 @@ public class PointOfInterest {
 
         zones.forEach(zone -> {
             poiArray.add(new PointOfInterest(
-                    new ArrayList<>(),
+                    new ArrayList<String>(Collections.singleton("TargetZone")),
                     zone.getW(),
                     zone.getH(),
                     zone.getUpper_x(),
@@ -156,6 +158,28 @@ public class PointOfInterest {
         result += "\n}";
 
         return result;
+    }
+
+    /**
+     * Gets the String value of the most present material in a hash table of material proportions
+     * @return The name of the predominant material
+     */
+    public String getNameOfPredominantMaterial(){
+
+        Integer predominantMaterialMaxPresence = 0;
+        String predominantMaterial = "unknown";
+
+        for (Map.Entry<String, Integer> entry : materialProportions.entrySet()) {
+            String material = entry.getKey();
+            Integer proportion = entry.getValue();
+
+            if (proportion > predominantMaterialMaxPresence) {
+                predominantMaterialMaxPresence = proportion;
+                predominantMaterial = material;
+            }
+        }
+
+        return predominantMaterial;
     }
 
 }

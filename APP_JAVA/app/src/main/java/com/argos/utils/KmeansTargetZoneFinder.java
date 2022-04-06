@@ -1,5 +1,7 @@
 package com.argos.utils;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.opencv.core.Core;
@@ -35,6 +37,8 @@ public class KmeansTargetZoneFinder {
      */
     public List<TargetZone> getDetectedTargetZones(Mat src_image) {
 
+        Log.d("Arnaud", String.valueOf(src_image.channels()));
+
         List<TargetZone> detectedZones = new ArrayList<>();
 
         Mat kmean_mask = new Mat();
@@ -54,7 +58,7 @@ public class KmeansTargetZoneFinder {
         Core.kmeans(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
 
         Mat draw = new Mat((int) src_image.total(), 1, CvType.CV_32FC3);
-        Mat colors = centers.reshape(3, clustersNumber);
+        Mat colors = centers.reshape(4, clustersNumber);
         for (int i = 0; i < clustersNumber; i++) {
             Mat mask = new Mat(); // a mask for each cluster label
             Core.compare(bestLabels, new Scalar(i), mask, Core.CMP_EQ);

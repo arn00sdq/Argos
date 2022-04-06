@@ -7,6 +7,7 @@ package com.argos.utils;
 
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -41,6 +42,8 @@ public class MaterialAnalyzer {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public List<String> getMaterialsInsideZoneOfImage(Mat analyzedImage, int upper_x, int upper_y, int w, int h, int clustersNumber) {
 
+        if (analyzedImage.empty()) return null;
+
         Mat centers = new Mat();
         Mat labels = new Mat();
 
@@ -56,8 +59,8 @@ public class MaterialAnalyzer {
         Mat imageROI = new Mat(analyzedImage, rectCrop);
 
         Mat img_clone = new Mat();
-
-        Imgproc.cvtColor(imageROI, img_clone, Imgproc.COLOR_RGB2BGR);
+        Log.d("Arnaud", String.valueOf(imageROI));
+        Imgproc.cvtColor(imageROI, img_clone, Imgproc.COLOR_RGBA2BGR);
 
         Mat imgKmean = img_clone.clone();
 
