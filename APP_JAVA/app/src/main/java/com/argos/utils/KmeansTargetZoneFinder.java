@@ -1,7 +1,6 @@
 package com.argos.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -12,6 +11,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.TermCriteria;
+import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -21,7 +21,7 @@ import org.opencv.imgproc.Imgproc;
  */
 public class KmeansTargetZoneFinder {
 
-    private Integer attemptNumber = 3;
+    private Integer attemptNumber = 5;
     private Integer clustersNumber = 3;
     private Integer threshold = 120;
     private Integer min_area_contour = 500;
@@ -44,11 +44,6 @@ public class KmeansTargetZoneFinder {
         Mat hierarchy = new Mat();
         Mat srcclone = src_image.clone();
 
-        Integer attemptNumber = this.attemptNumber;
-        Integer clustersNumber = this.clustersNumber;
-        Integer threshold = this.threshold;
-        Integer min_area_contour = this.min_area_contour;
-
         Mat bestLabels = new Mat();
         TermCriteria criteria = new TermCriteria();
         int flags = Core.KMEANS_PP_CENTERS;
@@ -57,15 +52,10 @@ public class KmeansTargetZoneFinder {
         Mat data = srcclone.reshape(1, srcclone.rows() * srcclone.cols());
         data.convertTo(data, CvType.CV_32F);
 
-        Core.kmeans(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
+        Core.kmeans​(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
 
         Mat draw = new Mat((int) src_image.total(), 1, CvType.CV_32FC3);
-        centers = centers.submat(0, centers.rows(), 0, centers.cols() - 1);
-        System.out.println("Centers : " + centers + ", Cluster number : " + clustersNumber);
-        System.out.println(centers.dump());
-
         Mat colors = centers.reshape(3, clustersNumber);
-        
         for (int i = 0; i < clustersNumber; i++) {
             Mat mask = new Mat(); // a mask for each cluster label
             Core.compare(bestLabels, new Scalar(i), mask, Core.CMP_EQ);
@@ -106,6 +96,7 @@ public class KmeansTargetZoneFinder {
         }
 
         if (this.debug) {
+            System.out.println("k" +centers);
             System.out.println(detectedZones.size());
 
             for (int k = 0; k < detectedZones.size(); k++) {
@@ -116,6 +107,13 @@ public class KmeansTargetZoneFinder {
                 Imgproc.rectangle(source_bitwised_and, p1, p2, color, thickness);
 
             }
+            HighGui.imshow("image_bitwised", source_bitwised_and);
+            HighGui.imshow("2GRAY", kmean_mask);
+            HighGui.imshow("resize_original", kmean_mask);
+            HighGui.imshow("KmeanImg", draw);
+            HighGui.imshow("inv_mask", kmean_mask_inverted);
+
+            HighGui.waitKey(1);
 
         }
 
@@ -144,8 +142,8 @@ public class KmeansTargetZoneFinder {
         Mat data = srcclone.reshape(1, srcclone.rows() * srcclone.cols());
         data.convertTo(data, CvType.CV_32F);
 
-        Core.kmeans(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
-
+        Core.kmeans​(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
+        System.out.println("k" +centers);
         Mat draw = new Mat((int) src_image.total(), 1, CvType.CV_32FC3);
         Mat colors = centers.reshape(3, clustersNumber);
         for (int i = 0; i < clustersNumber; i++) {
@@ -206,7 +204,7 @@ public class KmeansTargetZoneFinder {
 
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat img = Imgcodecs.imread("C:\\Users\\Ivan\\Google Drive\\FAC\\M1\\S2\\Gestion de Projets\\Gestion-de-projet\\Images_de_test\\test2.jpg");
+        Mat img = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\test.png");
         KmeansTargetZoneFinder cal = new KmeansTargetZoneFinder();
         cal.getDetectedTargetZones(img);
     }

@@ -543,7 +543,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
             @SuppressLint({"ClickableViewAccessibility", "LongLogTag"})
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(analyseStarted && poiList.size() > 0) {
+                if(analyseStarted && poiList != null) {
                     float scale = Math.max((float) mJavaCamera2View.getWidth() / rgba_matrix.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
                     Log.d(TAG, "scale = " + scale);
                     Size scaled_mat = new Size(rgba_matrix.width() * scale, rgba_matrix.height() * scale);
@@ -561,9 +561,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
                     Log.d(TAG, "X = " + x);
                     Log.d(TAG, "Y = " + y);
                     PointOfInterest poi = getPoiAt(x, y);
-                    if(poi != null) {
-                        new carotDataDialog(mJavaCamera2View.getContext(), "TEST").show();
-                    }
+                    new carotDataDialog(mJavaCamera2View.getContext(), "TEST").show();
                 } else {
                     analyseStarted = true;
                 }
@@ -625,7 +623,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
         // Getting the new ratio
         double img_ratio = (double) (original_size.width / this.rgba_matrix.size().width);
         // Resizing the mat with the new ratio
-        org.opencv.core.Size new_size = new org.opencv.core.Size(this.rgba_matrix.size().width * img_ratio,
+        Size new_size = new Size(this.rgba_matrix.size().width * img_ratio,
                 Math.floor((int) this.rgba_matrix.size().height * img_ratio));
         Imgproc.resize(this.rgba_matrix, this.rgba_matrix, new_size, Imgproc.INTER_CUBIC);
         // getting the sub mat to match the mat size needed
@@ -640,7 +638,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
             this.poiList.forEach( poi -> {
                 Imgproc.rectangle(this.rgba_matrix, new Point(poi.getX_coord(), poi.getY_coord()),
                         new Point(poi.getX_coord() + poi.getWidth(), poi.getY_coord() + poi.getHeight()),
-                        new Scalar(0, 0, 255), poi.getLineWidth());
+                        new Scalar(poi.getLineColor().red(), poi.getLineColor().green(), poi.getLineColor().blue()), 5);
             });
         }
 

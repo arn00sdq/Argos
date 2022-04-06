@@ -131,6 +131,7 @@ public class ConfigLayout {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 frameAnalyzer.KmeansTargetZoneFinder.setMin_area_contour(i);
+                frameAnalyzer.HSVTargetZoneFinder.setMin_area_contour(i);
             }
 
             @Override
