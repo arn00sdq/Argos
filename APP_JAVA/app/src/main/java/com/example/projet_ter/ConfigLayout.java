@@ -48,7 +48,6 @@ public class ConfigLayout {
     private final FrameAnalyzer frameAnalyzer;
 
     private final ImageButton buttonChangeAlgo;
-    private final Switch algoChangeSwitch;
 
     private final Group kMeansGroup;
     private final Group hsvGroup;
@@ -80,8 +79,6 @@ public class ConfigLayout {
         this.hsvGroup = this.layout.findViewById(R.id.hsvGroup);
         // Getting the ImageButton
         this.buttonChangeAlgo = this.layout.findViewById(R.id.swapbutton);
-        // Getting the switch
-        this.algoChangeSwitch = this.layout.findViewById(R.id.algoChangeSwitch);
         // Getting the text field
         this.agloNameField = this.layout.findViewById(R.id.textAlgo);
         // Getting the kMeans seekBar

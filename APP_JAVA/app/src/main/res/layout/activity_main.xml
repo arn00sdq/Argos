@@ -92,15 +92,6 @@
                 app:layout_constraintStart_toEndOf="@+id/textLeft"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Switch
-                android:id="@+id/algoChangeSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
             <ImageButton
                 android:id="@+id/swapbutton"
                 android:layout_width="wrap_content"
@@ -130,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="visible"
-                app:constraint_referenced_ids="seekBarMinArea, textNbCluster, seekBarNbCluster, textNbIt, seekBarNbIt, textThreshold, seekBarThreshold" />
+                app:constraint_referenced_ids="textNbCluster, seekBarNbCluster, textNbIt, seekBarNbIt, textThreshold, seekBarThreshold" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/hsvGroup"
@@ -252,7 +243,7 @@
                 android:textSize="20sp"
                 android:textColor="#ff2196F3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/seekBarMinArea" />
 
             <SeekBar
                 android:id="@+id/seekBarH"
