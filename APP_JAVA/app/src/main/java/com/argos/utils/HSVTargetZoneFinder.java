@@ -1,11 +1,5 @@
 package com.argos.utils;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.opencv.core.Core;
@@ -16,7 +10,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -30,7 +24,7 @@ public class HSVTargetZoneFinder {
     private Integer hue_value = 0;
     private Integer saturation_value = 0;
     private Integer value_value = 0;
-    private Integer min_area_contour = 100;
+    private Integer min_area_contour = 1750;
 
     private final boolean debug = true;
 
@@ -38,7 +32,10 @@ public class HSVTargetZoneFinder {
     private int max_saturation_val = 100;
 
     /**
-     * Gets a list of detected TargetZone from an image
+     * Gets a list of detected TargetZone from an image.
+     * Uses the HSV format and subsequent thresholding on
+     * masked images of the original image in order to 
+     * ignore background and get only the relevant figures.
      *
      * @param src_image Mat representing an image
      * @return list of TargetZone
@@ -105,6 +102,15 @@ public class HSVTargetZoneFinder {
             }
 
             System.out.println("saturation value" + saturation_value);
+
+            HighGui.imshow("original", src_image);
+            HighGui.imshow("HSV", hsv_image);
+            HighGui.imshow("mask", hsv_mask);
+            HighGui.imshow("maskInv", hsv_mask_inverted);
+            HighGui.imshow("rect", srcclone);
+            HighGui.imshow("RectFinal", source_bitwised_and);
+            HighGui.waitKey(1);
+
         }
 
         return detectedZones;
@@ -151,12 +157,12 @@ public class HSVTargetZoneFinder {
     /**
      * This method goes through all possible values (from 0 to
      * max_saturation_value) of the saturation value in order to automatically
-     * find the most optimal value based on the number of TargetZones by the
+     * find the most optimal value based on the number of TargetZones found by the
      * finder method (prioritizing highest number)
      *
      * @param sourceCalibration source image to base the calibration upon
      */
-    private void automaticallyCalibrate(Mat sourceCalibration) {
+    public void automaticallyCalibrate(Mat sourceCalibration) {
 
         List<TargetZone> detectedZones = new ArrayList<>();
 
@@ -183,14 +189,12 @@ public class HSVTargetZoneFinder {
             
             System.out.println("Saturation: " + saturation_value + "  Zones: " + detectedZones.size());
 
-            if (Math.abs(targetNumber - detectedZones.size() + 1) < minDiff) {
+            if (Math.abs(targetNumber - detectedZones.size() + 1) <= minDiff) {
 
                 minDiff = Math.abs(targetNumber - detectedZones.size() + 1);
                 optimalSaturation = saturation_value;
 
             }
-            //System.out.println(detectedZones.size() + " zones detected. with val  " + saturation_value);
-
         }
 
         saturation_value = optimalSaturation;
@@ -244,22 +248,4 @@ public class HSVTargetZoneFinder {
     public void setMax_saturation_val(int max_saturation_val) {
         this.max_saturation_val = max_saturation_val;
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void main(String[] args) {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat img = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\test.png");
-        HSVTargetZoneFinder cal = new HSVTargetZoneFinder();
-        Instant start = Instant.now();
-        cal.automaticallyCalibrate(img);
-        cal.getDetectedTargetZones(img).
-                forEach(zone -> {
-                    System.out.println(zone);
-                });
-        Instant end = Instant.now();
-        Duration interval = Duration.between(start, end);
-        System.out.println("Execution time in nanoseconds: " + interval.getNano());
-
-    }
-
 }

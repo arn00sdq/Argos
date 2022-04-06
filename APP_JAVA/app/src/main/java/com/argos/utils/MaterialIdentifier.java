@@ -1,13 +1,10 @@
 package com.argos.utils;
 
-import android.graphics.Color;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+
 
 /**
  *
@@ -16,104 +13,121 @@ import java.util.Map.Entry;
  *       and a specific PaletteMapper
  */
 public class MaterialIdentifier {
-    
+
     /**
-     * confidence: degree of accuracy for comparison
-     * number between 1 and 100
-     * 100 means color values must exactly match
+     * Confidence: degree of accuracy for comparison ranging between 1 and 100
+     * 100 means color values must exactly match Example: with a confidence of
+     * 90 and checking against sand RGB(50,50,50), matching function will
+     * compare if a new Color, for example RGB(10,34,65) has values between 
+     * 50 +- 255 * (1 - confidence / 100) / 2
      */
-    private PaletteMapper paletteMapper = null;
     private float confidence = 90;
+    
+    private PaletteMapper paletteMapper = null;
+    
+
     /**
-     * 
-     * @param mapper palette containing mapped colors for materials
-     * @param confidence degree of accuracy for comparison
+     *
+     * @param mapper Palette containing mapped colors for materials
+     * @param confidence Degree of accuracy for comparison
      */
     public MaterialIdentifier(PaletteMapper mapper, float confidence) {
         this.paletteMapper = mapper;
         this.confidence = confidence;
     }
+
     /**
-     * 
-     * @param mapper palette containing mapped colors for materials
+     *
+     * @param mapper Malette containing mapped colors for materials
      */
     public MaterialIdentifier(PaletteMapper mapper) {
         this.paletteMapper = mapper;
     }
+
     /**
-     * 
+     *
      * @param colors Array of sRGB colors
      * @return List of strings representing each color mapped to a material
-     *         returns either the name of a material or unknown
+     * returns either the name of a material or unknown
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<String> getMaterialNamesFromColors(Color[] colors){
-        List<String> result = new ArrayList<>();
+    public List<String> getMaterialNamesFromColors(Color[] colors) {
+        List<String> materialNames = new ArrayList<>();
         for (Color color : colors) {
-            result.add(identifyMaterialFromColor(color));
+            materialNames.add(identifyMaterialFromColor(color));
         }
-        return result;
+        return materialNames;
     }
+
     /**
-     * 
+     *
      * @param color Color that we want to identify
      * @return Either the name of the identified material or unknown
      */
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private String identifyMaterialFromColor(Color color){
-        
+    private String identifyMaterialFromColor(Color color) {
+
         for (Entry<Color, String> entry : paletteMapper.getColorMap().entrySet()) {
-            
+
             Color baseColor = entry.getKey();
             String mat = entry.getValue();
-            
-            if (colorsMatch(color, baseColor)) return mat;
+
+            if (colorsMatch(color, baseColor)) {
+                return mat;
+            }
+
         }
         return "unknown";
     }
-    /**
-     * 
-     * @param color color that we want to identify
-     * @param baseColor color present in the palette that maps to a material
-     * @return whether the two colors match
-     */
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private boolean colorsMatch(Color color, Color baseColor) {
-        
-        float decimalConfidence = confidence / 100;
-        float maxIntervalrange = 256 * (1 - decimalConfidence);
-        float halfInterval = maxIntervalrange / 2;
-        
-        float lowerRedLimit = baseColor.red() - halfInterval;
-        float lowerGreenLimit = baseColor.green() - halfInterval;
-        float lowerBlueLimit = baseColor.blue() - halfInterval;
-        
-        float higherRedLimit = baseColor.red() + halfInterval;
-        float higherGreenLimit = baseColor.green() + halfInterval;
-        float higherBlueLimit = baseColor.blue() + halfInterval;
-        
-        /*
-        float lowerRedLimit = baseColor.red() * decimalConfidence;
-        float lowerGreenLimit = baseColor.green() * decimalConfidence;
-        float lowerBlueLimit = baseColor.blue() * decimalConfidence;
-        
-        float higherRedLimit = baseColor.red() * (1 - decimalConfidence) + baseColor.red();
-        float higherGreenLimit = baseColor.green() * (1 - decimalConfidence) + baseColor.green();
-        float higherBlueLimit = baseColor.blue() * (1 - decimalConfidence) + baseColor.blue();*/
 
-        
+
+    /**
+     *
+     * @param color Color that we want to identify
+     * @param baseColor Color present in the palette that maps to a material
+     * @return Whether the two colors match
+     */
+    private boolean colorsMatch(Color color, Color baseColor) {
+
+        float decimalConfidence = confidence / 100;
+        float maxIntervalrange = 256 * (1 - decimalConfidence) / 2;
+
+        float lowerRedLimit = baseColor.getRed() - maxIntervalrange;
+        float lowerGreenLimit = baseColor.getGreen() - maxIntervalrange;
+        float lowerBlueLimit = baseColor.getBlue() - maxIntervalrange;
+
+        float higherRedLimit = baseColor.getRed() + maxIntervalrange;
+        float higherGreenLimit = baseColor.getGreen() + maxIntervalrange;
+        float higherBlueLimit = baseColor.getBlue() + maxIntervalrange;
+
         lowerRedLimit = lowerRedLimit < 0 ? 0 : lowerRedLimit;
         lowerGreenLimit = lowerGreenLimit < 0 ? 0 : lowerGreenLimit;
         lowerBlueLimit = lowerBlueLimit < 0 ? 0 : lowerBlueLimit;
-        
+
         higherRedLimit = higherRedLimit > 255 ? 255 : higherRedLimit;
         higherGreenLimit = higherGreenLimit > 255 ? 255 : higherGreenLimit;
         higherBlueLimit = higherBlueLimit > 255 ? 255 : higherBlueLimit;
-        
-        boolean redMatches = (color.red() >= lowerRedLimit) && (color.red() <= higherRedLimit);
-        boolean greenMatches = (color.green() >= lowerGreenLimit) && (color.green() <= higherGreenLimit);
-        boolean blueMatches = (color.blue() >= lowerBlueLimit) && (color.blue() <= higherBlueLimit);
-        
+
+        boolean redMatches = (color.getRed() >= lowerRedLimit) && (color.getRed() <= higherRedLimit);
+        boolean greenMatches = (color.getGreen() >= lowerGreenLimit) && (color.getGreen() <= higherGreenLimit);
+        boolean blueMatches = (color.getBlue() >= lowerBlueLimit) && (color.getBlue() <= higherBlueLimit);
+
         return redMatches && greenMatches && blueMatches;
     }
+
+    public PaletteMapper getPaletteMapper() {
+        return paletteMapper;
+    }
+
+    public float getConfidence() {
+        return confidence;
+    }
+
+    public void setPaletteMapper(PaletteMapper paletteMapper) {
+        this.paletteMapper = paletteMapper;
+    }
+
+    public void setConfidence(float confidence) {
+        this.confidence = confidence;
+    }
+    
+    
 }
