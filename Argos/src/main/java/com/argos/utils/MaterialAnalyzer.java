@@ -32,6 +32,7 @@ public class MaterialAnalyzer {
      * @param upper_y Upper Y coordinate of the zone
      * @param w Width of the zone
      * @param h Height of the zone
+     * @param clustersNumber Number of clusters for the k-means material analysis
      * @return A list of names of materials
      */
     public List<String> getMaterialsInsideZoneOfImage(Mat analyzedImage, int upper_x, int upper_y, int w, int h, int clustersNumber) {

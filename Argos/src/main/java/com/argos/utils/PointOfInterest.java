@@ -2,8 +2,10 @@ package com.argos.utils;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -17,7 +19,7 @@ public class PointOfInterest {
     private final Integer height;
     private final Integer x_coord;
     private final Integer y_coord;
-    private Color lineColor = new Color(255,0,0);
+    private Color lineColor = new Color(255, 0, 0);
     private Integer lineWidth = 1;
 
     private Hashtable<String, Integer> materialProportions;
@@ -71,14 +73,15 @@ public class PointOfInterest {
         ArrayList<PointOfInterest> poiArray = new ArrayList<>();
 
         zones.forEach(zone -> {
+            
             poiArray.add(new PointOfInterest(
-                    new ArrayList<>(),
+                    new ArrayList<String>(Collections.singleton("Test")),
                     zone.getW(),
                     zone.getH(),
                     zone.getUpper_x(),
                     zone.getUpper_y(),
                     Color.RED,
-                    2));
+                    5));
         });
 
         return poiArray;
@@ -111,6 +114,30 @@ public class PointOfInterest {
 
     public Integer getLineWidth() {
         return lineWidth;
+    }
+
+    /**
+     * Gets the String value of the most present material in a hash table of
+     * material proportions
+     *
+     * @return The name of the predominant material
+     */
+    public String getNameOfPredominantMaterial() {
+
+        Integer predominantMaterialMaxPresence = 0;
+        String predominantMaterial = "unknown";
+
+        for (Map.Entry<String, Integer> entry : materialProportions.entrySet()) {
+            String material = entry.getKey();
+            Integer proportion = entry.getValue();
+
+            if (proportion > predominantMaterialMaxPresence) {
+                predominantMaterialMaxPresence = proportion;
+                predominantMaterial = material;
+            }
+        }
+
+        return predominantMaterial;
     }
 
     public Hashtable<String, Integer> getMaterialProportions() {
