@@ -162,7 +162,7 @@ public class HSVTargetZoneFinder {
      *
      * @param sourceCalibration source image to base the calibration upon
      */
-    public void automaticallyCalibrate(Mat sourceCalibration) {
+    public void setAutomaticallyCalibratedS(Mat sourceCalibration) {
 
         List<TargetZone> detectedZones = new ArrayList<>();
 
@@ -231,21 +231,5 @@ public class HSVTargetZoneFinder {
 
     public void setMin_area_contour(Integer min_area_contour) {
         this.min_area_contour = min_area_contour;
-    }
-
-    public Integer getTargetNumber() {
-        return targetNumber;
-    }
-
-    public void setTargetNumber(Integer targetNumber) {
-        this.targetNumber = targetNumber;
-    }
-
-    public int getMax_saturation_val() {
-        return max_saturation_val;
-    }
-
-    public void setMax_saturation_val(int max_saturation_val) {
-        this.max_saturation_val = max_saturation_val;
     }
 }

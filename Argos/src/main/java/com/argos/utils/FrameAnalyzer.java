@@ -11,25 +11,25 @@ import org.opencv.imgcodecs.Imgcodecs;
  */
 public class FrameAnalyzer {
 
-    public TargetZoneFinderMethod targetZoneFinderMethod = TargetZoneFinderMethod.HSV;
-    
+    private TargetZoneFinderMethod targetZoneFinderMethod = TargetZoneFinderMethod.HSV;
+
     public HSVTargetZoneFinder HSVTargetZoneFinder = new HSVTargetZoneFinder();
     public KmeansTargetZoneFinder KmeansTargetZoneFinder = new KmeansTargetZoneFinder();
-    
+
     public TargetZoneMaterialsExtractor targetZoneMaterialsExtractor = new TargetZoneMaterialsExtractor();
-    
+
     public static enum TargetZoneFinderMethod {
         HSV, K_MEANS
     }
-    
-    
+
     /**
      * Gets a list of detected target zones on an image
+     *
      * @param img The image to analyze
      * @return A list of Target Zones
      */
     public List<TargetZone> getTargetZonesFromImage(Mat img) {
-        switch (this.targetZoneFinderMethod){
+        switch (this.targetZoneFinderMethod) {
             case HSV:
                 return HSVTargetZoneFinder.getDetectedTargetZones(img);
             case K_MEANS:
@@ -37,8 +37,10 @@ public class FrameAnalyzer {
         }
         return null;
     }
+
     /**
      * Gets a list of POIs containing data of the presence of materials
+     *
      * @param img The image to analyze
      * @return A list of Points of Interest
      */
@@ -53,20 +55,30 @@ public class FrameAnalyzer {
     public void setTargetZoneFinderMethod(TargetZoneFinderMethod TargetZoneFinderMethod) {
         this.targetZoneFinderMethod = TargetZoneFinderMethod;
     }
-    
-    
-    
+
     public static void main(String[] args) {
+
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        
-        FrameAnalyzer analyzer = new FrameAnalyzer();
+
         Mat img = Imgcodecs.imread("C:\\Users\\Ivan\\Google Drive\\FAC\\M1\\S2\\Gestion de Projets\\Gestion-de-projet\\Images\\test2.jpg");
-        
+
+        /*EXEMPLE D'UTILISATION DE LA CLASSE FRAME ANALYZER POUR EXTRAIRE DES POI 
+        CONTENANT DES DONNES CONCERNANT DES MATERIAUX A L'INTERIEUR DES CAROTTES
+         */
+        FrameAnalyzer analyzer = new FrameAnalyzer();
+
         analyzer.HSVTargetZoneFinder.setSaturation_value(45);
-        //analyzer.HSVTargetZoneFinder.automaticallyCalibrate(img);
-        analyzer.targetZoneMaterialsExtractor.setComparisonConfidence(50);
-        analyzer.targetZoneMaterialsExtractor.setNumberOfCuts(20);
-        analyzer.getDetailedPOIsFromImage(img).forEach(POI -> System.out.println(POI.toJSON()));
-        
+        analyzer.HSVTargetZoneFinder.setHue_value(45);
+        analyzer.HSVTargetZoneFinder.setValue_value(45);
+        analyzer.HSVTargetZoneFinder.setMin_area_contour(1000);
+        /*ET/OU*/
+        analyzer.HSVTargetZoneFinder.setAutomaticallyCalibratedS(img);
+
+        analyzer.targetZoneMaterialsExtractor.setConfidence(90);
+        analyzer.targetZoneMaterialsExtractor.setLengthOfCut(5);
+        analyzer.targetZoneMaterialsExtractor.setNumberOfClusters(4);
+
+        List<PointOfInterest> poiList = analyzer.getDetailedPOIsFromImage(img);
+
     }
 }

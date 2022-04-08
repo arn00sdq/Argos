@@ -18,12 +18,21 @@ public class TargetZoneMaterialsExtractor {
 
     MaterialAnalyzer materialAnalyzer = new MaterialAnalyzer();
 
-    private int numberOfCuts = 10;
+    private int lengthOfCut = 5;
     private int numberOfClusters = 4;
+    /**
+     * @value Confidence: degree of accuracy for comparison ranging between 1 and 100
+     * 100 means color values must exactly match Example: with a confidence of
+     * 90 and checking against sand RGB(50,50,50), matching function will
+     * compare if a new Color, for example RGB(10,34,65) has values between
+     * 50 +- 255 * (1 - confidence / 100) / 2
+     */
+    private int confidence = 90;
 
     /**
-     * Cuts each target zone in numberOfCuts pieces and extracts material data
+     * Cuts each target zone in lengthOfCut pieces and extracts material data
      * from it
+     *
      * @param targetZones List of Target Zones to analyze
      * @param image Image in which the target zones are present
      * @return A list of PointsOfInterest containing data about the materials
@@ -31,49 +40,76 @@ public class TargetZoneMaterialsExtractor {
      */
     protected List<PointOfInterest> getPOIFromTargetZonesMaterials(List<TargetZone> targetZones, Mat image) {
 
-        
         List<PointOfInterest> analyzedPOI = new ArrayList<>();
 
-        if (targetZones.isEmpty()) return analyzedPOI;
-        
+        if (targetZones.isEmpty()) {
+            return analyzedPOI;
+        }
+
         TargetZone largestTargetZone = getLargestTargetZone(targetZones);
 
         targetZones.forEach(zone -> {
 
             Hashtable<String, Integer> materialPresencesInTargetZone = new Hashtable<>();
 
+            int analyzed_upper_x_zone = zone.upper_x,
+                    analyzed_upper_y_zone = zone.upper_y,
+                    analyzed_width_zone = zone.w,
+                    analyzed_height_zone = zone.h;
+
             if (largestTargetZone.w > largestTargetZone.h) {
+                /*Width is greater than height, we assume the cores are positionned horizontally*/
 
-                for (int i = 0; i < zone.w; i += zone.w / numberOfCuts) {
+                while (analyzed_width_zone > lengthOfCut) {
 
-                    List<String> presentMaterialsInZone = materialAnalyzer.getMaterialsInsideZoneOfImage(image, zone.upper_x + i, zone.upper_y, zone.w / numberOfCuts, zone.h, numberOfClusters);
-
+                    List<String> presentMaterialsInZone = materialAnalyzer.
+                            getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, lengthOfCut, analyzed_height_zone, numberOfClusters, confidence);
                     materialPresencesInTargetZone = addMaterialPresences(materialPresencesInTargetZone, presentMaterialsInZone);
+
+                    analyzed_upper_x_zone += lengthOfCut;
+                    analyzed_width_zone -= lengthOfCut;
+
                 }
+
+                List<String> presentMaterialsInZone = materialAnalyzer.
+                        getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, analyzed_width_zone, analyzed_height_zone, numberOfClusters, confidence);
+                materialPresencesInTargetZone = addMaterialPresences(materialPresencesInTargetZone, presentMaterialsInZone);
+
             } else {
-                for (int i = 0; i < zone.h; i += zone.h / numberOfCuts) {
+                /*Width is smaller than height, we assume the cores are positionned vertically*/
+                while (analyzed_height_zone > lengthOfCut) {
 
-                    List<String> presentMaterialsInZone = materialAnalyzer.getMaterialsInsideZoneOfImage(image, zone.upper_x, zone.upper_y + i, zone.w, zone.h / numberOfCuts, numberOfClusters);
-
+                    List<String> presentMaterialsInZone = materialAnalyzer.
+                            getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, analyzed_width_zone, lengthOfCut, numberOfClusters, confidence);
                     materialPresencesInTargetZone = addMaterialPresences(materialPresencesInTargetZone, presentMaterialsInZone);
+
+                    analyzed_upper_y_zone += lengthOfCut;
+                    analyzed_height_zone -= lengthOfCut;
+
                 }
+
+                List<String> presentMaterialsInZone = materialAnalyzer.
+                        getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, analyzed_width_zone, analyzed_height_zone, numberOfClusters, confidence);
+                materialPresencesInTargetZone = addMaterialPresences(materialPresencesInTargetZone, presentMaterialsInZone);
+
             }
+
             List<String> materialsList = new ArrayList<>();
             materialPresencesInTargetZone.keySet().forEach(mat -> materialsList.add(mat));
 
-            PointOfInterest POI = new PointOfInterest(materialsList, zone.upper_x, zone.upper_y, zone.w, zone.h);
+            PointOfInterest POI = new PointOfInterest(materialsList, zone.w, zone.h, zone.upper_x, zone.upper_y);
             POI.setMaterialProportions(getZoneMaterialsPercentages(materialPresencesInTargetZone));
             POI.setLineColor(materialAnalyzer.getColorOfPredominantMaterial(materialPresencesInTargetZone));
             analyzedPOI.add(POI);
-
         });
-
         return analyzedPOI;
     }
 
     /**
      * Calculates the percentages of presence of each material
-     * @param materialPresencesInTargetZone HashTable where presence of each material has been counted
+     *
+     * @param materialPresencesInTargetZone HashTable where presence of each
+     * material has been counted
      * @return HashTable containing percentages instead of the count
      */
     private Hashtable<String, Integer> getZoneMaterialsPercentages(Hashtable<String, Integer> materialPresencesInTargetZone) {
@@ -118,14 +154,6 @@ public class TargetZoneMaterialsExtractor {
         return largestTargetZone;
     }
 
-    public int getNumberOfCuts() {
-        return numberOfCuts;
-    }
-
-    public void setNumberOfCuts(int numberOfCuts) {
-        this.numberOfCuts = numberOfCuts;
-    }
-
     public int getNumberOfClusters() {
         return numberOfClusters;
     }
@@ -134,12 +162,20 @@ public class TargetZoneMaterialsExtractor {
         this.numberOfClusters = numberOfClusters;
     }
 
-    public float getConfidence() {
-        return materialAnalyzer.getConfidence();
+    public int getConfidence() {
+        return confidence;
     }
 
-    public void setComparisonConfidence(int confidence) {
-        materialAnalyzer.setConfidence(confidence);
+    public void setConfidence(int confidence) {
+        this.confidence = confidence;
+    }
+
+    public int getLengthOfCut() {
+        return lengthOfCut;
+    }
+
+    public void setLengthOfCut(int lengthOfCut) {
+        this.lengthOfCut = lengthOfCut;
     }
 
 }
