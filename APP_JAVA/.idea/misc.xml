@@ -5,8 +5,15 @@
       <map>
         <entry key="../../../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable-xhdpi/gear_button_bg.xml" value="0.142" />
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/bg_shape.xml" value="0.1315" />
+        <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/brush_button_bg_selected.xml" value="0.142" />
+        <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/card_bg.xml" value="0.142" />
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/config_layout_top.xml" value="0.218" />
+        <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/develop_tab_bg.xml" value="0.142" />
+        <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/filter_button_bg_selected.xml" value="0.142" />
+        <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/gear_button_bg.xml" value="0.2275" />
+        <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/gear_button_bg_selected.xml" value="0.142" />
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/ic_bars_solid.xml" value="0.3015" />
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/ic_gear_solid.xml" value="0.3015" />
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
@@ -18,7 +25,7 @@
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/seekbar_thumbtind.xml" value="0.3015" />
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/drawable/switch_style.xml" value="0.3015" />
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/layout-v26/activity_main.xml" value="0.3625" />
-        <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/layout/pop_up_carot_data.xml" value="0.3625" />
         <entry key="..\:/CODE/Cours/M1/TER/Gestion-de-projet/APP_JAVA/app/src/main/res/layout/switch_style.xml" value="0.3625" />
         <entry key="app/src/main/res/drawable/config_layout_top.xml" value="0.1" />

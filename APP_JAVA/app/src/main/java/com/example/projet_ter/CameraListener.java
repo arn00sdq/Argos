@@ -1,31 +1,5 @@
 package com.example.projet_ter;
 
-
-import android.annotation.SuppressLint;
-import android.os.Build;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-
-import androidx.annotation.RequiresApi;
-
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.JavaCamera2View;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-//import org.opencv.core.Size;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
-
-import com.argos.utils.FrameAnalyzer;
-import com.argos.utils.PointOfInterest;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 /*
 public class CameraListener {
 
@@ -523,15 +497,57 @@ public class CameraListener {
 
 }
 */
+
+import android.annotation.SuppressLint;
+import android.os.Build;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+
+import androidx.annotation.RequiresApi;
+
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.JavaCamera2View;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+//import org.opencv.core.Size;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+
+import com.argos.utils.FrameAnalyzer;
+import com.argos.utils.PointOfInterest;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     private static final String TAG = "ProjectTER::CameraListener";
-    private final FrameAnalyzer frameAnalyzer = new FrameAnalyzer();
+
+    private final int CAMERA_STATE_PREVIEW = 0;
+    private final int CAMERA_STATE_ANALYSE = 1;
+    private final int CAMERA_STATE_MASK = 2;
+    private final int CAMERA_STATE_COLOR = 3;
+    private final int CAMERA_STATE_FILTERED = 4;
+
+    private final int FILTER_NONE = 0;
+    private final int FILTER_ALL = 1;
+    private final int FILTER_ARGILE = 2;
+    private final int FILTER_SAND = 3;
+    private final int FILTER_CONGLOMERA = 4;
+    private final int FILTER_UNKNOWN = 5;
+
+    private final FrameAnalyzer mFrameAnalyzer = new FrameAnalyzer();
     private final JavaCamera2View mJavaCamera2View;
 
     private boolean analyseStarted = false;
 
     private List<PointOfInterest> poiList;
+
+    private int mCameraState = CAMERA_STATE_PREVIEW;
 
     private Mat rgba_matrix;
 
@@ -544,7 +560,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
             @SuppressLint({"ClickableViewAccessibility", "LongLogTag"})
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(analyseStarted && poiList != null && poiList.size() > 0) {
+                if(mCameraState == CAMERA_STATE_ANALYSE && poiList != null && poiList.size() > 0) {
                     float scale = Math.max((float) mJavaCamera2View.getWidth() / rgba_matrix.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
                     Log.d(TAG, "scale = " + scale);
                     Size scaled_mat = new Size(rgba_matrix.width() * scale, rgba_matrix.height() * scale);
@@ -564,7 +580,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
                     PointOfInterest poi = getPoiAt(x, y);
                     new carotDataDialog(mJavaCamera2View.getContext(), "TEST").show();
                 } else {
-                    analyseStarted = true;
+                    mCameraState = CAMERA_STATE_MASK;
                 }
                 return true;
             }
@@ -573,7 +589,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     }
 
     public FrameAnalyzer getFrameAnalyzer() {
-        return this.frameAnalyzer;
+        return this.mFrameAnalyzer;
     }
 
     public void enable() {
@@ -590,12 +606,6 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     private PointOfInterest getPoiAt(int x, int y) {
         Log.d(TAG, "X = " + x + " Y = " + y);
         for(PointOfInterest poi : this.poiList) {
-            Log.d(TAG, "POI x1 = " + poi.getX_coord());
-            Log.d(TAG, "POI y1 = " + poi.getY_coord());
-            Log.d(TAG, "POI x2 = " + (poi.getX_coord() + poi.getWidth()));
-            Log.d(TAG, "POI y2 = " + (poi.getY_coord() + poi.getHeight()));
-            Log.d(TAG, "POI x is : " + (x > poi.getX_coord() && x < poi.getX_coord() + poi.getWidth()));
-            Log.d(TAG, "POI y is : " + (y > poi.getY_coord() && x < poi.getY_coord() + poi.getHeight()));
             if (x > poi.getX_coord() && x < poi.getX_coord() + poi.getWidth() && y > poi.getY_coord() && x < poi.getY_coord() + poi.getHeight()) {
                 return poi;
             }
@@ -617,39 +627,67 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         this.rgba_matrix = inputFrame.rgba();
-        org.opencv.core.Size original_size;
 
-        original_size = this.rgba_matrix.size();
-        Core.rotate(this.rgba_matrix, this.rgba_matrix, Core.ROTATE_90_CLOCKWISE);
+        this.rgba_matrix = this.orientationRotation(this.rgba_matrix);
+
+        this.rgba_matrix = this.transformMat(this.rgba_matrix);
+
+        return this.rgba_matrix;
+    }
+
+    public void setCameraState(int cameraState) {
+        this.mCameraState = cameraState;
+    }
+
+    private Mat orientationRotation(final Mat image) {
+        Mat img = image.clone();
+
+        Size original_size;
+        original_size = img.size();
+        /* TODO GET ORIENTATION AND APPLY ROTATION */
+        Core.rotate(img, img, Core.ROTATE_90_CLOCKWISE);
         // Getting the new ratio
-        double img_ratio = (double) (original_size.width / this.rgba_matrix.size().width);
+        double img_ratio = (double) (original_size.width / img.size().width);
         // Resizing the mat with the new ratio
-        Size new_size = new Size(this.rgba_matrix.size().width * img_ratio,
-                Math.floor((int) this.rgba_matrix.size().height * img_ratio));
-        Imgproc.resize(this.rgba_matrix, this.rgba_matrix, new_size, Imgproc.INTER_CUBIC);
+        Size new_size = new Size(img.size().width * img_ratio,
+                Math.floor((int) img.size().height * img_ratio));
+        Imgproc.resize(img, img, new_size, Imgproc.INTER_CUBIC);
         // getting the sub mat to match the mat size needed
-        this.rgba_matrix = this.rgba_matrix.submat((int) ((new_size.height / 2) - (original_size.height / 2)),
+        img = img.submat((int) ((new_size.height / 2) - (original_size.height / 2)),
                 (int) ((new_size.height / 2) + (original_size.height / 2)),
                 (int) ((new_size.width / 2) - (original_size.width / 2)),
                 (int) ((new_size.width / 2) + (original_size.width / 2)));
-        if (analyseStarted) {
-            // Start the analyze
-            //this.poiList = PointOfInterest.toPOIList(this.frameAnalyzer.getTargetZonesFromImage(this.rgba_matrix));
-            this.poiList = frameAnalyzer.getDetailedPOIsFromImage(this.rgba_matrix);
-            //getNameOfPredominantMaterial
-            // Draw the data
-            this.poiList.forEach( poi -> {
-                if (poi.getWidth() < rgba_matrix.width() && poi.getHeight() < rgba_matrix.height()) {
-                    Imgproc.rectangle(this.rgba_matrix, new Point(poi.getX_coord(), poi.getY_coord()),
+        return img;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Mat dramPOIs(final Mat image, final List<PointOfInterest> POIs) {
+        Mat img = image.clone();
+        if (POIs.size() > 0) {
+            POIs.forEach( poi -> {
+                if (poi.getWidth() < img.width() && poi.getHeight() < img.height()) {
+                    Imgproc.rectangle(img, new Point(poi.getX_coord(), poi.getY_coord()),
                             new Point(poi.getX_coord() + poi.getWidth(), poi.getY_coord() + poi.getHeight()),
                             new Scalar(poi.getLineColor().red(), poi.getLineColor().green(), poi.getLineColor().blue()), 5);
-                    //Imgproc.getFontScaleFromHeight(0, 20, 5);
-                    Imgproc.putText(this.rgba_matrix, poi.getLabels().get(0), new Point(poi.getX_coord() + 10, poi.getY_coord() + 30), 0, 1,
+                    Imgproc.putText(img, poi.getLabels().get(0), new Point(poi.getX_coord() + 10, poi.getY_coord() + 30), 0, 1,
                             new Scalar(poi.getLineColor().red(), poi.getLineColor().green(), poi.getLineColor().blue()), 5);
                 }
             });
         }
-
-        return this.rgba_matrix;
+        return img;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private Mat transformMat(Mat image) {
+        switch (this.mCameraState) {
+            case CAMERA_STATE_ANALYSE:
+                this.poiList = mFrameAnalyzer.getDetailedPOIsFromImage(this.rgba_matrix);
+                return this.dramPOIs(image, this.poiList);
+            case CAMERA_STATE_MASK:
+                return this.mFrameAnalyzer.HSVTargetZoneFinder.getBitwised_img(image);
+            default :
+                return image;
+        }
+    }
+
 }

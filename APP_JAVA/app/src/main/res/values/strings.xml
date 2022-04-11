@@ -20,4 +20,9 @@
     <string name="v">V</string>
     <string name="info">Info</string>
     <string name="fermer">Fermer</string>
+    <string name="config">Config</string>
+    <string name="brush" />
+    <string name="filter" />
+    <string name="configuration">Configuration</string>
+    <string name="color">Couleur</string>
 </resources>

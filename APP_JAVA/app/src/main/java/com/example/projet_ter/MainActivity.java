@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CameraListener camera_component;
     private ConfigLayout configLayout;
+    private Tabs mTabs;
     private float x1 = 0;
     private float y1 = 0;
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         //this.camera_component = new CameraListener(this, this.findViewById(R.id.textureView));
         this.camera_component = new CameraListener(this.findViewById(R.id.javaCamera2View));
         this.configLayout = new ConfigLayout((View) this.findViewById(R.id.ButtonLayout), this.camera_component.getFrameAnalyzer());
+        this.mTabs = new Tabs(this, this.findViewById(R.id.tabLayout));
 
     }
 
@@ -65,7 +67,18 @@ public class MainActivity extends AppCompatActivity {
             } catch (CameraAccessException e) {
                 e.printStackTrace();
             }*/
-            this.camera_component.enable();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    camera_component.enable();
+                } else {
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                        Toast.makeText(this, "This Application can not run without camera services.", Toast.LENGTH_SHORT).show();
+                    }
+                    this.requestPermissions(new String[] {Manifest.permission.CAMERA}, MainActivity.REGUEST_CAMERA_PERMISSION_RESULT);
+                }
+            } else {
+                this.camera_component.enable();
+            }
         }
     }
 
@@ -139,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REGUEST_CAMERA_PERMISSION_RESULT) {
             if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this.getApplicationContext(), "This Application can not run without camera services.", Toast.LENGTH_SHORT).show();
+            } else {
+                onResume();
             }
         }
     }

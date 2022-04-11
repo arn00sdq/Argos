@@ -20,38 +20,486 @@
     <org.opencv.android.JavaCamera2View
         android:id="@+id/javaCamera2View"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="400dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/configLayout"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:background="@drawable/develop_tab_bg"
+            android:padding="20dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textLayoutTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/configuration"
+                android:textSize="50sp"
+                android:textColor="#888888"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/subLayout1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/card_bg"
+                    android:padding="2dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textLayoutTitle">
+
+                    <TextView
+                        android:id="@+id/minAreaText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:text="@string/aire_minimale_d_une_zone"
+                        android:textColor="#888888"
+                        android:textSize="25sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <SeekBar
+                        android:id="@+id/minAreaSeakBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="0dp"
+                        android:max="10000"
+                        android:min="50"
+                        android:minHeight="30dp"
+                        android:progress="500"
+                        android:progressDrawable="@drawable/seekbar_progress"
+                        android:thumb="@drawable/seekbar_thumb"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/minAreaText" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/subLayout2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="visible"
+                    android:background="@drawable/card_bg"
+                    android:padding="2dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/subLayout1">
+
+                    <TextView
+                        android:id="@+id/HText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/h"
+                        android:textSize="25sp"
+                        android:textColor="#888888"
+                        android:layout_marginStart="18dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <SeekBar
+                        android:id="@+id/HSeakBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="30dp"
+                        android:progressDrawable="@drawable/seekbar_progress"
+                        android:thumb="@drawable/seekbar_thumb"
+                        android:layout_marginBottom="0dp"
+                        android:progress="500"
+                        android:min="50"
+                        android:max="10000"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/HText" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/subLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="visible"
+                    android:background="@drawable/card_bg"
+                    android:padding="2dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/subLayout2">
+
+                    <TextView
+                        android:id="@+id/SText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/s"
+                        android:textSize="25sp"
+                        android:textColor="#888888"
+                        android:layout_marginStart="18dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <SeekBar
+                        android:id="@+id/SSeakBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="30dp"
+                        android:progressDrawable="@drawable/seekbar_progress"
+                        android:thumb="@drawable/seekbar_thumb"
+                        android:layout_marginBottom="0dp"
+                        android:progress="500"
+                        android:min="50"
+                        android:max="10000"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/SText" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/subLayout4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:visibility="visible"
+                    android:background="@drawable/card_bg"
+                    android:padding="2dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/subLayout3">
+
+                    <TextView
+                        android:id="@+id/VText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/v"
+                        android:textSize="25sp"
+                        android:textColor="#888888"
+                        android:layout_marginStart="18dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <SeekBar
+                        android:id="@+id/VSeakBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="30dp"
+                        android:progressDrawable="@drawable/seekbar_progress"
+                        android:thumb="@drawable/seekbar_thumb"
+                        android:layout_marginBottom="0dp"
+                        android:progress="500"
+                        android:min="50"
+                        android:max="10000"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/VText" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="400dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/colorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:background="@drawable/develop_tab_bg"
+            android:padding="20dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/textLayoutTitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/color"
+                android:textSize="50sp"
+                android:textColor="#888888"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/subLayout21"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/card_bg"
+                android:padding="2dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textLayoutTitle2">
+
+                <TextView
+                    android:id="@+id/minAreaText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="@string/aire_minimale_d_une_zone"
+                    android:textColor="#888888"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <SeekBar
+                    android:id="@+id/minAreaSeakBar2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
+                    android:max="10000"
+                    android:min="50"
+                    android:minHeight="30dp"
+                    android:progress="500"
+                    android:progressDrawable="@drawable/seekbar_progress"
+                    android:thumb="@drawable/seekbar_thumb"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/minAreaText2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/subLayout22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="visible"
+                android:background="@drawable/card_bg"
+                android:padding="2dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subLayout21">
+
+                <TextView
+                    android:id="@+id/ClusterNumberText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nombre_de_clusters"
+                    android:textSize="25sp"
+                    android:textColor="#888888"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <SeekBar
+                    android:id="@+id/ClusterNumberSeakBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:progressDrawable="@drawable/seekbar_progress"
+                    android:thumb="@drawable/seekbar_thumb"
+                    android:layout_marginBottom="0dp"
+                    android:progress="500"
+                    android:min="50"
+                    android:max="10000"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ClusterNumberText" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/subLayout23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="visible"
+                android:background="@drawable/card_bg"
+                android:padding="2dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subLayout22">
+
+                <TextView
+                    android:id="@+id/attempsText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nombre_d_it_rations"
+                    android:textSize="25sp"
+                    android:textColor="#888888"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <SeekBar
+                    android:id="@+id/attempsSeekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:progressDrawable="@drawable/seekbar_progress"
+                    android:thumb="@drawable/seekbar_thumb"
+                    android:layout_marginBottom="0dp"
+                    android:progress="500"
+                    android:min="50"
+                    android:max="10000"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/attempsText" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/subLayout24"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="visible"
+                android:background="@drawable/card_bg"
+                android:padding="2dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/subLayout23">
+
+                <TextView
+                    android:id="@+id/thresholdText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/seuil"
+                    android:textSize="25sp"
+                    android:textColor="#888888"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <SeekBar
+                    android:id="@+id/thresholdSeakBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="30dp"
+                    android:progressDrawable="@drawable/seekbar_progress"
+                    android:thumb="@drawable/seekbar_thumb"
+                    android:layout_marginBottom="0dp"
+                    android:progress="500"
+                    android:min="50"
+                    android:max="10000"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/thresholdText" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
+        <ImageButton
+            android:id="@+id/gearButton"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:background="@drawable/image_button_bg"
+            app:tint="#aaaaaa"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/brushButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            openwcv:srcCompat="@drawable/ic_gear_solid"
+            android:contentDescription="@string/config" />
 
-    <Switch
-        android:id="@+id/AutoModeSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="46dp"
-        android:layout_marginEnd="36dp"
-        android:checked="true"
-        android:minHeight="48dp"
-        android:scaleX="1.5"
-        android:scaleY="1.5"
-        android:text="@string/auto"
-        android:textColor="@drawable/switch_style"
-        android:thumbTint="@drawable/switch_style"
-        android:trackTint="@drawable/switch_style"
-        android:alpha="0.8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        <ImageButton
+            android:id="@+id/brushButton"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:background="@drawable/image_button_bg"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            app:tint="#aaaaaa"
+            app:layout_constraintStart_toEndOf="@+id/gearButton"
+            app:layout_constraintEnd_toStartOf="@+id/filterButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            openwcv:srcCompat="@drawable/ic_brush_solid"
+            android:contentDescription="@string/brush" />
+
+        <ImageButton
+            android:id="@+id/filterButton"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:background="@drawable/image_button_bg"
+            app:tint="#aaaaaa"
+            app:layout_constraintStart_toEndOf="@+id/brushButton"
+            app:layout_constraintEnd_toEndOf="@id/detailButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            openwcv:srcCompat="@drawable/filter_solid"
+            android:contentDescription="@string/filter" />
+
+        <ImageButton
+            android:id="@+id/detailButton"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:padding="20dp"
+            android:scaleType="fitCenter"
+            android:background="@drawable/image_button_bg"
+            app:tint="#aaaaaa"
+            app:layout_constraintStart_toEndOf="@+id/filterButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            openwcv:srcCompat="@drawable/filter_solid"
+            android:contentDescription="@string/filter" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ButtonLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/bg_shape"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:animateLayoutChanges="true"
         android:alpha="0.8"
         app:layout_constraintBottom_toBottomOf="parent"
