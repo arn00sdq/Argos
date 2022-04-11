@@ -199,7 +199,7 @@ public class ImageAnalyzer implements Runnable {
                 Mat rgb32f4c = new Mat((int) this.rgbMatrix.total(), 1, CvType.CV_32FC3);
                 this.rgbMatrix.convertTo(rgb32f4c, CvType.CV_32F);
                 Imgproc.cvtColor(rgb32f4c, rgb32f4c, Imgproc.COLOR_BGR2BGRA);
-                this.mPOIs = PointOfInterest.toPOIList(this.mFrameAnalyzer.getTargetZonesFromImage(rgb32f4c));
+                this.mPOIs = this.mFrameAnalyzer.getDetailedPOIsFromImage(rgb32f4c);
             }
             this.draw();
             //this.mCanvas.drawBitmap(this.mBitmapImage, new Matrix(), null);

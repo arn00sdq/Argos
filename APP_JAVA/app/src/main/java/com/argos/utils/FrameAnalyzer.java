@@ -46,6 +46,7 @@ public class FrameAnalyzer {
      * @param img The image to analyze
      * @return A list of Points of Interest
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public List<PointOfInterest> getDetailedPOIsFromImage(Mat img) {
         return targetZoneMaterialsExtractor.getPOIFromTargetZonesMaterials(getTargetZonesFromImage(img), img);
     }

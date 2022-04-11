@@ -60,7 +60,7 @@ public class FrameAnalyzer {
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        Mat img = Imgcodecs.imread("C:\\Users\\Ivan\\Google Drive\\FAC\\M1\\S2\\Gestion de Projets\\Gestion-de-projet\\Images\\test2.jpg");
+        Mat img = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\test.png");
 
         /*EXEMPLE D'UTILISATION DE LA CLASSE FRAME ANALYZER POUR EXTRAIRE DES POI 
         CONTENANT DES DONNES CONCERNANT DES MATERIAUX A L'INTERIEUR DES CAROTTES
@@ -72,7 +72,7 @@ public class FrameAnalyzer {
         analyzer.HSVTargetZoneFinder.setValue_value(45);
         analyzer.HSVTargetZoneFinder.setMin_area_contour(1000);
         /*ET/OU*/
-        analyzer.HSVTargetZoneFinder.setAutomaticallyCalibratedS(img);
+       // analyzer.HSVTargetZoneFinder.setAutomaticallyCalibratedS(img);
 
         analyzer.targetZoneMaterialsExtractor.setConfidence(90);
         analyzer.targetZoneMaterialsExtractor.setLengthOfCut(5);

@@ -24,6 +24,7 @@ public class HSVTargetZoneFinder {
     private Integer saturation_value = 0;
     private Integer value_value = 0;
     private Integer min_area_contour = 1750;
+    private Mat hsv_mask_inv_display = new Mat();
 
     private final boolean debug = true;
 
@@ -58,6 +59,8 @@ public class HSVTargetZoneFinder {
                 hsv_mask);
 
         Imgproc.threshold(hsv_mask, hsv_mask_inverted, 0, 255, Imgproc.THRESH_BINARY_INV);
+
+        this.hsv_mask_inv_display = hsv_mask_inverted;
 
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_CROSS, new Size(5, 5));
         
@@ -219,6 +222,10 @@ public class HSVTargetZoneFinder {
 
     public int getMax_saturation_val() {
         return max_saturation_val;
+    }
+
+    public Mat getHsv_inverted_mask() {
+        return this.hsv_mask_inv_display;
     }
 
     public void setMax_saturation_val(int max_saturation_val) {

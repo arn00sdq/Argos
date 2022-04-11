@@ -55,10 +55,10 @@ public class MaterialIdentifier {
      * returns either the name of a material or unknown
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<String> getMaterialNamesFromColors(Color[] colors) {
+    public List<String> getMaterialNamesFromColors(Color[] colors,int confidence) {
         List<String> materialNames = new ArrayList<>();
         for (Color color : colors) {
-            materialNames.add(identifyMaterialFromColor(color));
+            materialNames.add(identifyMaterialFromColor(color, confidence));
         }
         return materialNames;
     }
@@ -69,14 +69,14 @@ public class MaterialIdentifier {
      * @return Either the name of the identified material or unknown
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private String identifyMaterialFromColor(Color color) {
+    private String identifyMaterialFromColor(Color color, int confidence) {
 
         for (Entry<Color, String> entry : paletteMapper.getColorMap().entrySet()) {
 
             Color baseColor = entry.getKey();
             String mat = entry.getValue();
 
-            if (colorsMatch(color, baseColor)) {
+            if (colorsMatch(color, baseColor, confidence)) {
                 return mat;
             }
 
@@ -92,7 +92,7 @@ public class MaterialIdentifier {
      * @return Whether the two colors match
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private boolean colorsMatch(Color color, Color baseColor) {
+    private boolean colorsMatch(Color color, Color baseColor, int confidence){
 
         float decimalConfidence = confidence / 100;
         float maxIntervalrange = 256 * (1 - decimalConfidence) / 2;
