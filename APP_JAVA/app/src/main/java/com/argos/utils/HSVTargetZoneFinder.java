@@ -24,7 +24,6 @@ public class HSVTargetZoneFinder {
     private Integer saturation_value = 0;
     private Integer value_value = 0;
     private Integer min_area_contour = 1750;
-    private Mat hsv_mask_inv_display = new Mat();
 
     private final boolean debug = true;
 
@@ -59,8 +58,6 @@ public class HSVTargetZoneFinder {
                 hsv_mask);
 
         Imgproc.threshold(hsv_mask, hsv_mask_inverted, 0, 255, Imgproc.THRESH_BINARY_INV);
-
-        this.hsv_mask_inv_display = hsv_mask_inverted;
 
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_CROSS, new Size(5, 5));
         
@@ -180,6 +177,35 @@ public class HSVTargetZoneFinder {
 
     }
 
+    public Mat getHsv_inverted_mask(Mat src_image) {
+
+        Mat hsv_image = new Mat();
+        Mat hsv_mask = new Mat();
+        Mat hsv_mask_inverted = new Mat();
+
+        Imgproc.cvtColor(src_image, hsv_image, Imgproc.COLOR_BGR2HSV);
+
+        Core.inRange(hsv_image,
+                new Scalar(hue_value, saturation_value, value_value),
+                new Scalar(255, 255, 255),
+                hsv_mask);
+
+        Imgproc.threshold(hsv_mask, hsv_mask_inverted, 0, 255, Imgproc.THRESH_BINARY_INV);
+
+        return hsv_mask_inverted;
+
+    }
+
+    public Mat getBitwised_img(Mat src_image) {
+
+        Mat source_bitwised_and = new Mat();
+
+        Core.bitwise_and(src_image, src_image, source_bitwised_and, getHsv_inverted_mask(src_image));
+
+        return source_bitwised_and;
+
+    }
+
     public Integer getHue_value() {
         return hue_value;
     }
@@ -224,9 +250,6 @@ public class HSVTargetZoneFinder {
         return max_saturation_val;
     }
 
-    public Mat getHsv_inverted_mask() {
-        return this.hsv_mask_inv_display;
-    }
 
     public void setMax_saturation_val(int max_saturation_val) {
         this.max_saturation_val = max_saturation_val;
