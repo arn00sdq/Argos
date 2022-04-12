@@ -5,8 +5,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Build;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
+
+import androidx.annotation.RequiresApi;
+
+import com.argos.utils.FrameAnalyzer;
 
 public class Tabs {
 
@@ -95,6 +101,115 @@ public class Tabs {
                     mCurrentTab = TAB_NONE;
                 }
             }
+        });
+
+        // Getting config tab seekBar
+        SeekBar minAreaSeekBar = mContext.findViewById(R.id.minAreaSeekBar);
+        SeekBar hSeekBar = mContext.findViewById(R.id.HSeekBar);
+        SeekBar sSeekBar = mContext.findViewById(R.id.SSeekBar);
+        SeekBar vSeekBar = mContext.findViewById(R.id.VSeekBar);
+
+        SeekBar minAreaSeekBar2 = mContext.findViewById(R.id.minAreaSeekBar2);
+        SeekBar nbClusterSeekBar = mContext.findViewById(R.id.ClusterNumberSeekBar);
+        SeekBar attemptsSeekBar = mContext.findViewById(R.id.attemptsSeekBar);
+        SeekBar thresholdSeekBar = mContext.findViewById(R.id.thresholdSeekBar);
+
+        minAreaSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                CameraListener.mFrameAnalyzer.HSVTargetZoneFinder.setMin_area_contour(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        hSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                CameraListener.mFrameAnalyzer.HSVTargetZoneFinder.setHue_value(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                CameraListener.mFrameAnalyzer.HSVTargetZoneFinder.setSaturation_value(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        vSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                CameraListener.mFrameAnalyzer.HSVTargetZoneFinder.setValue_value(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        minAreaSeekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                CameraListener.mFrameAnalyzer.KmeansTargetZoneFinder.setMin_area_contour(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        nbClusterSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                CameraListener.mFrameAnalyzer.KmeansTargetZoneFinder.setClustersNumber(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        attemptsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                CameraListener.mFrameAnalyzer.KmeansTargetZoneFinder.setAttemptNumber(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        thresholdSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                CameraListener.mFrameAnalyzer.KmeansTargetZoneFinder.setThreshold(i);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
     }
 

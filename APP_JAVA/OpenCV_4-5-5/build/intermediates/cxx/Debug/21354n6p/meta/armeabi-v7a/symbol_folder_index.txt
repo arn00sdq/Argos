@@ -1,0 +1,1 @@
+/home/fred/Documents/Cours/M1/S2/TER/Gestion-de-projet/APP_JAVA/OpenCV_4-5-5/build/intermediates/cxx/Debug/21354n6p/obj/armeabi-v7a

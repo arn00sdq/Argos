@@ -29,19 +29,19 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ScrollView
+        android:id="@+id/configLayout"
         android:layout_width="fill_parent"
         android:layout_height="400dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tabLayout"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/configLayout"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:background="@drawable/develop_tab_bg"
-            android:padding="20dp"
-            android:visibility="gone">
+            android:padding="20dp" >
 
             <TextView
                 android:id="@+id/textLayoutTitle"
@@ -80,14 +80,14 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <SeekBar
-                        android:id="@+id/minAreaSeakBar"
+                        android:id="@+id/minAreaSeekBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="0dp"
-                        android:max="10000"
-                        android:min="50"
+                        android:max="6000"
+                        android:min="200"
                         android:minHeight="30dp"
-                        android:progress="500"
+                        android:progress="1750"
                         android:progressDrawable="@drawable/seekbar_progress"
                         android:thumb="@drawable/seekbar_thumb"
                         android:visibility="visible"
@@ -123,16 +123,16 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <SeekBar
-                        android:id="@+id/HSeakBar"
+                        android:id="@+id/HSeekBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="30dp"
                         android:progressDrawable="@drawable/seekbar_progress"
                         android:thumb="@drawable/seekbar_thumb"
                         android:layout_marginBottom="0dp"
-                        android:progress="500"
-                        android:min="50"
-                        android:max="10000"
+                        android:progress="0"
+                        android:min="0"
+                        android:max="255"
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -166,16 +166,16 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <SeekBar
-                        android:id="@+id/SSeakBar"
+                        android:id="@+id/SSeekBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="30dp"
                         android:progressDrawable="@drawable/seekbar_progress"
                         android:thumb="@drawable/seekbar_thumb"
                         android:layout_marginBottom="0dp"
-                        android:progress="500"
-                        android:min="50"
-                        android:max="10000"
+                        android:progress="0"
+                        android:min="0"
+                        android:max="255"
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -209,16 +209,16 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <SeekBar
-                        android:id="@+id/VSeakBar"
+                        android:id="@+id/VSeekBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:minHeight="30dp"
                         android:progressDrawable="@drawable/seekbar_progress"
                         android:thumb="@drawable/seekbar_thumb"
                         android:layout_marginBottom="0dp"
-                        android:progress="500"
-                        android:min="50"
-                        android:max="10000"
+                        android:progress="0"
+                        android:min="0"
+                        android:max="255"
                         android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -229,19 +229,19 @@
     </ScrollView>
 
     <ScrollView
+        android:id="@+id/colorLayout"
         android:layout_width="fill_parent"
         android:layout_height="400dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tabLayout"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/colorLayout"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:background="@drawable/develop_tab_bg"
-            android:padding="20dp"
-            android:visibility="gone">
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/textLayoutTitle2"
@@ -280,14 +280,14 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <SeekBar
-                    android:id="@+id/minAreaSeakBar2"
+                    android:id="@+id/minAreaSeekBar2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="0dp"
-                    android:max="10000"
-                    android:min="50"
+                    android:max="6000"
+                    android:min="200"
                     android:minHeight="30dp"
-                    android:progress="500"
+                    android:progress="1750"
                     android:progressDrawable="@drawable/seekbar_progress"
                     android:thumb="@drawable/seekbar_thumb"
                     android:visibility="visible"
@@ -323,16 +323,16 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <SeekBar
-                    android:id="@+id/ClusterNumberSeakBar"
+                    android:id="@+id/ClusterNumberSeekBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="30dp"
                     android:progressDrawable="@drawable/seekbar_progress"
                     android:thumb="@drawable/seekbar_thumb"
                     android:layout_marginBottom="0dp"
-                    android:progress="500"
-                    android:min="50"
-                    android:max="10000"
+                    android:progress="3"
+                    android:min="3"
+                    android:max="7"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -355,7 +355,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/subLayout22">
 
                 <TextView
-                    android:id="@+id/attempsText"
+                    android:id="@+id/attemptsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/nombre_d_it_rations"
@@ -366,20 +366,20 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <SeekBar
-                    android:id="@+id/attempsSeekBar"
+                    android:id="@+id/attemptsSeekBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="30dp"
                     android:progressDrawable="@drawable/seekbar_progress"
                     android:thumb="@drawable/seekbar_thumb"
                     android:layout_marginBottom="0dp"
-                    android:progress="500"
-                    android:min="50"
-                    android:max="10000"
+                    android:progress="3"
+                    android:min="3"
+                    android:max="7"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/attempsText" />
+                    app:layout_constraintTop_toBottomOf="@+id/attemptsText" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -409,16 +409,16 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <SeekBar
-                    android:id="@+id/thresholdSeakBar"
+                    android:id="@+id/thresholdSeekBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="30dp"
                     android:progressDrawable="@drawable/seekbar_progress"
                     android:thumb="@drawable/seekbar_thumb"
                     android:layout_marginBottom="0dp"
-                    android:progress="500"
-                    android:min="50"
-                    android:max="10000"
+                    android:progress="0"
+                    android:min="0"
+                    android:max="255"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

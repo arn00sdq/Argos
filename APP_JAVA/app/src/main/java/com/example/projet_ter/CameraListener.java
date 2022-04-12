@@ -540,10 +540,8 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     private final int FILTER_CONGLOMERA = 4;
     private final int FILTER_UNKNOWN = 5;
 
-    private final FrameAnalyzer mFrameAnalyzer = new FrameAnalyzer();
+    public static final FrameAnalyzer mFrameAnalyzer = new FrameAnalyzer();
     private final JavaCamera2View mJavaCamera2View;
-
-    private boolean analyseStarted = false;
 
     private List<PointOfInterest> poiList;
 
@@ -627,11 +625,9 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         this.rgba_matrix = inputFrame.rgba();
-
-        this.rgba_matrix = this.orientationRotation(this.rgba_matrix);
-
-        this.rgba_matrix = this.transformMat(this.rgba_matrix);
-
+        this.rgba_matrix = orientationRotation(this.rgba_matrix);
+        this.rgba_matrix = transformMat(this.rgba_matrix);
+        Log.d(TAG, String.valueOf(mCameraState));
         return this.rgba_matrix;
     }
 
@@ -679,12 +675,12 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Mat transformMat(Mat image) {
-        switch (this.mCameraState) {
-            case CAMERA_STATE_ANALYSE:
-                this.poiList = mFrameAnalyzer.getDetailedPOIsFromImage(this.rgba_matrix);
-                return this.dramPOIs(image, this.poiList);
-            case CAMERA_STATE_MASK:
-                return this.mFrameAnalyzer.HSVTargetZoneFinder.getBitwised_img(image);
+        switch (mCameraState) {
+            case CAMERA_STATE_ANALYSE :
+                poiList = mFrameAnalyzer.getDetailedPOIsFromImage(image);
+                return dramPOIs(image, poiList);
+            case CAMERA_STATE_MASK :
+                return mFrameAnalyzer.HSVTargetZoneFinder.getHsv_inverted_mask(image);
             default :
                 return image;
         }
