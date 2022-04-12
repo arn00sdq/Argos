@@ -6,34 +6,25 @@
     android:layout_height="match_parent"
     xmlns:openwcv="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
-<!--
-    <TextureView
-        android:id="@+id/textureView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
--->
 
+    <!-- OPENCV CAMERA2 -->
     <org.opencv.android.JavaCamera2View
         android:id="@+id/javaCamera2View"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
+        app:layout_constraintBottom_toTopOf="@+id/camera_state_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
-
+    <!-- COLOR CONFIG LAYOUT -->
     <ScrollView
-        android:id="@+id/configLayout"
+        android:id="@+id/colorLayout"
         android:layout_width="fill_parent"
         android:layout_height="400dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tabLayout"
+        app:layout_constraintBottom_toTopOf="@id/camera_state_layout"
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone">
 
@@ -47,7 +38,7 @@
                 android:id="@+id/textLayoutTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/configuration"
+                android:text="@string/couleur"
                 android:textSize="50sp"
                 android:textColor="#888888"
                 android:visibility="visible"
@@ -227,75 +218,35 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
+    <!-- GLOBAL CONFIG LAYOUT -->
     <ScrollView
-        android:id="@+id/colorLayout"
+        android:id="@+id/configLayout"
         android:layout_width="fill_parent"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
+        android:minHeight="10dp"
+        android:maxHeight="400dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tabLayout"
+        app:layout_constraintBottom_toTopOf="@id/camera_state_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone">
+        android:visibility="gone" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/develop_tab_bg"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:padding="20dp">
 
             <TextView
                 android:id="@+id/textLayoutTitle2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/color"
+                android:text="@string/configuration"
                 android:textSize="50sp"
                 android:textColor="#888888"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/subLayout21"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/card_bg"
-                android:padding="2dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textLayoutTitle2">
-
-                <TextView
-                    android:id="@+id/minAreaText2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:text="@string/aire_minimale_d_une_zone"
-                    android:textColor="#888888"
-                    android:textSize="25sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <SeekBar
-                    android:id="@+id/minAreaSeekBar2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="0dp"
-                    android:max="6000"
-                    android:min="200"
-                    android:minHeight="30dp"
-                    android:progress="1750"
-                    android:progressDrawable="@drawable/seekbar_progress"
-                    android:thumb="@drawable/seekbar_thumb"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/minAreaText2" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/subLayout22"
@@ -309,7 +260,7 @@
                 android:paddingEnd="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/subLayout21">
+                app:layout_constraintTop_toBottomOf="@id/textLayoutTitle2" >
 
                 <TextView
                     android:id="@+id/ClusterNumberText"
@@ -427,7 +378,65 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+    <!-- CAMERA STATE -->
+    <RelativeLayout
+        android:id="@+id/camera_state_layout"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@drawable/camera_state_layout_bg"
+        android:padding="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tabLayout"
+        app:layout_constraintEnd_toEndOf="parent" >
 
+        <TextView
+            android:id="@+id/state0"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/camera"
+            android:textSize="22sp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/gear_color"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/state1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@id/state0"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/analyse"
+            android:textSize="22sp"
+            android:textColor="@color/grey_color"
+            android:layout_centerInParent="false"/>
+
+        <TextView
+            android:id="@+id/state2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/masque"
+            android:textSize="22sp"
+            android:layout_toEndOf="@id/state1"
+            android:textColor="@color/grey_color"
+            android:layout_centerInParent="false"/>
+
+        <TextView
+            android:id="@+id/state3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/couleur"
+            android:textSize="22sp"
+            android:layout_toEndOf="@id/state2"
+            android:textColor="@color/grey_color"
+            android:layout_centerInParent="false" />
+
+    </RelativeLayout>
+    <!-- TAB LAYOUT -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
@@ -494,6 +503,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <!-- OLD STUFF -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ButtonLayout"
         android:layout_width="match_parent"

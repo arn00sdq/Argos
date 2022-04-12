@@ -24,5 +24,8 @@
     <string name="brush" />
     <string name="filter" />
     <string name="configuration">Configuration</string>
-    <string name="color">Couleur</string>
+    <string name="couleur">Couleur</string>
+    <string name="camera">Camera</string>
+    <string name="analyse">Analyse</string>
+    <string name="masque">Masque</string>
 </resources>

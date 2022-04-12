@@ -11,4 +11,5 @@
     <color name="brush_color">#ffe66b</color>
     <color name="filter_color">#66d97a</color>
     <color name="detail_color">#d87dff</color>
+    <color name="grey_color">#aaaaaa</color>
 </resources>

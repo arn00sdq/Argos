@@ -109,7 +109,6 @@ public class Tabs {
         SeekBar sSeekBar = mContext.findViewById(R.id.SSeekBar);
         SeekBar vSeekBar = mContext.findViewById(R.id.VSeekBar);
 
-        SeekBar minAreaSeekBar2 = mContext.findViewById(R.id.minAreaSeekBar2);
         SeekBar nbClusterSeekBar = mContext.findViewById(R.id.ClusterNumberSeekBar);
         SeekBar attemptsSeekBar = mContext.findViewById(R.id.attemptsSeekBar);
         SeekBar thresholdSeekBar = mContext.findViewById(R.id.thresholdSeekBar);
@@ -163,22 +162,10 @@ public class Tabs {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        minAreaSeekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                CameraListener.mFrameAnalyzer.KmeansTargetZoneFinder.setMin_area_contour(i);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
         nbClusterSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                CameraListener.mFrameAnalyzer.KmeansTargetZoneFinder.setClustersNumber(i);
+                CameraListener.mFrameAnalyzer.targetZoneMaterialsExtractor.setNumberOfClusters(i);
             }
 
             @Override
@@ -190,7 +177,7 @@ public class Tabs {
         attemptsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                CameraListener.mFrameAnalyzer.KmeansTargetZoneFinder.setAttemptNumber(i);
+                CameraListener.mFrameAnalyzer.targetZoneMaterialsExtractor.setNumberOfIterations(i);
             }
 
             @Override

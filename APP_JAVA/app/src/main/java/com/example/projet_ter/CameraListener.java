@@ -527,11 +527,10 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     private static final String TAG = "ProjectTER::CameraListener";
 
-    private final int CAMERA_STATE_PREVIEW = 0;
-    private final int CAMERA_STATE_ANALYSE = 1;
-    private final int CAMERA_STATE_MASK = 2;
-    private final int CAMERA_STATE_COLOR = 3;
-    private final int CAMERA_STATE_FILTERED = 4;
+    public static final int CAMERA_STATE_PREVIEW = 0;
+    public static final int CAMERA_STATE_ANALYSE = 1;
+    public static final int CAMERA_STATE_MASK = 2;
+    public static final int CAMERA_STATE_COLOR = 3;
 
     private final int FILTER_NONE = 0;
     private final int FILTER_ALL = 1;
@@ -558,29 +557,19 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
             @SuppressLint({"ClickableViewAccessibility", "LongLogTag"})
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(mCameraState == CAMERA_STATE_ANALYSE && poiList != null && poiList.size() > 0) {
+                if(poiList != null && poiList.size() > 0) {
                     float scale = Math.max((float) mJavaCamera2View.getWidth() / rgba_matrix.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
-                    Log.d(TAG, "scale = " + scale);
                     Size scaled_mat = new Size(rgba_matrix.width() * scale, rgba_matrix.height() * scale);
-                    Log.d(TAG, "rgba_matrix.width() * scale = " + (rgba_matrix.width() * scale));
-                    Log.d(TAG, "mJavaCamera2View.getWidth() = " + mJavaCamera2View.getWidth());
-                    Log.d(TAG, "rgba_matrix.height() * scale = " + (rgba_matrix.height() * scale));
-                    Log.d(TAG, "mJavaCamera2View.getHeight() = " + mJavaCamera2View.getHeight());
                     int x_gap = (int) (scaled_mat.width - mJavaCamera2View.getWidth()) / 2;
                     int y_gap = (int) (scaled_mat.height - mJavaCamera2View.getHeight()) / 2;
-                    Log.d(TAG, "x_gap = " + x_gap);
-                    Log.d(TAG, "y_gap = " + y_gap);
                     int x = (int) ((int) (motionEvent.getX() + x_gap) / scale);
                     int y = (int) ((int) (motionEvent.getY() + y_gap) / scale);
 
-                    Log.d(TAG, "X = " + x);
-                    Log.d(TAG, "Y = " + y);
                     PointOfInterest poi = getPoiAt(x, y);
                     new carotDataDialog(mJavaCamera2View.getContext(), "TEST").show();
-                } else {
-                    mCameraState = CAMERA_STATE_MASK;
+                    return true;
                 }
-                return true;
+                return false;
             }
 
         });
@@ -632,7 +621,8 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     }
 
     public void setCameraState(int cameraState) {
-        this.mCameraState = cameraState;
+        Log.d(TAG, String.valueOf(cameraState));
+        mCameraState = cameraState;
     }
 
     private Mat orientationRotation(final Mat image) {
@@ -681,6 +671,8 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
                 return dramPOIs(image, poiList);
             case CAMERA_STATE_MASK :
                 return mFrameAnalyzer.HSVTargetZoneFinder.getHsv_inverted_mask(image);
+            case CAMERA_STATE_COLOR :
+                return mFrameAnalyzer.targetZoneMaterialsExtractor.getKmeanMask(image);
             default :
                 return image;
         }

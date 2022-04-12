@@ -73,20 +73,23 @@ public class MaterialAnalyzer {
 
     }
 
-    public Mat getHsv_kmean_mask(Mat src_image, int clustersNumber, int attemptNumber) {
+    public Mat getKmeanMask(Mat src_image, int clustersNumber, int attemptNumber) {
 
         Mat srcclone = src_image.clone();
+        Mat srctemp = new Mat();
+        Imgproc.cvtColor(src_image,srctemp,Imgproc.COLOR_RGBA2RGB);
 
         Mat bestLabels = new Mat();
         TermCriteria criteria = new TermCriteria();
         int flags = Core.KMEANS_PP_CENTERS;
         Mat centers = new Mat();
 
-        Mat data = srcclone.reshape(1, srcclone.rows() * srcclone.cols());
-        data.convertTo(data, CvType.CV_32F);
+        srctemp.convertTo(srctemp, CvType.CV_32F);
+        Mat data = srctemp.reshape(1, (int)srctemp.total());
 
         Core.kmeans(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
-        Mat draw = new Mat((int) src_image.total(), 1, CvType.CV_32FC3);
+
+        Mat draw = new Mat((int) srctemp.total(), 1, CvType.CV_32FC3);
         Mat colors = centers.reshape(3, clustersNumber);
         for (int i = 0; i < clustersNumber; i++) {
             Mat mask = new Mat(); // a mask for each cluster label
@@ -96,8 +99,10 @@ public class MaterialAnalyzer {
             draw.setTo(new Scalar(d[0], d[1], d[2]), mask);
         }
 
-        draw = draw.reshape(3, src_image.rows());
+        draw = draw.reshape(3, srctemp.rows());
         draw.convertTo(draw, CvType.CV_8U);
+        Imgproc.cvtColor(draw,draw,Imgproc.COLOR_RGB2RGBA);
+
         return draw;
 
     }

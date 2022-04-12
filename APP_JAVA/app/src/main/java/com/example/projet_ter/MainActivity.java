@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CameraListener camera_component;
     private ConfigLayout configLayout;
+    private CameraStateLayout mCameraStateLayout;
     private Tabs mTabs;
     private float x1 = 0;
     private float y1 = 0;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         this.camera_component = new CameraListener(this.findViewById(R.id.javaCamera2View));
         this.configLayout = new ConfigLayout((View) this.findViewById(R.id.ButtonLayout), this.camera_component.getFrameAnalyzer());
         this.mTabs = new Tabs(this, this.findViewById(R.id.tabLayout));
+        this.mCameraStateLayout = new CameraStateLayout(this);
 
     }
 
@@ -127,10 +129,12 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG,"Action was UP");
                 // Use dx and dy to determine the direction of the move
                 if(Math.abs(dx) > Math.abs(dy)) {
-                    if(dx>0)
-                        Log.i(TAG, "right");
-                    else
-                        Log.i(TAG, "left");
+                    if(dx>0) {
+                        mCameraStateLayout.nextState();
+                    } else {
+                        mCameraStateLayout.previouslyState();
+                    }
+                    camera_component.setCameraState(mCameraStateLayout.getCameraState());
                 } else {
                     if (dy > 0) {
                         this.configLayout.setVisible(false);

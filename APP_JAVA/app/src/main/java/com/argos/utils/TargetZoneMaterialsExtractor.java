@@ -162,6 +162,12 @@ public class TargetZoneMaterialsExtractor {
         return largestTargetZone;
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Mat getKmeanMask(Mat img) {
+        return materialAnalyzer.getKmeanMask(img, numberOfClusters, numberOfIterations);
+    }
+
     public int getNumberOfClusters() {
         return numberOfClusters;
     }
