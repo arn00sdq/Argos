@@ -23,7 +23,8 @@ public class TargetZoneMaterialsExtractor {
     MaterialAnalyzer materialAnalyzer = new MaterialAnalyzer();
 
     private int lengthOfCut = 5;
-    private int numberOfClusters = 4;
+    private int numberOfClusters = 3;
+    private int numberOfIterations = 3;
     /**
      * @value Confidence: degree of accuracy for comparison ranging between 1 and 100
      * 100 means color values must exactly match Example: with a confidence of
@@ -68,7 +69,7 @@ public class TargetZoneMaterialsExtractor {
                 while (analyzed_width_zone > lengthOfCut) {
 
                     List<String> presentMaterialsInZone = materialAnalyzer.
-                            getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, lengthOfCut, analyzed_height_zone, numberOfClusters, confidence);
+                            getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, lengthOfCut, analyzed_height_zone, numberOfClusters,numberOfIterations, confidence);
                     materialPresencesInTargetZone = addMaterialPresences(materialPresencesInTargetZone, presentMaterialsInZone);
 
                     analyzed_upper_x_zone += lengthOfCut;
@@ -77,7 +78,7 @@ public class TargetZoneMaterialsExtractor {
                 }
 
                 List<String> presentMaterialsInZone = materialAnalyzer.
-                        getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, analyzed_width_zone, analyzed_height_zone, numberOfClusters, confidence);
+                        getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, analyzed_width_zone, analyzed_height_zone, numberOfClusters,numberOfIterations, confidence);
                 materialPresencesInTargetZone = addMaterialPresences(materialPresencesInTargetZone, presentMaterialsInZone);
 
             } else {
@@ -85,7 +86,7 @@ public class TargetZoneMaterialsExtractor {
                 while (analyzed_height_zone > lengthOfCut) {
 
                     List<String> presentMaterialsInZone = materialAnalyzer.
-                            getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, analyzed_width_zone, lengthOfCut, numberOfClusters, confidence);
+                            getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, analyzed_width_zone, lengthOfCut, numberOfClusters,numberOfIterations, confidence);
                     materialPresencesInTargetZone = addMaterialPresences(materialPresencesInTargetZone, presentMaterialsInZone);
 
                     analyzed_upper_y_zone += lengthOfCut;
@@ -94,7 +95,7 @@ public class TargetZoneMaterialsExtractor {
                 }
 
                 List<String> presentMaterialsInZone = materialAnalyzer.
-                        getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, analyzed_width_zone, analyzed_height_zone, numberOfClusters, confidence);
+                        getMaterialsInsideZoneOfImage(image, analyzed_upper_x_zone, analyzed_upper_y_zone, analyzed_width_zone, analyzed_height_zone, numberOfClusters,numberOfIterations, confidence);
                 materialPresencesInTargetZone = addMaterialPresences(materialPresencesInTargetZone, presentMaterialsInZone);
 
             }
@@ -165,9 +166,9 @@ public class TargetZoneMaterialsExtractor {
         return numberOfClusters;
     }
 
-    public void setNumberOfClusters(int numberOfClusters) {
-        this.numberOfClusters = numberOfClusters;
-    }
+    public void setNumberOfClusters(int numberOfClusters) { this.numberOfClusters = numberOfClusters;}
+
+    public void setNumberOfIterations(int numberOfIterations) { this.numberOfIterations = numberOfIterations;}
 
     public int getConfidence() {
         return confidence;
@@ -180,6 +181,7 @@ public class TargetZoneMaterialsExtractor {
     public int getLengthOfCut() {
         return lengthOfCut;
     }
+
 
     public void setLengthOfCut(int lengthOfCut) {
         this.lengthOfCut = lengthOfCut;

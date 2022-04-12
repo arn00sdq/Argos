@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi;
 import com.argos.utils.PaletteMapper.*;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.Hashtable;
@@ -24,6 +25,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Size;
 import org.opencv.core.TermCriteria;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class MaterialAnalyzer {
 
     private final MaterialIdentifier materialIdentifier = new MaterialIdentifier(new PaletteMapper(paletteTypes.DEFAULT_PALETTE));
@@ -44,7 +46,7 @@ public class MaterialAnalyzer {
      * @return A list of names of materials
      */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<String> getMaterialsInsideZoneOfImage(Mat analyzedImage, int upper_x, int upper_y, int w, int h, int clustersNumber, int confidence) {
+    public List<String> getMaterialsInsideZoneOfImage(Mat analyzedImage, int upper_x, int upper_y, int w, int h, int clustersNumber, int attemptNumber, int confidence) {
 
         Mat centers = new Mat();
         Mat labels = new Mat();
@@ -60,14 +62,43 @@ public class MaterialAnalyzer {
         imgKmean = img_clone.reshape(1, imageZone.rows() * imageZone.cols());
         imgKmean.convertTo(imgKmean, CvType.CV_32F);
 
-        TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.COUNT, 10, 1.0);
+        TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.COUNT, attemptNumber, 1.0);
 
-        Core.kmeans(imgKmean, clustersNumber, labels, criteria, 10, Core.KMEANS_PP_CENTERS, centers);
+        Core.kmeans(imgKmean, clustersNumber, labels, criteria, attemptNumber, Core.KMEANS_PP_CENTERS, centers);
 
         String dump = centers.dump();
         Color[] colorsArray = extractRgbFromString(dump, clustersNumber);
 
         return materialIdentifier.getMaterialNamesFromColors(colorsArray, confidence);
+
+    }
+
+    public Mat getHsv_kmean_mask(Mat src_image, int clustersNumber, int attemptNumber) {
+
+        Mat srcclone = src_image.clone();
+
+        Mat bestLabels = new Mat();
+        TermCriteria criteria = new TermCriteria();
+        int flags = Core.KMEANS_PP_CENTERS;
+        Mat centers = new Mat();
+
+        Mat data = srcclone.reshape(1, srcclone.rows() * srcclone.cols());
+        data.convertTo(data, CvType.CV_32F);
+
+        Core.kmeans(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
+        Mat draw = new Mat((int) src_image.total(), 1, CvType.CV_32FC3);
+        Mat colors = centers.reshape(3, clustersNumber);
+        for (int i = 0; i < clustersNumber; i++) {
+            Mat mask = new Mat(); // a mask for each cluster label
+            Core.compare(bestLabels, new Scalar(i), mask, Core.CMP_EQ);
+            Mat col = colors.row(i); // can't use the Mat directly with setTo() (see #19100)
+            double d[] = col.get(0, 0); // can't create Scalar directly from get(), 3 vs 4 elements
+            draw.setTo(new Scalar(d[0], d[1], d[2]), mask);
+        }
+
+        draw = draw.reshape(3, src_image.rows());
+        draw.convertTo(draw, CvType.CV_8U);
+        return draw;
 
     }
 

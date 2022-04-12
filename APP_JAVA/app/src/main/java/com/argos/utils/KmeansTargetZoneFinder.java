@@ -149,6 +149,50 @@ public class KmeansTargetZoneFinder {
         return contours;
     }
 
+    public Mat getHsv_kmean_mask(Mat src_image) {
+
+        Mat kmean_mask = new Mat();
+        Mat kmean_mask_inverted = new Mat();
+        Mat source_bitwised_and = new Mat();
+        Mat hierarchy = new Mat();
+        Mat srcclone = src_image.clone();
+
+        Mat bestLabels = new Mat();
+        TermCriteria criteria = new TermCriteria();
+        int flags = Core.KMEANS_PP_CENTERS;
+        Mat centers = new Mat();
+
+        Mat data = srcclone.reshape(1, srcclone.rows() * srcclone.cols());
+        data.convertTo(data, CvType.CV_32F);
+
+        Core.kmeans(data, clustersNumber, bestLabels, criteria, attemptNumber, flags, centers);
+        System.out.println("k" +centers);
+        Mat draw = new Mat((int) src_image.total(), 1, CvType.CV_32FC3);
+        Mat colors = centers.reshape(3, clustersNumber);
+        for (int i = 0; i < clustersNumber; i++) {
+            Mat mask = new Mat(); // a mask for each cluster label
+            Core.compare(bestLabels, new Scalar(i), mask, Core.CMP_EQ);
+            Mat col = colors.row(i); // can't use the Mat directly with setTo() (see #19100)
+            double d[] = col.get(0, 0); // can't create Scalar directly from get(), 3 vs 4 elements
+            draw.setTo(new Scalar(d[0], d[1], d[2]), mask);
+        }
+
+        draw = draw.reshape(3, src_image.rows());
+        draw.convertTo(draw, CvType.CV_8U);
+        return draw;
+
+    }
+
+    public Mat getBitwised_img(Mat src_image) {
+
+        Mat source_bitwised_and = new Mat();
+
+        Core.bitwise_and(src_image, src_image, source_bitwised_and, getHsv_kmean_mask(src_image));
+
+        return source_bitwised_and;
+
+    }
+
     public Integer getAttemptNumber() {
         return attemptNumber;
     }
