@@ -608,7 +608,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
         Mat img = image.clone();
 
         Size original_size;
-        original_size = img.size();²
+        original_size = img.size();
         Core.rotate(img, img, Core.ROTATE_90_CLOCKWISE);
         // Getting the new ratio
         double img_ratio = (double) (original_size.width / img.size().width);
