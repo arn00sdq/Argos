@@ -552,7 +552,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     public CameraListener(JavaCamera2View javaCamera2View) {
         this.mJavaCamera2View = javaCamera2View;
         this.mJavaCamera2View.setCvCameraViewListener(this);
-        this.mJavaCamera2View.setOnTouchListener(new View.OnTouchListener() {
+        /*this.mJavaCamera2View.setOnTouchListener(new View.OnTouchListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @SuppressLint({"ClickableViewAccessibility", "LongLogTag"})
             @Override
@@ -572,11 +572,11 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
                 return false;
             }
 
-        });
+        });*/
     }
 
     public FrameAnalyzer getFrameAnalyzer() {
-        return this.mFrameAnalyzer;
+        return mFrameAnalyzer;
     }
 
     public void enable() {
