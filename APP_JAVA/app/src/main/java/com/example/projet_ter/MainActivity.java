@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.i(TAG, "up");
                     }
                 }
+                camera_component.setCameraState(mCameraStateLayout.getCameraState());
                 return true;
             default :
                 return super.onTouchEvent(event);
