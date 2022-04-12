@@ -64,11 +64,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (OpenCVLoader.initDebug()) {
-            /*try {
-                this.camera_component.startCamera();
-            } catch (CameraAccessException e) {
-                e.printStackTrace();
-            }*/
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     camera_component.enable();

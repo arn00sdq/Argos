@@ -57,7 +57,7 @@ public class Tabs {
                 clearTabs();
                 if (mCurrentTab != TAB_GEAR) {
                     mCurrentTab = TAB_GEAR;
-                    gearButton.setColorFilter(Color.argb(255, 0, 103, 247));
+                    gearButton.setColorFilter(Color.argb(255, 109,204,252));
                     gearTab.setVisibility(View.VISIBLE);
                 } else {
                     mCurrentTab = TAB_NONE;
@@ -71,7 +71,7 @@ public class Tabs {
                 clearTabs();
                 if (mCurrentTab != TAB_BRUSH) {
                     mCurrentTab = TAB_BRUSH;
-                    brushButton.setColorFilter(Color.argb(255, 0, 103, 247));
+                    brushButton.setColorFilter(Color.argb(255, 109,204,252));
                     brushTab.setVisibility(View.VISIBLE);
                 } else {
                     mCurrentTab = TAB_NONE;
@@ -84,7 +84,7 @@ public class Tabs {
                 clearTabs();
                 if (mCurrentTab != TAB_FILTER) {
                     mCurrentTab = TAB_FILTER;
-                    filterButton.setColorFilter(Color.argb(255, 0, 103, 247));
+                    filterButton.setColorFilter(Color.argb(255, 109,204,252));
                 } else {
                     mCurrentTab = TAB_NONE;
                 }
@@ -96,7 +96,7 @@ public class Tabs {
                 clearTabs();
                 if (mCurrentTab != TAB_DETAILS) {
                     mCurrentTab = TAB_DETAILS;
-                    detailButton.setColorFilter(Color.argb(255, 0, 103, 247));
+                    detailButton.setColorFilter(Color.argb(255, 109,204,252));
                 } else {
                     mCurrentTab = TAB_NONE;
                 }
@@ -120,10 +120,14 @@ public class Tabs {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(0.4f);
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(1f);
+            }
         });
         hSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -132,10 +136,14 @@ public class Tabs {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                brushTab.setAlpha(0.4f);
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                brushTab.setAlpha(1f);
+            }
         });
         sSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -144,10 +152,14 @@ public class Tabs {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                brushTab.setAlpha(0.4f);
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                brushTab.setAlpha(1f);
+            }
         });
         vSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -156,10 +168,14 @@ public class Tabs {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                brushTab.setAlpha(0.4f);
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                brushTab.setAlpha(1f);
+            }
         });
 
         nbClusterSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -169,10 +185,14 @@ public class Tabs {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(0.4f);
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(1f);
+            }
         });
         attemptsSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -181,10 +201,14 @@ public class Tabs {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(0.4f);
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(1f);
+            }
         });
         thresholdSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -193,19 +217,23 @@ public class Tabs {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(0.4f);
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(1f);
+            }
         });
     }
 
     @SuppressLint("ResourceAsColor")
     private void clearTabs() {
-        gearButton.setColorFilter(Color.argb(255, 170, 170, 170));
-        brushButton.setColorFilter(Color.argb(255, 170, 170, 170));
-        filterButton.setColorFilter(Color.argb(255, 170, 170, 170));
-        detailButton.setColorFilter(Color.argb(255, 170, 170, 170));
+        gearButton.setColorFilter(Color.argb(255, 255, 255, 255));
+        brushButton.setColorFilter(Color.argb(255, 255, 255, 255));
+        filterButton.setColorFilter(Color.argb(255, 255, 255, 255));
+        detailButton.setColorFilter(Color.argb(255, 255, 255, 255));
         gearTab.setVisibility(View.GONE);
         brushTab.setVisibility(View.GONE);
     }

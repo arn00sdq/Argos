@@ -552,27 +552,6 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     public CameraListener(JavaCamera2View javaCamera2View) {
         this.mJavaCamera2View = javaCamera2View;
         this.mJavaCamera2View.setCvCameraViewListener(this);
-        /*this.mJavaCamera2View.setOnTouchListener(new View.OnTouchListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @SuppressLint({"ClickableViewAccessibility", "LongLogTag"})
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(poiList != null && poiList.size() > 0) {
-                    float scale = Math.max((float) mJavaCamera2View.getWidth() / rgba_matrix.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
-                    Size scaled_mat = new Size(rgba_matrix.width() * scale, rgba_matrix.height() * scale);
-                    int x_gap = (int) (scaled_mat.width - mJavaCamera2View.getWidth()) / 2;
-                    int y_gap = (int) (scaled_mat.height - mJavaCamera2View.getHeight()) / 2;
-                    int x = (int) ((int) (motionEvent.getX() + x_gap) / scale);
-                    int y = (int) ((int) (motionEvent.getY() + y_gap) / scale);
-
-                    PointOfInterest poi = getPoiAt(x, y);
-                    new carotDataDialog(mJavaCamera2View.getContext(), "TEST").show();
-                    return true;
-                }
-                return false;
-            }
-
-        });*/
     }
 
     public FrameAnalyzer getFrameAnalyzer() {
@@ -629,8 +608,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
         Mat img = image.clone();
 
         Size original_size;
-        original_size = img.size();
-        /* TODO GET ORIENTATION AND APPLY ROTATION */
+        original_size = img.size();²
         Core.rotate(img, img, Core.ROTATE_90_CLOCKWISE);
         // Getting the new ratio
         double img_ratio = (double) (original_size.width / img.size().width);

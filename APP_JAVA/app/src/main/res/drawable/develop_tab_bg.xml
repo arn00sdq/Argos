@@ -4,19 +4,7 @@
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
             android:thickness="0dp"
             android:shape="rectangle" >
-            <solid android:color="@color/white" />
-        </shape>
-    </item>
-    <item android:top="300dp">
-        <shape xmlns:android="http://schemas.android.com/apk/res/android"
-            android:thickness="0dp"
-            android:shape="rectangle" >
-            <gradient android:endColor="#FFFFFF"
-                android:startColor="#dddddd"
-                android:centerY="5%"
-                android:centerColor="#ffffff"
-                android:angle="90"
-            />
+            <solid android:color="#555555" />
         </shape>
     </item>
 </layer-list>
