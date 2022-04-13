@@ -112,12 +112,14 @@ public class MainActivity extends AppCompatActivity {
         float y2 = event.getY();
         float dx = x2-x1;
         float dy = y2-y1;
+        Log.d(TAG, "Tpouch");
 
         switch(action) {
             case (MotionEvent.ACTION_DOWN) :
                 Log.d(TAG,"Action was DOWN");
                 x1 = event.getX();
                 y1 = event.getY();
+                mTabs.clearTabs();
                 return true;
 
             case (MotionEvent.ACTION_UP) :
@@ -129,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         mCameraStateLayout.previouslyState();
                     }
-                    camera_component.setCameraState(mCameraStateLayout.getCameraState());
                 } else {
                     if (dy > 0) {
                         this.configLayout.setVisible(false);
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.i(TAG, "up");
                     }
                 }
+                camera_component.setFilters(mTabs.getFilters());
                 camera_component.setCameraState(mCameraStateLayout.getCameraState());
                 return true;
             default :

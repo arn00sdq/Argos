@@ -1,5 +1,7 @@
 package com.argos.utils;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.opencv.core.Core;
@@ -183,14 +185,14 @@ public class HSVTargetZoneFinder {
         Mat hsv_mask = new Mat();
         Mat hsv_mask_inverted = new Mat();
 
-        Imgproc.cvtColor(src_image, hsv_image, Imgproc.COLOR_BGR2HSV);
-
+        Imgproc.cvtColor(src_image, hsv_image, Imgproc.COLOR_RGB2HSV);
         Core.inRange(hsv_image,
                 new Scalar(hue_value, saturation_value, value_value),
                 new Scalar(255, 255, 255),
                 hsv_mask);
 
         Imgproc.threshold(hsv_mask, hsv_mask_inverted, 0, 255, Imgproc.THRESH_BINARY_INV);
+        Imgproc.cvtColor(hsv_mask_inverted, hsv_mask_inverted, Imgproc.COLOR_GRAY2BGRA);
 
         return hsv_mask_inverted;
 

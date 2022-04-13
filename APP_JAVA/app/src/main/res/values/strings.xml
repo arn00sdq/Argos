@@ -28,4 +28,11 @@
     <string name="camera">Camera</string>
     <string name="analyse">Analyse</string>
     <string name="masque">Masque</string>
+    <string name="details">Détails</string>
+    <string name="contenue">Contenue</string>
+    <string name="filtres">Filtres</string>
+    <string name="argiles">Argiles</string>
+    <string name="sables">Sables</string>
+    <string name="conglomera">Conglomera</string>
+    <string name="indeterminer">Indeterminer</string>
 </resources>

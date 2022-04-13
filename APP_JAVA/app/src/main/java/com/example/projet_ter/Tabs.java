@@ -6,13 +6,21 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.argos.utils.FrameAnalyzer;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class Tabs {
 
@@ -24,6 +32,9 @@ public class Tabs {
     private static final int TAB_FILTER = 3;
     private static final int TAB_DETAILS = 4;
 
+    private static final boolean FILTER_ENABLE = true;
+    private static final boolean FILTER_DISABLE = false;
+
     private final Activity mContext;
     private final View mTabLayout;
 
@@ -34,8 +45,18 @@ public class Tabs {
 
     private final View gearTab;
     private final View brushTab;
-    /*private final ImageButton filterTab;
-    private final ImageButton detailtab;*/
+    private final View filterTab;
+    /*private final ImageButton detailtab;*/
+
+    private final View argileFilterView;
+    private final View sableFilterView;
+    private final View conglomeraFilterView;
+    private final View unknownFilterView;
+
+    private boolean argileFilter = FILTER_ENABLE;
+    private boolean sableFilter = FILTER_ENABLE;
+    private boolean conglomeraFilter = FILTER_ENABLE;
+    private boolean unknownFilter = FILTER_DISABLE;
 
     private int mCurrentTab = TAB_NONE;
 
@@ -50,6 +71,8 @@ public class Tabs {
         // Getting tabs layout
         gearTab = mContext.findViewById(R.id.configLayout);
         brushTab = mContext.findViewById(R.id.colorLayout);
+        filterTab = mContext.findViewById(R.id.filterLayout);
+
         // adding listener
         gearButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +108,7 @@ public class Tabs {
                 if (mCurrentTab != TAB_FILTER) {
                     mCurrentTab = TAB_FILTER;
                     filterButton.setColorFilter(Color.argb(255, 109,204,252));
+                    filterTab.setVisibility(View.VISIBLE);
                 } else {
                     mCurrentTab = TAB_NONE;
                 }
@@ -102,7 +126,6 @@ public class Tabs {
                 }
             }
         });
-
         // Getting config tab seekBar
         SeekBar minAreaSeekBar = mContext.findViewById(R.id.minAreaSeekBar);
         SeekBar hSeekBar = mContext.findViewById(R.id.HSeekBar);
@@ -112,7 +135,7 @@ public class Tabs {
         SeekBar nbClusterSeekBar = mContext.findViewById(R.id.ClusterNumberSeekBar);
         SeekBar attemptsSeekBar = mContext.findViewById(R.id.attemptsSeekBar);
         SeekBar thresholdSeekBar = mContext.findViewById(R.id.thresholdSeekBar);
-
+        // Setting the seekBar listener
         minAreaSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
@@ -226,15 +249,67 @@ public class Tabs {
                 gearTab.setAlpha(1f);
             }
         });
+        // Getting the filters
+        argileFilterView = mContext.findViewById(R.id.filter1);
+        sableFilterView = mContext.findViewById(R.id.filter2);
+        conglomeraFilterView = mContext.findViewById(R.id.filter3);
+        unknownFilterView = mContext.findViewById(R.id.filter4);
+        // Setting filter listener
+        argileFilterView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                argileFilter = !argileFilter;
+                updateFiltersView();
+                return false;
+            }
+        });
+        sableFilterView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                sableFilter = !sableFilter;
+                updateFiltersView();
+                return false;
+            }
+        });
+        conglomeraFilterView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                conglomeraFilter = !conglomeraFilter;
+                updateFiltersView();
+                return false;
+            }
+        });
+        unknownFilterView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                unknownFilter = !unknownFilter;
+                updateFiltersView();
+                return false;
+            }
+        });
+
     }
 
     @SuppressLint("ResourceAsColor")
-    private void clearTabs() {
+    public void clearTabs() {
         gearButton.setColorFilter(Color.argb(255, 255, 255, 255));
         brushButton.setColorFilter(Color.argb(255, 255, 255, 255));
         filterButton.setColorFilter(Color.argb(255, 255, 255, 255));
         detailButton.setColorFilter(Color.argb(255, 255, 255, 255));
         gearTab.setVisibility(View.GONE);
         brushTab.setVisibility(View.GONE);
+        filterTab.setVisibility(View.GONE);
     }
+
+    private void updateFiltersView() {
+        argileFilterView.setBackgroundResource(argileFilter? R.drawable.card_bg : 0);
+        sableFilterView.setBackgroundResource(sableFilter? R.drawable.card_bg : 0);
+        conglomeraFilterView.setBackgroundResource(conglomeraFilter? R.drawable.card_bg : 0);
+        unknownFilterView.setBackgroundResource(unknownFilter? R.drawable.card_bg : 0);
+    }
+
+    public boolean[] getFilters() {
+        return new boolean[]{argileFilter, sableFilter, conglomeraFilter, unknownFilter};
+    }
+
 }

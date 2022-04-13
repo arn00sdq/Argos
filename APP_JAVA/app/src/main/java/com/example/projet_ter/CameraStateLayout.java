@@ -1,8 +1,10 @@
 package com.example.projet_ter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,14 +22,16 @@ public class CameraStateLayout {
     private int mCameraState = CameraListener.CAMERA_STATE_PREVIEW;
 
     private final List<TextView> mStatesViews = new ArrayList<>();
-    private View.OnClickListener mStatesViewsListener = new View.OnClickListener() {
+    private View.OnTouchListener mStatesViewsListener = new View.OnTouchListener() {
         @Override
-        public void onClick(View view) {
+        public boolean onTouch(View view, MotionEvent motionEvent) {
             mCameraState = mStatesViews.indexOf(view);
             updateView();
+            return false;
         }
     };
 
+    @SuppressLint("ClickableViewAccessibility")
     public CameraStateLayout(Activity context) {
         mContext = context;
         mLayout = mContext.findViewById(R.id.camera_state_layout);
@@ -36,7 +40,7 @@ public class CameraStateLayout {
         mStatesViews.add(CameraListener.CAMERA_STATE_MASK, mContext.findViewById(R.id.state2));
         mStatesViews.add(CameraListener.CAMERA_STATE_COLOR, mContext.findViewById(R.id.state3));
         for (int i = 0; i < mStatesViews.size(); i++) {
-            mStatesViews.get(i).setOnClickListener(mStatesViewsListener);
+            mStatesViews.get(i).setOnTouchListener(mStatesViewsListener);
         }
     }
 

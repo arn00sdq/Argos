@@ -501,9 +501,9 @@ public class CameraListener {
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import org.opencv.android.CameraBridgeViewBase;
@@ -515,13 +515,16 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import org.xml.sax.XMLFilter;
 
 import com.argos.utils.FrameAnalyzer;
 import com.argos.utils.PointOfInterest;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.Set;
 
 public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -532,17 +535,17 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     public static final int CAMERA_STATE_MASK = 2;
     public static final int CAMERA_STATE_COLOR = 3;
 
-    private final int FILTER_NONE = 0;
-    private final int FILTER_ALL = 1;
-    private final int FILTER_ARGILE = 2;
-    private final int FILTER_SAND = 3;
-    private final int FILTER_CONGLOMERA = 4;
-    private final int FILTER_UNKNOWN = 5;
+    private final String FILTER_ARGILE = "Argile";
+    private final String FILTER_SAND = "Sable massif";
+    private final String FILTER_CONGLOMERA = "Conglomerat";
+    private final String FILTER_UNKNOWN = "unknown";
 
     public static final FrameAnalyzer mFrameAnalyzer = new FrameAnalyzer();
     private final JavaCamera2View mJavaCamera2View;
 
     private List<PointOfInterest> poiList;
+
+    private Map<String, Boolean> mFilters = new HashMap<>();
 
     private int mCameraState = CAMERA_STATE_PREVIEW;
 
@@ -552,6 +555,31 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     public CameraListener(JavaCamera2View javaCamera2View) {
         this.mJavaCamera2View = javaCamera2View;
         this.mJavaCamera2View.setCvCameraViewListener(this);
+        mFilters.put(FILTER_ARGILE, true);
+        mFilters.put(FILTER_SAND, true);
+        mFilters.put(FILTER_CONGLOMERA, true);
+        mFilters.put(FILTER_UNKNOWN, false);
+        /*this.mJavaCamera2View.setOnTouchListener(new View.OnTouchListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @SuppressLint({"ClickableViewAccessibility", "LongLogTag"})
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(poiList != null && poiList.size() > 0) {
+                    float scale = Math.max((float) mJavaCamera2View.getWidth() / rgba_matrix.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
+                    Size scaled_mat = new Size(rgba_matrix.width() * scale, rgba_matrix.height() * scale);
+                    int x_gap = (int) (scaled_mat.width - mJavaCamera2View.getWidth()) / 2;
+                    int y_gap = (int) (scaled_mat.height - mJavaCamera2View.getHeight()) / 2;
+                    int x = (int) ((int) (motionEvent.getX() + x_gap) / scale);
+                    int y = (int) ((int) (motionEvent.getY() + y_gap) / scale);
+
+                    PointOfInterest poi = getPoiAt(x, y);
+                    new carotDataDialog(mJavaCamera2View.getContext(), "TEST").show();
+                    return true;
+                }
+                return false;
+            }
+
+        });*/
     }
 
     public FrameAnalyzer getFrameAnalyzer() {
@@ -595,7 +623,6 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
         this.rgba_matrix = inputFrame.rgba();
         this.rgba_matrix = orientationRotation(this.rgba_matrix);
         this.rgba_matrix = transformMat(this.rgba_matrix);
-        Log.d(TAG, String.valueOf(mCameraState));
         return this.rgba_matrix;
     }
 
@@ -609,6 +636,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
         Size original_size;
         original_size = img.size();
+        /* TODO GET ORIENTATION AND APPLY ROTATION */
         Core.rotate(img, img, Core.ROTATE_90_CLOCKWISE);
         // Getting the new ratio
         double img_ratio = (double) (original_size.width / img.size().width);
@@ -625,16 +653,19 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private Mat dramPOIs(final Mat image, final List<PointOfInterest> POIs) {
+    private Mat drawPOIs(final Mat image, final List<PointOfInterest> POIs) {
         Mat img = image.clone();
         if (POIs.size() > 0) {
             POIs.forEach( poi -> {
-                if (poi.getWidth() < img.width() && poi.getHeight() < img.height()) {
+                if (mFilters.get(poi.getLabels().get(0))) {
                     Imgproc.rectangle(img, new Point(poi.getX_coord(), poi.getY_coord()),
                             new Point(poi.getX_coord() + poi.getWidth(), poi.getY_coord() + poi.getHeight()),
                             new Scalar(poi.getLineColor().red(), poi.getLineColor().green(), poi.getLineColor().blue()), 5);
-                    Imgproc.putText(img, poi.getLabels().get(0), new Point(poi.getX_coord() + 10, poi.getY_coord() + 30), 0, 1,
-                            new Scalar(poi.getLineColor().red(), poi.getLineColor().green(), poi.getLineColor().blue()), 5);
+                    Size textSize = Imgproc.getTextSize(poi.getLabels().get(0), 0, 1, 3, null);
+                    if (poi.getHeight() > textSize.height && poi.getWidth() > textSize.width) {
+                        Imgproc.putText(img, poi.getLabels().get(0), new Point(poi.getX_coord() + 10, poi.getY_coord() + 30), 0, 1,
+                                new Scalar(poi.getLineColor().red(), poi.getLineColor().green(), poi.getLineColor().blue()), 3);
+                    }
                 }
             });
         }
@@ -643,17 +674,39 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Mat transformMat(Mat image) {
+        float scale = Math.max((float) mJavaCamera2View.getWidth() / image.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
+        Size scaled_mat = new Size(image.width() * scale, image.height() * scale);
+        int x_gap = (int) (scaled_mat.width - mJavaCamera2View.getWidth()) / 2;
+        int y_gap = (int) (scaled_mat.height - mJavaCamera2View.getHeight()) / 2;
+        x_gap /= scale;
+        y_gap /= scale;
+        Mat subImage = image.submat(y_gap, image.rows() - y_gap, x_gap, image.cols() - x_gap );
         switch (mCameraState) {
             case CAMERA_STATE_ANALYSE :
                 poiList = mFrameAnalyzer.getDetailedPOIsFromImage(image);
-                return dramPOIs(image, poiList);
+                subImage = drawPOIs(subImage, poiList);
+                break;
             case CAMERA_STATE_MASK :
-                return mFrameAnalyzer.HSVTargetZoneFinder.getHsv_inverted_mask(image);
+                subImage = mFrameAnalyzer.HSVTargetZoneFinder.getHsv_inverted_mask(subImage);
+                break;
             case CAMERA_STATE_COLOR :
-                return mFrameAnalyzer.targetZoneMaterialsExtractor.getKmeanMask(image);
-            default :
-                return image;
+                subImage =  mFrameAnalyzer.targetZoneMaterialsExtractor.getKmeanMask(subImage);
+                break;
         }
+        subImage.copyTo(image.rowRange(y_gap, y_gap + subImage.rows()).colRange(x_gap, x_gap + subImage.cols()));
+        return image;
+    }
+
+    public void setFilters(boolean[] filters) {
+        Log.d("FILTERS", "FILTERS -------------------------------");
+        Log.d("FILTERS", "FILTERS = " + filters[0]);
+        Log.d("FILTERS", "FILTERS = " + filters[1]);
+        Log.d("FILTERS", "FILTERS = " + filters[2]);
+        Log.d("FILTERS", "FILTERS = " + filters[3]);
+        mFilters.put(FILTER_ARGILE, filters[0]);
+        mFilters.put(FILTER_SAND, filters[1]);
+        mFilters.put(FILTER_CONGLOMERA, filters[2]);
+        mFilters.put(FILTER_UNKNOWN, filters[3]);
     }
 
 }
