@@ -502,6 +502,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Build;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -553,36 +555,48 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     private Mat rgba_matrix;
 
+    private float x1 = 0;
+    private float y1 = 0;
+    private final View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            Log.d(TAG, "Touch");
+            Log.d(TAG, "mCameraState = " + mCameraState);
+            Log.d(TAG, "motion Action = " + motionEvent.getAction());
+            if (mCameraState == CAMERA_STATE_ANALYSE) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        x1 = motionEvent.getX();
+                        y1 = motionEvent.getY();
+                    case MotionEvent.ACTION_UP:
+                        float seuil = 50;
+                        float x2 = motionEvent.getX();
+                        float y2 = motionEvent.getY();
+                        float dx = x1 - x2;
+                        float dy = y1 - y2;
+                        Log.d(TAG, "dx = " + dx + ", dy = " + dy);
+                        if (dx + dy < seuil) {
+                            displayPOIAt(x1, y1);
+                            return true;
+                        }
+                        break;
+                }
+            }
+            return false;
+        }
+    };
+
     @SuppressLint("ClickableViewAccessibility")
     public CameraListener(Activity context) {
         mContext = context;
-        this.mJavaCamera2View = mContext.findViewById(R.id.javaCamera2View);
-        this.mJavaCamera2View.setCvCameraViewListener(this);
+        mJavaCamera2View = mContext.findViewById(R.id.javaCamera2View);
+        mJavaCamera2View.setCvCameraViewListener(this);
+        mJavaCamera2View.setOnTouchListener(mOnTouchListener);
         mFilters.put(FILTER_ARGILE, true);
         mFilters.put(FILTER_SAND, true);
         mFilters.put(FILTER_CONGLOMERA, true);
         mFilters.put(FILTER_UNKNOWN, false);
-        /*this.mJavaCamera2View.setOnTouchListener(new View.OnTouchListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @SuppressLint({"ClickableViewAccessibility", "LongLogTag"})
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(poiList != null && poiList.size() > 0) {
-                    float scale = Math.max((float) mJavaCamera2View.getWidth() / rgba_matrix.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
-                    Size scaled_mat = new Size(rgba_matrix.width() * scale, rgba_matrix.height() * scale);
-                    int x_gap = (int) (scaled_mat.width - mJavaCamera2View.getWidth()) / 2;
-                    int y_gap = (int) (scaled_mat.height - mJavaCamera2View.getHeight()) / 2;
-                    int x = (int) ((int) (motionEvent.getX() + x_gap) / scale);
-                    int y = (int) ((int) (motionEvent.getY() + y_gap) / scale);
-
-                    PointOfInterest poi = getPoiAt(x, y);
-                    new carotDataDialog(mJavaCamera2View.getContext(), "TEST").show();
-                    return true;
-                }
-                return false;
-            }
-
-        });*/
     }
 
     public FrameAnalyzer getFrameAnalyzer() {
@@ -596,18 +610,6 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     public void disable() {
         this.mJavaCamera2View.disableView();
-    }
-
-    @SuppressLint("LongLogTag")
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private PointOfInterest getPoiAt(int x, int y) {
-        Log.d(TAG, "X = " + x + " Y = " + y);
-        for(PointOfInterest poi : this.poiList) {
-            if (x > poi.getX_coord() && x < poi.getX_coord() + poi.getWidth() && y > poi.getY_coord() && x < poi.getY_coord() + poi.getHeight()) {
-                return poi;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -630,7 +632,6 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     }
 
     public void setCameraState(int cameraState) {
-        Log.d(TAG, String.valueOf(cameraState));
         mCameraState = cameraState;
     }
 
@@ -701,15 +702,38 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     }
 
     public void setFilters(boolean[] filters) {
-        Log.d("FILTERS", "FILTERS -------------------------------");
-        Log.d("FILTERS", "FILTERS = " + filters[0]);
-        Log.d("FILTERS", "FILTERS = " + filters[1]);
-        Log.d("FILTERS", "FILTERS = " + filters[2]);
-        Log.d("FILTERS", "FILTERS = " + filters[3]);
         mFilters.put(FILTER_ARGILE, filters[0]);
         mFilters.put(FILTER_SAND, filters[1]);
         mFilters.put(FILTER_CONGLOMERA, filters[2]);
         mFilters.put(FILTER_UNKNOWN, filters[3]);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void displayPOIAt(float x, float y) {
+        Mat image = this.rgba_matrix.clone();
+        List<PointOfInterest> POIs = poiList;
+        float scale = Math.max((float) mJavaCamera2View.getWidth() / image.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
+        Size scaled_mat = new Size(image.width() * scale, image.height() * scale);
+        int x_gap = (int) (scaled_mat.width - mJavaCamera2View.getWidth()) / 2;
+        int y_gap = (int) (scaled_mat.height - mJavaCamera2View.getHeight()) / 2;
+        x_gap /= scale;
+        y_gap /= scale;
+        x = x + x_gap
+        PointOfInterest resultPOI = null;
+        int i = 0;
+        while (i < POIs.size() && resultPOI == null) {
+            if (POIs.get(i).getX_coord() < x + x_gap && POIs.get(i).getX_coord() + POIs.get(i).getWidth() > x + x_gap) {
+                if (POIs.get(i).getY_coord() < y + y_gap && POIs.get(i).getY_coord() + POIs.get(i).getHeight() > y + y_gap) {
+                    resultPOI = POIs.get(i);
+                }
+            }
+            i++;
+        }
+        if (resultPOI != null) {
+            Log.d(TAG, "POI found");
+        } else {
+            Log.d(TAG, "no POI found");
+        }
     }
 
 }
