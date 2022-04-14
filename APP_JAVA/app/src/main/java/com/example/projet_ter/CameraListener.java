@@ -499,6 +499,7 @@ public class CameraListener {
 */
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Build;
 import android.util.Log;
 
@@ -541,6 +542,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     private final String FILTER_UNKNOWN = "unknown";
 
     public static final FrameAnalyzer mFrameAnalyzer = new FrameAnalyzer();
+    private final Activity mContext;
     private final JavaCamera2View mJavaCamera2View;
 
     private List<PointOfInterest> poiList;
@@ -552,8 +554,9 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     private Mat rgba_matrix;
 
     @SuppressLint("ClickableViewAccessibility")
-    public CameraListener(JavaCamera2View javaCamera2View) {
-        this.mJavaCamera2View = javaCamera2View;
+    public CameraListener(Activity context) {
+        mContext = context;
+        this.mJavaCamera2View = mContext.findViewById(R.id.javaCamera2View);
         this.mJavaCamera2View.setCvCameraViewListener(this);
         mFilters.put(FILTER_ARGILE, true);
         mFilters.put(FILTER_SAND, true);

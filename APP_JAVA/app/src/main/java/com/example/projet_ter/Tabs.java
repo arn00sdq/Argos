@@ -37,6 +37,7 @@ public class Tabs {
 
     private final Activity mContext;
     private final View mTabLayout;
+    private final CameraListener mCameraListener;
 
     private final ImageButton gearButton;
     private final ImageButton brushButton;
@@ -60,9 +61,10 @@ public class Tabs {
 
     private int mCurrentTab = TAB_NONE;
 
-    public Tabs(Activity context, View layout) {
+    public Tabs(Activity context, View layout, CameraListener cm) {
         mContext = context;
         mTabLayout = layout;
+        mCameraListener = cm;
         // Getting tabs buttons
         gearButton = mTabLayout.findViewById(R.id.gearButton);
         brushButton = mTabLayout.findViewById(R.id.brushButton);
@@ -260,6 +262,7 @@ public class Tabs {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 argileFilter = !argileFilter;
                 updateFiltersView();
+                mCameraListener.setFilters(getFilters());
                 return false;
             }
         });
@@ -268,6 +271,7 @@ public class Tabs {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 sableFilter = !sableFilter;
                 updateFiltersView();
+                mCameraListener.setFilters(getFilters());
                 return false;
             }
         });
@@ -276,6 +280,7 @@ public class Tabs {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 conglomeraFilter = !conglomeraFilter;
                 updateFiltersView();
+                mCameraListener.setFilters(getFilters());
                 return false;
             }
         });
@@ -284,6 +289,7 @@ public class Tabs {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 unknownFilter = !unknownFilter;
                 updateFiltersView();
+                mCameraListener.setFilters(getFilters());
                 return false;
             }
         });

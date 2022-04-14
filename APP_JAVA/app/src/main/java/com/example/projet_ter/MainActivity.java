@@ -52,10 +52,9 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         Log.i(TAG, "onCreate");
-        //this.camera_component = new CameraListener(this, this.findViewById(R.id.textureView));
-        this.camera_component = new CameraListener(this.findViewById(R.id.javaCamera2View));
+        this.camera_component = new CameraListener(this);
         this.configLayout = new ConfigLayout((View) this.findViewById(R.id.ButtonLayout), this.camera_component.getFrameAnalyzer());
-        this.mTabs = new Tabs(this, this.findViewById(R.id.tabLayout));
+        this.mTabs = new Tabs(this, this.findViewById(R.id.tabLayout), camera_component);
         this.mCameraStateLayout = new CameraStateLayout(this);
 
     }
@@ -81,24 +80,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        /*try {
-            this.camera_component.closeCamera();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-
         this.camera_component.disable();
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        /*try {
-            this.camera_component.closeCamera();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-
         this.camera_component.disable();
         super.onPause();
     }
