@@ -27,6 +27,12 @@ public class HSVTargetZoneFinder {
     private Integer value_value = 0;
     private Integer min_area_contour = 1750;
 
+    private int mode = HSV_BINARY;
+
+    private static final int
+        HSV_BINARY = 0,
+        HSV_INVERTED = 1;
+
     private final boolean debug = true;
 
     private Integer targetNumber = 100;
@@ -59,7 +65,7 @@ public class HSVTargetZoneFinder {
                 new Scalar(255, 255, 255),
                 hsv_mask);
 
-        Imgproc.threshold(hsv_mask, hsv_mask_inverted, 0, 255, Imgproc.THRESH_BINARY_INV);
+        Imgproc.threshold(hsv_mask, hsv_mask_inverted, 0, 255, mode);
 
         Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_CROSS, new Size(5, 5));
         
@@ -120,7 +126,7 @@ public class HSVTargetZoneFinder {
                 new Scalar(255, 255, 255),
                 hsv_mask);
 
-        Imgproc.threshold(hsv_mask, hsv_mask_inverted, 0, 255, Imgproc.THRESH_BINARY_INV);
+        Imgproc.threshold(hsv_mask, hsv_mask_inverted, 0, 255, mode);
 
         Core.bitwise_and(src_image, src_image, source_bitwised_and, hsv_mask_inverted);
 
@@ -191,7 +197,7 @@ public class HSVTargetZoneFinder {
                 new Scalar(255, 255, 255),
                 hsv_mask);
 
-        Imgproc.threshold(hsv_mask, hsv_mask_inverted, 0, 255, Imgproc.THRESH_BINARY_INV);
+        Imgproc.threshold(hsv_mask, hsv_mask_inverted, 0, 255, mode);
         Imgproc.cvtColor(hsv_mask_inverted, hsv_mask_inverted, Imgproc.COLOR_GRAY2BGRA);
 
         return hsv_mask_inverted;
@@ -252,6 +258,9 @@ public class HSVTargetZoneFinder {
         return max_saturation_val;
     }
 
+    public void setMode(int mode){
+        this.mode = mode;
+    }
 
     public void setMax_saturation_val(int max_saturation_val) {
         this.max_saturation_val = max_saturation_val;
