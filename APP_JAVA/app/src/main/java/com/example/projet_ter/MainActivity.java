@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 
 import android.Manifest;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 
 import android.os.Build;
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "ProjetTER::MainActivity";
 
     private CameraListener camera_component;
-    private ConfigLayout configLayout;
     private CameraStateLayout mCameraStateLayout;
     private Tabs mTabs;
     private float x1 = 0;
@@ -44,10 +44,10 @@ public class MainActivity extends AppCompatActivity {
         this.setContentView(R.layout.activity_main);
         Objects.requireNonNull(this.getSupportActionBar()).hide();
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Log.i(TAG, "onCreate");
         this.camera_component = new CameraListener(this);
-        this.configLayout = new ConfigLayout((View) this.findViewById(R.id.ButtonLayout), this.camera_component.getFrameAnalyzer());
         this.mTabs = new Tabs(this, this.findViewById(R.id.tabLayout), camera_component);
         this.mCameraStateLayout = new CameraStateLayout(this);
 
@@ -114,10 +114,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     if (dy > 0) {
-                        this.configLayout.setVisible(false);
                         Log.i(TAG, "down");
                     } else {
-                        this.configLayout.setVisible(true);
                         Log.i(TAG, "up");
                     }
                 }

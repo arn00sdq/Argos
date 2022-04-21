@@ -7,9 +7,10 @@ import android.graphics.Color;
 
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-
+import android.widget.Switch;
 
 
 public class Tabs {
@@ -43,6 +44,8 @@ public class Tabs {
     private final View sableFilterView;
     private final View conglomeraFilterView;
     private final View unknownFilterView;
+
+    private final Switch switchMaskMode;
 
     private boolean argileFilter = FILTER_ENABLE;
     private boolean sableFilter = FILTER_ENABLE;
@@ -281,6 +284,14 @@ public class Tabs {
                 updateFiltersView();
                 mCameraListener.setFilters(getFilters());
                 return false;
+            }
+        });
+
+        switchMaskMode = mContext.findViewById(R.id.switch1);
+        switchMaskMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                CameraListener.mFrameAnalyzer.HSVTargetZoneFinder.setMode(b? 1 : 0);
             }
         });
 

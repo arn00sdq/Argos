@@ -24,6 +24,7 @@ import com.argos.utils.FrameAnalyzer;
 import com.argos.utils.PointOfInterest;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -210,25 +211,20 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void displayPOIAt(float x, float y) {
-        Mat image = this.rgba_matrix.clone();
-        List<PointOfInterest> POIs = poiList;
-        float scale = Math.max((float) mJavaCamera2View.getWidth() / image.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
-        Size scaled_mat = new Size(image.width() * scale, image.height() * scale);
-        int x_gap = (int) (scaled_mat.width - mJavaCamera2View.getWidth()) / 2;
-        int y_gap = (int) (scaled_mat.height - mJavaCamera2View.getHeight()) / 2;
-        x_gap /= scale;
-        y_gap /= scale;
-        x = x + x_gap;
         PointOfInterest resultPOI = null;
-        int i = 0;
-        while (i < POIs.size() && resultPOI == null) {
-            if (POIs.get(i).getX_coord() < x + x_gap && POIs.get(i).getX_coord() + POIs.get(i).getWidth() > x + x_gap) {
-                if (POIs.get(i).getY_coord() < y + y_gap && POIs.get(i).getY_coord() + POIs.get(i).getHeight() > y + y_gap) {
-                    resultPOI = POIs.get(i);
+        if (poiList != null) {
+            List<PointOfInterest> POIs = new ArrayList<>(poiList);
+            int i = 0;
+            while (i < POIs.size() && resultPOI == null) {
+                if (POIs.get(i).getX_coord() < x && POIs.get(i).getX_coord() + POIs.get(i).getWidth() > x) {
+                    if (POIs.get(i).getY_coord() < y && POIs.get(i).getY_coord() + POIs.get(i).getHeight() > y) {
+                        resultPOI = POIs.get(i);
+                    }
                 }
+                i++;
             }
-            i++;
         }
+
         if (resultPOI != null) {
             Log.d(TAG, "POI found");
         } else {

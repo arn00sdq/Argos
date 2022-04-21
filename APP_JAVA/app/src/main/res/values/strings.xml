@@ -33,6 +33,6 @@
     <string name="filtres">Filtres</string>
     <string name="argiles">Argiles</string>
     <string name="sables">Sables</string>
-    <string name="conglomera">Conglomera</string>
-    <string name="indeterminer">Indeterminer</string>
+    <string name="conglomera">Conglomerat</string>
+    <string name="indeterminer">Indeterminé</string>
 </resources>
