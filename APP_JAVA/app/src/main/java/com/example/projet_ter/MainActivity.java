@@ -2,31 +2,25 @@ package com.example.projet_ter;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+
 import androidx.core.content.ContextCompat;
-import androidx.core.view.MotionEventCompat;
+
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraAccessException;
+
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Layout;
+
 import android.util.Log;
-import android.view.GestureDetector;
+
 import android.view.MotionEvent;
-import android.view.TextureView;
+
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.Switch;
-import android.widget.TableLayout;
+
 import android.widget.Toast;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.JavaCameraView;
 import org.opencv.android.OpenCVLoader;
 
 import java.util.Objects;
