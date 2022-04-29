@@ -275,7 +275,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="0dp"
-                    android:max="6000"
+                    android:max="10000"
                     android:min="200"
                     android:minHeight="30dp"
                     android:progress="1750"

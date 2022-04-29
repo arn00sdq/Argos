@@ -60,7 +60,7 @@ class AutoHSVtarget {
 
     public AutoHSVtarget(String[] args) {
 
-        src = Imgcodecs.imread("img\\carrote2.jpg");
+        src = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\test.png");
         
         resizeImg = Mat.zeros(src.size(), CvType.CV_8U);
         Size sz = new Size(400,400);

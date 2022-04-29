@@ -12,7 +12,7 @@ minDiff = target
 optimalSaturation = 1
 analysis_completed = False
 
-s_val = 1
+S_value = 1
 
 
 def empty(a):
@@ -20,7 +20,7 @@ def empty(a):
 
 
 cv.namedWindow("TrackBars")
-cv.resizeWindow("TrackBars",740,240)
+#cv.resizeWindow("TrackBars",740,240)
 cv.createTrackbar("X","TrackBars",10,2000,empty)
 cv.createTrackbar("Y","TrackBars",10,2000,empty) #58
 cv.createTrackbar("H","TrackBars",0,255,empty)
@@ -28,9 +28,9 @@ cv.createTrackbar("S","TrackBars",0,255,empty)
 cv.createTrackbar("V","TrackBars",0,255,empty)
 cv.createTrackbar("T","TrackBars",0,255,empty)
 
-img = cv.imread('Image_de_test/carrote2.jpg')
+img = cv.imread('../Images/test2.jpg')
 
-img = cv.resize(img, (540,300))
+#img = cv.resize(img, (540,300))
 
 h,w,_ = img.shape
 img_hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
@@ -52,7 +52,7 @@ while True:
 
     img_cp = img.copy()
 
-    img_cp = cv.resize(img, (540,300))
+    #img_cp = cv.resize(img, (540,300))
 
     #pointer
     """ cx = int(X_value/2)
@@ -67,7 +67,7 @@ while True:
     cv.circle(img_hsv, (X_value, Y_value), 5, (255,0,0),3) """
 
     # define rhsv
-    lower = np.array([H_value,s_val,V_value])
+    lower = np.array([H_value,S_value,V_value])
     upper = np.array([255,255,255])
 
     masked = cv.inRange(img_hsv,lower,upper)
@@ -105,15 +105,15 @@ while True:
     print('detected: ' + str(len(detected)))
     
     if not analysis_completed:
-        if s_val < 150:
-            s_val += 2
+        if S_value < 150:
+            S_value += 2
         else:
             analysis_completed = True
         if abs(target - len(detected)+1) < minDiff:
             minDiff = abs(target - len(detected)+1)
-            optimalSaturation = s_val
+            optimalSaturation = S_value
     else:
-        s_val = optimalSaturation
+        S_value = optimalSaturation
         
         
     cv.imshow('hsv',img_hsv)

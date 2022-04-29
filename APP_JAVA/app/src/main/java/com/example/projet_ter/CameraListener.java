@@ -188,7 +188,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
         Mat subImage = image.submat(y_gap, image.rows() - y_gap, x_gap, image.cols() - x_gap );
         switch (mCameraState) {
             case CAMERA_STATE_ANALYSE :
-                poiList = mFrameAnalyzer.getDetailedPOIsFromImage(image);
+                poiList = mFrameAnalyzer.getDetailedPOIsFromImage(subImage);
                 subImage = drawPOIs(subImage, poiList);
                 break;
             case CAMERA_STATE_MASK :

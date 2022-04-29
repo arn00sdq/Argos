@@ -28,9 +28,9 @@ cv.createTrackbar("S","TrackBars",0,255,empty)
 cv.createTrackbar("V","TrackBars",0,255,empty)
 cv.createTrackbar("T","TrackBars",0,255,empty)
 
-img = cv.imread('Image_de_test/carrote2.jpg')
+img = cv.imread('../Images/test2.jpg')
 
-img = cv.resize(img, (540,300))
+#img = cv.resize(img, (540,300))
 
 h,w,_ = img.shape
 img_hsv = cv.cvtColor(img, cv.COLOR_BGR2HSV)
@@ -52,7 +52,7 @@ while True:
 
     img_cp = img.copy()
 
-    img_cp = cv.resize(img, (540,300))
+    #img_cp = cv.resize(img, (540,300))
 
     #pointer
     """ cx = int(X_value/2)
@@ -67,7 +67,7 @@ while True:
     cv.circle(img_hsv, (X_value, Y_value), 5, (255,0,0),3) """
 
     # define rhsv
-    lower = np.array([H_value,s_val,V_value])
+    lower = np.array([H_value,S_value,V_value])
     upper = np.array([255,255,255])
 
     masked = cv.inRange(img_hsv,lower,upper)

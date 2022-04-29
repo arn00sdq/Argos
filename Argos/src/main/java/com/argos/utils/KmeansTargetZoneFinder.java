@@ -21,8 +21,8 @@ import org.opencv.imgproc.Imgproc;
  */
 public class KmeansTargetZoneFinder {
 
-    private Integer attemptNumber = 5;
-    private Integer clustersNumber = 3;
+    private Integer attemptNumber = 7;
+    private Integer clustersNumber = 7;
     private Integer threshold = 120;
     private Integer min_area_contour = 500;
 
@@ -68,7 +68,7 @@ public class KmeansTargetZoneFinder {
         draw.convertTo(draw, CvType.CV_8U);
 
         Imgproc.cvtColor(draw, kmean_mask, Imgproc.COLOR_BGR2GRAY);
-        Imgproc.threshold(kmean_mask, kmean_mask_inverted, threshold, 200, Imgproc.THRESH_BINARY);//ou Inv
+        Imgproc.threshold(kmean_mask, kmean_mask_inverted, threshold, 200, Imgproc.THRESH_BINARY_INV);//ou Inv
         Core.bitwise_and(src_image, src_image, source_bitwised_and, kmean_mask_inverted);
 
         List<MatOfPoint> contours = new ArrayList<>();
@@ -107,12 +107,11 @@ public class KmeansTargetZoneFinder {
                 Imgproc.rectangle(source_bitwised_and, p1, p2, color, thickness);
 
             }
-            HighGui.imshow("image_bitwised", source_bitwised_and);
-            HighGui.imshow("2GRAY", kmean_mask);
-            HighGui.imshow("resize_original", kmean_mask);
             HighGui.imshow("KmeanImg", draw);
-            HighGui.imshow("inv_mask", kmean_mask_inverted);
-
+            HighGui.imshow("gray", kmean_mask);
+            HighGui.imshow("mask", kmean_mask_inverted);
+            HighGui.imshow("image_bitwised", source_bitwised_and);
+            
             HighGui.waitKey(1);
 
         }
@@ -204,7 +203,7 @@ public class KmeansTargetZoneFinder {
 
     public static void main(String[] args) {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-        Mat img = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\com\\argos\\utils\\test.png");
+        Mat img = Imgcodecs.imread("C:\\Users\\MSI\\Desktop\\master\\Gestion-de-projet\\Argos\\src\\main\\java\\test2.jpg");
         KmeansTargetZoneFinder cal = new KmeansTargetZoneFinder();
         cal.getDetectedTargetZones(img);
     }
