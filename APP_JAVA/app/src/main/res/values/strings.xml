@@ -35,4 +35,7 @@
     <string name="sables">Sables</string>
     <string name="conglomera">Conglomerat</string>
     <string name="indeterminer">Indeterminé</string>
+    <string name="contour">Contour</string>
+    <string name="pr_cision">Précision</string>
+    <string name="taille_des_divisions">Taille des divisions</string>
 </resources>

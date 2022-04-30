@@ -38,13 +38,14 @@ public class CameraStateLayout {
         mStatesViews.add(CameraListener.CAMERA_STATE_ANALYSE, mContext.findViewById(R.id.state1));
         mStatesViews.add(CameraListener.CAMERA_STATE_MASK, mContext.findViewById(R.id.state2));
         mStatesViews.add(CameraListener.CAMERA_STATE_COLOR, mContext.findViewById(R.id.state3));
+        mStatesViews.add(CameraListener.CAMERA_STATE_BORDER, mContext.findViewById(R.id.state4));
         for (int i = 0; i < mStatesViews.size(); i++) {
             mStatesViews.get(i).setOnTouchListener(mStatesViewsListener);
         }
     }
 
     public void previouslyState() {
-        if (mCameraState < CameraListener.CAMERA_STATE_COLOR) {
+        if (mCameraState < CameraListener.CAMERA_STATE_BORDER) {
             mCameraState++;
             updateView();
         }

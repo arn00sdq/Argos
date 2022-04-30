@@ -38,6 +38,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     public static final int CAMERA_STATE_ANALYSE = 1;
     public static final int CAMERA_STATE_MASK = 2;
     public static final int CAMERA_STATE_COLOR = 3;
+    public static final int CAMERA_STATE_BORDER = 4;
 
     private final String FILTER_ARGILE = "Argile";
     private final String FILTER_SAND = "Sable massif";
@@ -55,6 +56,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     private int mCameraState = CAMERA_STATE_PREVIEW;
 
     private Mat rgba_matrix;
+    private Mat Rgba_matrix_poi;
 
     private float x1 = 0;
     private float y1 = 0;
@@ -76,9 +78,9 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
                         float y2 = motionEvent.getY();
                         float dx = x1 - x2;
                         float dy = y1 - y2;
-                        Log.d(TAG, "dx = " + dx + ", dy = " + dy);
+                        Log.d(TAG, "x2 = " + x2 + ", y2 = " + y2);
                         if (dx + dy < seuil) {
-                            displayPOIAt(x1, y1);
+                            displayPOIAt((int) x2,(int) y2);
                             return true;
                         }
                         break;
@@ -138,10 +140,8 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     private Mat orientationRotation(final Mat image) {
         Mat img = image.clone();
-
         Size original_size;
         original_size = img.size();
-        /* TODO GET ORIENTATION AND APPLY ROTATION */
         Core.rotate(img, img, Core.ROTATE_90_CLOCKWISE);
         // Getting the new ratio
         double img_ratio = (double) (original_size.width / img.size().width);
@@ -162,7 +162,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
         Mat img = image.clone();
         if (POIs.size() > 0) {
             POIs.forEach( poi -> {
-                if (mFilters.get(poi.getLabels().get(0))) {
+                if (mCameraState == CAMERA_STATE_BORDER || mFilters.get(poi.getLabels().get(0))) {
                     Imgproc.rectangle(img, new Point(poi.getX_coord(), poi.getY_coord()),
                             new Point(poi.getX_coord() + poi.getWidth(), poi.getY_coord() + poi.getHeight()),
                             new Scalar(poi.getLineColor().red(), poi.getLineColor().green(), poi.getLineColor().blue()), 5);
@@ -197,6 +197,10 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
             case CAMERA_STATE_COLOR :
                 subImage =  mFrameAnalyzer.targetZoneMaterialsExtractor.getKmeanMask(subImage);
                 break;
+            case CAMERA_STATE_BORDER :
+                poiList =  PointOfInterest.toPOIList(mFrameAnalyzer.getTargetZonesFromImage(subImage));
+                subImage = drawPOIs(subImage, poiList);
+                break;
         }
         subImage.copyTo(image.rowRange(y_gap, y_gap + subImage.rows()).colRange(x_gap, x_gap + subImage.cols()));
         return image;
@@ -210,12 +214,18 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void displayPOIAt(float x, float y) {
+    private void displayPOIAt(int x, int y) {
+        float scale = Math.max((float) mJavaCamera2View.getWidth() / rgba_matrix.width(), (float) mJavaCamera2View.getHeight() / rgba_matrix.height());
+        x = (int) (x / scale);
+        y = (int) (y / scale);
         PointOfInterest resultPOI = null;
+        Log.d(TAG, "touch x = " + x + " touch y = " + y);
         if (poiList != null) {
             List<PointOfInterest> POIs = new ArrayList<>(poiList);
             int i = 0;
             while (i < POIs.size() && resultPOI == null) {
+                Log.d(TAG, "poi x = " + POIs.get(i).getX_coord() + " poi x2 = " + (POIs.get(i).getX_coord() + POIs.get(i).getWidth()));
+                Log.d(TAG, "poi y = " + POIs.get(i).getY_coord() + " poi y2 = " + (POIs.get(i).getY_coord() + POIs.get(i).getHeight()));
                 if (POIs.get(i).getX_coord() < x && POIs.get(i).getX_coord() + POIs.get(i).getWidth() > x) {
                     if (POIs.get(i).getY_coord() < y && POIs.get(i).getY_coord() + POIs.get(i).getHeight() > y) {
                         resultPOI = POIs.get(i);
