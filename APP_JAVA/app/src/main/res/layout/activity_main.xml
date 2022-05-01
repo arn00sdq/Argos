@@ -89,6 +89,17 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
+                <TextView
+                    android:id="@+id/HValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_0"
+                    android:textSize="25sp"
+                    android:textColor="#eeeeee"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="@id/HText"
+                    app:layout_constraintStart_toEndOf="@id/HText" />
+
                 <SeekBar
                     android:id="@+id/HSeekBar"
                     android:layout_width="match_parent"
@@ -135,6 +146,17 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
+                <TextView
+                    android:id="@+id/SValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_0"
+                    android:textSize="25sp"
+                    android:textColor="#eeeeee"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="@id/SText"
+                    app:layout_constraintStart_toEndOf="@id/SText" />
+
                 <SeekBar
                     android:id="@+id/SSeekBar"
                     android:layout_width="match_parent"
@@ -180,6 +202,17 @@
                     android:fontFamily="@font/cocogoose_typo"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/VValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_0"
+                    android:textSize="25sp"
+                    android:textColor="#eeeeee"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/VText" />
 
                 <SeekBar
                     android:id="@+id/VSeekBar"
@@ -270,6 +303,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/minAreaValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="@string/_1750"
+                    android:textColor="#eeeeee"
+                    android:textSize="25sp"
+                    app:layout_constraintStart_toEndOf="@id/minAreaText"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <SeekBar
                     android:id="@+id/minAreaSeekBar"
                     android:layout_width="match_parent"
@@ -312,8 +356,20 @@
                     android:textSize="25sp"
                     android:textColor="#eeeeee"
                     android:layout_marginStart="18dp"
+                    android:fontFamily="@font/cocogoose_typo"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/ClusterNumberValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_3"
+                    android:textSize="25sp"
+                    android:textColor="#eeeeee"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ClusterNumberText" />
 
                 <SeekBar
                     android:id="@+id/ClusterNumberSeekBar"
@@ -357,8 +413,20 @@
                     android:textSize="25sp"
                     android:textColor="#eeeeee"
                     android:layout_marginStart="18dp"
+                    android:fontFamily="@font/cocogoose_typo"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/attemptsValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_3"
+                    android:textSize="25sp"
+                    android:textColor="#eeeeee"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/attemptsText" />
 
                 <SeekBar
                     android:id="@+id/attemptsSeekBar"
@@ -402,8 +470,20 @@
                     android:textSize="25sp"
                     android:textColor="#eeeeee"
                     android:layout_marginStart="18dp"
+                    android:fontFamily="@font/cocogoose_typo"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/thresholdValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_0"
+                    android:textSize="25sp"
+                    android:textColor="#eeeeee"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/thresholdText" />
 
                 <SeekBar
                     android:id="@+id/thresholdSeekBar"
@@ -447,8 +527,20 @@
                     android:textSize="25sp"
                     android:textColor="#eeeeee"
                     android:layout_marginStart="18dp"
+                    android:fontFamily="@font/cocogoose_typo"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/accuracyValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_90"
+                    android:textSize="25sp"
+                    android:textColor="#eeeeee"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/accuracyText" />
 
                 <SeekBar
                     android:id="@+id/accuracySeekBar"
@@ -458,9 +550,9 @@
                     android:progressDrawable="@drawable/seekbar_progress"
                     android:thumb="@drawable/seekbar_thumb"
                     android:layout_marginBottom="0dp"
-                    android:progress="0"
-                    android:min="0"
-                    android:max="100"
+                    android:progress="90"
+                    android:min="50"
+                    android:max="90"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -492,8 +584,20 @@
                     android:textSize="25sp"
                     android:textColor="#eeeeee"
                     android:layout_marginStart="18dp"
+                    android:fontFamily="@font/cocogoose_typo"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/divisionSizeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_5"
+                    android:textSize="25sp"
+                    android:textColor="#eeeeee"
+                    android:layout_marginStart="18dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/divisionSizeText" />
 
                 <SeekBar
                     android:id="@+id/divisionSizeSeekBar"
@@ -503,9 +607,9 @@
                     android:progressDrawable="@drawable/seekbar_progress"
                     android:thumb="@drawable/seekbar_thumb"
                     android:layout_marginBottom="0dp"
-                    android:progress="0"
-                    android:min="0"
-                    android:max="100"
+                    android:progress="5"
+                    android:min="3"
+                    android:max="10"
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

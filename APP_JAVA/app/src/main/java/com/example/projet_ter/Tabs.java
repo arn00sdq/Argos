@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.TextView;
 
 
 public class Tabs {
@@ -53,6 +54,8 @@ public class Tabs {
     private final SeekBar nbClusterSeekBar;
     private final SeekBar attemptsSeekBar;
     private final SeekBar thresholdSeekBar;
+    private final SeekBar accuracySeekBar;
+    private final SeekBar divisionSizeSeekBar;
 
     private final Switch switchMaskMode;
 
@@ -86,6 +89,8 @@ public class Tabs {
         nbClusterSeekBar = mContext.findViewById(R.id.ClusterNumberSeekBar);
         attemptsSeekBar = mContext.findViewById(R.id.attemptsSeekBar);
         thresholdSeekBar = mContext.findViewById(R.id.thresholdSeekBar);
+        accuracySeekBar = mContext.findViewById(R.id.accuracySeekBar);
+        divisionSizeSeekBar = mContext.findViewById(R.id.divisionSizeSeekBar);
 
         // Getting the filters
         argileFilterView = mContext.findViewById(R.id.filter1);
@@ -142,6 +147,8 @@ public class Tabs {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 CameraListener.mFrameAnalyzer.HSVTargetZoneFinder.setHue_value(i);
+                TextView textValue = mContext.findViewById(R.id.HValue);
+                textValue.setText("(" + i + ")");
             }
 
             @Override
@@ -158,6 +165,8 @@ public class Tabs {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 CameraListener.mFrameAnalyzer.HSVTargetZoneFinder.setSaturation_value(i);
+                TextView textValue = mContext.findViewById(R.id.SValue);
+                textValue.setText("(" + i + ")");
             }
 
             @Override
@@ -174,6 +183,8 @@ public class Tabs {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 CameraListener.mFrameAnalyzer.HSVTargetZoneFinder.setValue_value(i);
+                TextView textValue = mContext.findViewById(R.id.VValue);
+                textValue.setText("(" + i + ")");
             }
 
             @Override
@@ -194,6 +205,8 @@ public class Tabs {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 CameraListener.mFrameAnalyzer.HSVTargetZoneFinder.setMin_area_contour(i);
+                TextView textValue = mContext.findViewById(R.id.minAreaValue);
+                textValue.setText("(" + i + ")");
             }
 
             @Override
@@ -211,6 +224,8 @@ public class Tabs {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 CameraListener.mFrameAnalyzer.targetZoneMaterialsExtractor.setNumberOfClusters(i);
+                TextView textValue = mContext.findViewById(R.id.ClusterNumberValue);
+                textValue.setText("(" + i + ")");
             }
 
             @Override
@@ -227,6 +242,8 @@ public class Tabs {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 CameraListener.mFrameAnalyzer.targetZoneMaterialsExtractor.setNumberOfIterations(i);
+                TextView textValue = mContext.findViewById(R.id.attemptsValue);
+                textValue.setText("(" + i + ")");
             }
 
             @Override
@@ -243,6 +260,44 @@ public class Tabs {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 CameraListener.mFrameAnalyzer.KmeansTargetZoneFinder.setThreshold(i);
+                TextView textValue = mContext.findViewById(R.id.thresholdValue);
+                textValue.setText("(" + i + ")");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(0.4f);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(1f);
+            }
+        });
+        accuracySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                CameraListener.mFrameAnalyzer.targetZoneMaterialsExtractor.setConfidence(i);
+                TextView textValue = mContext.findViewById(R.id.accuracyValue);
+                textValue.setText("(" + i + ")");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(0.4f);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                gearTab.setAlpha(1f);
+            }
+        });
+        divisionSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                CameraListener.mFrameAnalyzer.targetZoneMaterialsExtractor.setLengthOfCut(i);
+                TextView textValue = mContext.findViewById(R.id.divisionSizeValue);
+                textValue.setText("(" + i + ")");
             }
 
             @Override
@@ -361,6 +416,5 @@ public class Tabs {
                 return null;
         }
     }
-
 
 }

@@ -38,4 +38,9 @@
     <string name="contour">Contour</string>
     <string name="pr_cision">Précision</string>
     <string name="taille_des_divisions">Taille des divisions</string>
+    <string name="_0">(0)</string>
+    <string name="_1750">(1750)</string>
+    <string name="_3">(3)</string>
+    <string name="_90">(90)</string>
+    <string name="_5">(5)</string>
 </resources>
