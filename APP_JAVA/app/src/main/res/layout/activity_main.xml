@@ -1016,7 +1016,7 @@
             app:layout_constraintStart_toEndOf="@+id/filterButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            openwcv:srcCompat="@drawable/filter_solid"
+            openwcv:srcCompat="@drawable/ic_camera_solid"
             android:contentDescription="@string/filter" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -1033,6 +1033,20 @@
         android:textColor="#eeeeee"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/storeButton"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:padding="20dp"
+        android:scaleType="fitCenter"
+        android:background="@drawable/store_button_bg"
+        app:tint="#ffffff"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
+        openwcv:srcCompat="@drawable/ic_download_solid"
+        android:contentDescription="@string/config" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

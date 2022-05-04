@@ -2,15 +2,19 @@ package com.example.projet_ter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.JavaCamera2View;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
@@ -24,6 +28,9 @@ import com.argos.utils.FrameAnalyzer;
 import com.argos.utils.PointOfInterest;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +46,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     public static final int CAMERA_STATE_MASK = 2;
     public static final int CAMERA_STATE_COLOR = 3;
     public static final int CAMERA_STATE_BORDER = 4;
+    public static final int CAMERA_STATE_PICTURE = 5;
 
     private final String FILTER_ARGILE = "Argile";
     private final String FILTER_SAND = "Sable massif";
@@ -56,7 +64,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     private int mCameraState = CAMERA_STATE_PREVIEW;
 
     private Mat rgba_matrix;
-    private Mat Rgba_matrix_poi;
+    private Mat rgba_matix_picture;
 
     private float x1 = 0;
     private float y1 = 0;
@@ -136,6 +144,9 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     public void setCameraState(int cameraState) {
         mCameraState = cameraState;
+        if (mCameraState != CAMERA_STATE_PICTURE) {
+            rgba_matix_picture = null;
+        }
     }
 
     private Mat orientationRotation(final Mat image) {
@@ -201,6 +212,14 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
                 poiList =  PointOfInterest.toPOIList(mFrameAnalyzer.getTargetZonesFromImage(subImage));
                 subImage = drawPOIs(subImage, poiList);
                 break;
+            case CAMERA_STATE_PICTURE:
+                if (rgba_matix_picture == null) {
+                    poiList = mFrameAnalyzer.getDetailedPOIsFromImage(subImage);
+                    subImage = drawPOIs(subImage, poiList);
+                    rgba_matix_picture = subImage.clone();
+                } else {
+                    subImage = rgba_matix_picture;
+                }
         }
         subImage.copyTo(image.rowRange(y_gap, y_gap + subImage.rows()).colRange(x_gap, x_gap + subImage.cols()));
         return image;
@@ -242,4 +261,27 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
         }
     }
 
+    public void storePicture() {
+        Mat picture = rgba_matix_picture.clone();
+        Bitmap bmp = Bitmap.createBitmap(picture.cols(), picture.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(picture, bmp);
+        try {
+            File f = new File(Environment.getExternalStorageDirectory()
+                    + File.separator);
+            f.mkdirs();
+            File[] files = f.listFiles();
+            ArrayList<String> arrayFiles = new ArrayList<String>();
+            String filename = Environment.getExternalStorageDirectory()
+                    + File.separator + "carotte_" + files.length + ".png";
+            f = new File(filename);
+            f.createNewFile();
+            FileOutputStream out = new FileOutputStream(f);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+            Log.d(TAG, "FILENAME = " + filename);
+            Toast.makeText(mContext, "Image enregistré.", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            Toast.makeText(mContext, "Erreur enregistrement image.", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
 }

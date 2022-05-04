@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         Log.i(TAG, "onCreate");
         this.camera_component = new CameraListener(this);
-        this.mTabs = new Tabs(this, this.findViewById(R.id.tabLayout), camera_component);
         this.mCameraStateLayout = new CameraStateLayout(this);
+        this.mTabs = new Tabs(this, this.findViewById(R.id.tabLayout), camera_component, mCameraStateLayout);
 
     }
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
                         Toast.makeText(this, "This Application can not run without camera services.", Toast.LENGTH_SHORT).show();
                     }
-                    this.requestPermissions(new String[] {Manifest.permission.CAMERA}, MainActivity.REGUEST_CAMERA_PERMISSION_RESULT);
+                    this.requestPermissions(new String[] {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.MANAGE_EXTERNAL_STORAGE}, MainActivity.REGUEST_CAMERA_PERMISSION_RESULT);
                 }
             } else {
                 this.camera_component.enable();

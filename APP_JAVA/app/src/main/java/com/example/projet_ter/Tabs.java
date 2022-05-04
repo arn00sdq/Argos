@@ -13,6 +13,10 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.opencv.android.CameraActivity;
+
+import java.io.IOException;
+
 
 public class Tabs {
 
@@ -30,16 +34,17 @@ public class Tabs {
     private final Activity mContext;
     private final View mTabLayout;
     private final CameraListener mCameraListener;
+    private final CameraStateLayout mCameraStateLayout;
 
     private final ImageButton gearButton;
     private final ImageButton brushButton;
     private final ImageButton filterButton;
     private final ImageButton detailButton;
+    private final ImageButton storeButton;
 
     private final View gearTab;
     private final View brushTab;
     private final View filterTab;
-    /*private final ImageButton detailtab;*/
 
     private final View argileFilterView;
     private final View sableFilterView;
@@ -66,15 +71,17 @@ public class Tabs {
 
     private int mCurrentTab = TAB_NONE;
 
-    public Tabs(Activity context, View layout, CameraListener cm) {
+    public Tabs(Activity context, View layout, CameraListener cm, CameraStateLayout csl) {
         mContext = context;
         mTabLayout = layout;
         mCameraListener = cm;
+        mCameraStateLayout = csl;
         // Getting tabs buttons
         gearButton = mTabLayout.findViewById(R.id.gearButton);
         brushButton = mTabLayout.findViewById(R.id.brushButton);
         filterButton = mTabLayout.findViewById(R.id.filterButton);
         detailButton = mTabLayout.findViewById(R.id.detailButton);
+        storeButton = mContext.findViewById(R.id.storeButton);
         // Getting tabs layout
         gearTab = mContext.findViewById(R.id.configLayout);
         brushTab = mContext.findViewById(R.id.colorLayout);
@@ -138,6 +145,17 @@ public class Tabs {
             @Override
             public void onClick(View view) {
                 setCurrentTab(TAB_DETAILS);
+                if (mCurrentTab == TAB_DETAILS) {
+                    mCameraListener.setCameraState(CameraListener.CAMERA_STATE_PICTURE);
+                } else {
+                    mCameraListener.setCameraState(mCameraStateLayout.getCameraState());
+                }
+            }
+        });
+        storeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCameraListener.storePicture();
             }
         });
     }
@@ -361,6 +379,7 @@ public class Tabs {
         gearTab.setVisibility(View.GONE);
         brushTab.setVisibility(View.GONE);
         filterTab.setVisibility(View.GONE);
+        storeButton.setVisibility(View.GONE);
     }
 
     private void updateFiltersView() {
@@ -412,9 +431,10 @@ public class Tabs {
                 return brushTab;
             case TAB_FILTER:
                 return filterTab;
+            case TAB_DETAILS:
+                return storeButton;
             default:
                 return null;
         }
     }
-
 }
