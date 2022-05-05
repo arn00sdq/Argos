@@ -812,71 +812,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-    <!-- TODO IMAGE DETAILS LAYOUT -->
-    <ScrollView
-        android:id="@+id/detailsLayout"
-        android:layout_width="fill_parent"
-        android:maxHeight="400dp"
-        android:minHeight="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/camera_state_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone" >
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/DetailsView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/develop_tab_bg"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:background="@drawable/camera_state_layout_bg"
-                android:paddingStart="20dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:text="@string/details"
-                    android:textSize="50sp"
-                    android:fontFamily="@font/cocogoose"
-                    android:textColor="#aaaaaa"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:text="@string/contenue"
-                    android:textSize="35sp"
-                    android:fontFamily="@font/cocogoose"
-                    android:textColor="#aaaaaa"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
     <!-- CAMERA STATE -->
     <RelativeLayout
         android:id="@+id/camera_state_layout"
@@ -894,7 +830,7 @@
             android:id="@+id/state0"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/camera"
+            android:text="@string/analyse"
             android:textSize="22sp"
             android:paddingEnd="10dp"
             android:textColor="@color/gear_color"
@@ -908,7 +844,7 @@
             android:layout_toEndOf="@id/state0"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="@string/analyse"
+            android:text="@string/contour"
             android:textSize="22sp"
             android:textColor="@color/grey_color"
             android:layout_centerInParent="false"
@@ -920,7 +856,7 @@
             android:layout_height="match_parent"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="@string/masque"
+            android:text="@string/camera"
             android:textSize="22sp"
             android:layout_toEndOf="@id/state1"
             android:textColor="@color/grey_color"
@@ -933,7 +869,7 @@
             android:layout_height="match_parent"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="@string/couleur"
+            android:text="@string/masque"
             android:textSize="22sp"
             android:layout_toEndOf="@id/state2"
             android:textColor="@color/grey_color"
@@ -946,7 +882,7 @@
             android:layout_height="match_parent"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
-            android:text="@string/contour"
+            android:text="@string/couleur"
             android:textSize="22sp"
             android:layout_toEndOf="@id/state3"
             android:textColor="@color/grey_color"

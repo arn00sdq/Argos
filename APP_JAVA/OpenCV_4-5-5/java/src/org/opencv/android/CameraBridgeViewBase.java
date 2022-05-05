@@ -429,41 +429,35 @@ public abstract class CameraBridgeViewBase extends SurfaceView implements Surfac
                 canvas.drawColor(0, android.graphics.PorterDuff.Mode.CLEAR);
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "mStretch value: " + mScale);
-                /*
-                if (mScale != 0) {
-                    canvas.drawBitmap(mCacheBitmap, new Rect(0,0,mCacheBitmap.getWidth(), mCacheBitmap.getHeight()),
-                         new Rect((int)((canvas.getWidth() - mScale*mCacheBitmap.getWidth()) / 2),
-                         (int)((canvas.getHeight() - mScale*mCacheBitmap.getHeight()) / 2),
-                         (int)((canvas.getWidth() - mScale*mCacheBitmap.getWidth()) / 2 + mScale*mCacheBitmap.getWidth()),
-                         (int)((canvas.getHeight() - mScale*mCacheBitmap.getHeight()) / 2 + mScale*mCacheBitmap.getHeight())), null);
-                } else {
-                     canvas.drawBitmap(mCacheBitmap, new Rect(0,0,mCacheBitmap.getWidth(), mCacheBitmap.getHeight()),
-                         new Rect((canvas.getWidth() - mCacheBitmap.getWidth()) / 2,
-                         (canvas.getHeight() - mCacheBitmap.getHeight()) / 2,
-                         (canvas.getWidth() - mCacheBitmap.getWidth()) / 2 + mCacheBitmap.getWidth(),
-                         (canvas.getHeight() - mCacheBitmap.getHeight()) / 2 + mCacheBitmap.getHeight()), null);
-                }
-                */
+                    int width = mCacheBitmap.getWidth();
+                    int height = mCacheBitmap.getHeight();
+                    float scaleWidth = ((float) canvas.getWidth()) / width;
+                    float scaleHeight = ((float) canvas.getHeight()) / height;
+                    float fScale = Math.max(scaleHeight,  scaleWidth);
+                    // CREATE A MATRIX FOR THE MANIPULATION
+                    Matrix matrix = new Matrix();
+                    // RESIZE THE BITMAP
+                    matrix.postScale(fScale, fScale);
+                    Log.d("OPENCV", "fscale = " + fScale);
+                    // RECREATE THE NEW BITMAP
+                    Bitmap resizedBitmap = Bitmap.createBitmap(mCacheBitmap, 0, 0, width, height, matrix, false);
 
-                /////////////////////////////////////////////////////
-                ////// THIS IS THE CHANGED PART /////////////////////
-                int width = mCacheBitmap.getWidth();
-                int height = mCacheBitmap.getHeight();
-                float scaleWidth = ((float) canvas.getWidth()) / width;
-                float scaleHeight = ((float) canvas.getHeight()) / height;
-                float fScale = Math.max(scaleHeight,  scaleWidth);
-                // CREATE A MATRIX FOR THE MANIPULATION
-                Matrix matrix = new Matrix();
-                // RESIZE THE BITMAP
-                matrix.postScale(fScale, fScale);
-                Log.d("OPENCV", "fscale = " + fScale);
-
-                /////////////////////////////////////////////////////
-
-                // RECREATE THE NEW BITMAP
-                Bitmap resizedBitmap = Bitmap.createBitmap(mCacheBitmap, 0, 0, width, height, matrix, false);
-
-                canvas.drawBitmap(resizedBitmap, (canvas.getWidth() - resizedBitmap.getWidth()) / 2, (canvas.getHeight() - resizedBitmap.getHeight()) / 2, null);
+                    canvas.drawBitmap(resizedBitmap, (canvas.getWidth() - resizedBitmap.getWidth()) / 2, (canvas.getHeight() - resizedBitmap.getHeight()) / 2, null);
+/*
+                    if (mScale != 0) {
+                        canvas.drawBitmap(mCacheBitmap, new Rect(0,0,mCacheBitmap.getWidth(), mCacheBitmap.getHeight()),
+                                new Rect((int)((canvas.getWidth() - mScale*mCacheBitmap.getWidth()) / 2),
+                                        (int)((canvas.getHeight() - mScale*mCacheBitmap.getHeight()) / 2),
+                                        (int)((canvas.getWidth() - mScale*mCacheBitmap.getWidth()) / 2 + mScale*mCacheBitmap.getWidth()),
+                                        (int)((canvas.getHeight() - mScale*mCacheBitmap.getHeight()) / 2 + mScale*mCacheBitmap.getHeight())), null);
+                    } else {
+                        canvas.drawBitmap(mCacheBitmap, new Rect(0,0,mCacheBitmap.getWidth(), mCacheBitmap.getHeight()),
+                                new Rect((canvas.getWidth() - mCacheBitmap.getWidth()) / 2,
+                                        (canvas.getHeight() - mCacheBitmap.getHeight()) / 2,
+                                        (canvas.getWidth() - mCacheBitmap.getWidth()) / 2 + mCacheBitmap.getWidth(),
+                                        (canvas.getHeight() - mCacheBitmap.getHeight()) / 2 + mCacheBitmap.getHeight()), null);
+                    }
+*/
 
                 if (mFpsMeter != null) {
                     mFpsMeter.measure();

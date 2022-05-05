@@ -34,25 +34,26 @@ public class CameraStateLayout {
     public CameraStateLayout(Activity context) {
         mContext = context;
         mLayout = mContext.findViewById(R.id.camera_state_layout);
-        mStatesViews.add(CameraListener.CAMERA_STATE_PREVIEW, mContext.findViewById(R.id.state0));
-        mStatesViews.add(CameraListener.CAMERA_STATE_ANALYSE, mContext.findViewById(R.id.state1));
-        mStatesViews.add(CameraListener.CAMERA_STATE_MASK, mContext.findViewById(R.id.state2));
-        mStatesViews.add(CameraListener.CAMERA_STATE_COLOR, mContext.findViewById(R.id.state3));
-        mStatesViews.add(CameraListener.CAMERA_STATE_BORDER, mContext.findViewById(R.id.state4));
+        mStatesViews.add(CameraListener.CAMERA_STATE_ANALYSE, mContext.findViewById(R.id.state0));
+        mStatesViews.add(CameraListener.CAMERA_STATE_BORDER, mContext.findViewById(R.id.state1));
+        mStatesViews.add(CameraListener.CAMERA_STATE_PREVIEW, mContext.findViewById(R.id.state2));
+        mStatesViews.add(CameraListener.CAMERA_STATE_MASK, mContext.findViewById(R.id.state3));
+        mStatesViews.add(CameraListener.CAMERA_STATE_COLOR, mContext.findViewById(R.id.state4));
         for (int i = 0; i < mStatesViews.size(); i++) {
             mStatesViews.get(i).setOnTouchListener(mStatesViewsListener);
         }
+        updateView();
     }
 
     public void previouslyState() {
-        if (mCameraState < CameraListener.CAMERA_STATE_BORDER) {
+        if (mCameraState < CameraListener.CAMERA_STATE_COLOR) {
             mCameraState++;
             updateView();
         }
 
     }
     public void nextState() {
-        if (mCameraState > CameraListener.CAMERA_STATE_PREVIEW) {
+        if (mCameraState > CameraListener.CAMERA_STATE_ANALYSE) {
             mCameraState--;
             updateView();
         }

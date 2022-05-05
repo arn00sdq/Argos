@@ -41,11 +41,11 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
 
     private static final String TAG = "ProjectTER::CameraListener";
 
-    public static final int CAMERA_STATE_PREVIEW = 0;
-    public static final int CAMERA_STATE_ANALYSE = 1;
-    public static final int CAMERA_STATE_MASK = 2;
-    public static final int CAMERA_STATE_COLOR = 3;
-    public static final int CAMERA_STATE_BORDER = 4;
+    public static final int CAMERA_STATE_ANALYSE = 0;
+    public static final int CAMERA_STATE_BORDER = 1;
+    public static final int CAMERA_STATE_PREVIEW = 2;
+    public static final int CAMERA_STATE_MASK = 3;
+    public static final int CAMERA_STATE_COLOR = 4;
     public static final int CAMERA_STATE_PICTURE = 5;
 
     private final String FILTER_ARGILE = "Argile";
@@ -136,6 +136,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+
         this.rgba_matrix = inputFrame.rgba();
         this.rgba_matrix = orientationRotation(this.rgba_matrix);
         this.rgba_matrix = transformMat(this.rgba_matrix);
