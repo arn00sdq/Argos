@@ -12,7 +12,6 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.TermCriteria;
 import org.opencv.highgui.HighGui;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -198,6 +197,7 @@ public class KmeansTargetZoneFinder {
     public void setMin_area_contour(Integer min_area_contour) {
         this.min_area_contour = min_area_contour;
     }
+<<<<<<< Updated upstream
             
 
 
@@ -208,4 +208,6 @@ public class KmeansTargetZoneFinder {
         cal.getDetectedTargetZones(img);
     }
 
+=======
+>>>>>>> Stashed changes
 }

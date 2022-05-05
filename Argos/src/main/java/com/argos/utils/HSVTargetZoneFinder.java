@@ -28,8 +28,8 @@ public class HSVTargetZoneFinder {
 
     private final boolean debug = true;
 
-    private Integer targetNumber = 100;
-    private int max_saturation_val = 100;
+    private final Integer targetNumber = 100;
+    private final int max_saturation_val = 100;
 
     /**
      * Gets a list of detected TargetZone from an image.
