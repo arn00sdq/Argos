@@ -6,12 +6,12 @@ Argos is a real-time application bundled into an APK that automatically finds ge
 
 ## How It Works
 
-1. dwaf
-2. asdf
-3. adf
-4. adf
-5. adf
-
+1. Run the app
+2. You have to configure the app
+    - Click on the seconde tab button on the bottom of the screen and change the value
+    - Use the "Masque" camera filter by clicking on it to help you for the configuration
+3. Switch on the "Contour" or "Analyse" camera filter as you need
+4. The data should be visible
 
 ## How to use the analysis API
 
@@ -39,4 +39,5 @@ List<PointOfInterest> poiList = analyzer.getDetailedPOIsFromImage(img);
 
 1. Install the apk
 2. Run the apk
-3. Enjoy
+3. Accept required permision
+4. Enjoy
