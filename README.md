@@ -37,7 +37,9 @@ List<PointOfInterest> poiList = analyzer.getDetailedPOIsFromImage(img);
 ```
 ## APK installation
 
-1. Install the apk
-2. Run the apk
-3. Accept required permision
-4. Enjoy
+1. Open the "App" folder with AndroidStudio
+2. Build the apk
+3. Install the apk
+4. Run the apk
+5. Accept required permision
+6. Enjoy
