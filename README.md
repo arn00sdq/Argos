@@ -24,7 +24,7 @@ Argos is a real-time application bundled into an APK that automatically finds ge
     - Click on the second tab button on the bottom of the screen in order to change the values of the detection settings until the cores you are pointing at are white and the background is black. Use the "Invert" switch button if necessary.
     - Use the "Masque" camera filter by clicking on it to help you for configure the detection settings.
     - (Optional) Click on the first tab button to configure the optional values.
-    - (Optional) Use the "Couleur" camera filter by clicking on it to help you for the configuration.
+    - (Optional) Use the "Couleur" camera filter by clicking on it to help you configuring the settings.
 3. Switch on the "Contour" or "Analyse" camera filter option as you need.
 4. The detected elements will appear on screen.
 
