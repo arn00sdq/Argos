@@ -278,7 +278,7 @@ public class CameraListener implements CameraBridgeViewBase.CvCameraViewListener
             FileOutputStream out = new FileOutputStream(f);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
             Log.d(TAG, "FILENAME = " + filename);
-            Toast.makeText(mContext, "Image enregistré.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "Image enregistré dans " + filename, Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             Toast.makeText(mContext, "Erreur enregistrement image.", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
